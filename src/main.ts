@@ -1,1 +1,1 @@
-console.log('Application started');
+import './styles/common.scss';
