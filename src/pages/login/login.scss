@@ -1,6 +1,7 @@
 @import "../../styles/variables";
 @import "../../styles/mixins";
 @import "../../styles/common";
+@import "../../components/partials/input";
 
 .login-page {
   @include flex-center;
@@ -54,45 +55,5 @@
     font-weight: 500;
     line-height: 11px;
     text-align: center;
-  }
-}
-
-.input-field {
-  margin-bottom: 16px;
-
-  &__label {
-    display: block;
-    font-size: 9px;
-    color: $text-secondary;
-    margin-bottom: 4px;
-    font-weight: 500;
-    line-height: 9px;
-    letter-spacing: 0;
-  }
-
-  &__input {
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid $secondary-color;
-    padding: 8px 0;
-    font-size: 13px;
-    font-weight: 500;
-    outline: none;
-    background: transparent;
-    line-height: 13px;
-    letter-spacing: 0;
-    color: rgba(30, 30, 30, 1);
-
-    &::placeholder {
-      color: $text-secondary;
-    }
-  }
-
-  &__error {
-    color: $error-color;
-    font-size: 8px;
-    font-weight: 400;
-    line-height: 8px;
-    margin-top: 7px;
   }
 }

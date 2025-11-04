@@ -15,8 +15,9 @@ export default defineConfig({
     }
   },
   plugins: [handlebars({
+    partialDirectory: resolve(__dirname, 'src/components/partials'),
     context: {
-        title: 'Praktikum Messenger',
-      },
+      title: 'Praktikum Messenger',
+    },
   })],
 }) 
