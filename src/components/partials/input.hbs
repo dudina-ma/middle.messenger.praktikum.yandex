@@ -7,7 +7,7 @@
     type="{{type}}" 
     id="{{name}}"
     name="{{name}}" 
-    class="input-field__input"
+    class="input-field__input{{#if error}} input-field__input--error{{/if}}"
     {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}
     {{#if required}}required{{/if}}
   >

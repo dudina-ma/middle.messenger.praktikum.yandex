@@ -1,14 +1,14 @@
 @import "../../styles/form";
 
-.login-page {
+.signup-page {
   @include auth-page;
 
-  .login-form-container {
+  .signup-form-container {
     @include auth-form-container;
-    height: 450px;
+    height: 615px;
   }
 }
 
-.login-form {
+.signup-form {
   @include auth-form;
 }
