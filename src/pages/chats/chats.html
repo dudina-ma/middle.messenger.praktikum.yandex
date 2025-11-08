@@ -10,7 +10,8 @@
 <body class="chats-page">
     <aside class="chats-page__sidebar">
         <header class="chats-page__header">
-            <a href="/profile" class="chats-page__profile-link">Профиль <span class="chats-page__profile-link-arrow">&gt;</span></a>
+            <a href="/profile" class="chats-page__profile-link">Профиль <span
+                    class="chats-page__profile-link-arrow">&gt;</span></a>
 
             <search class="chats-page__search-box">
                 <form role="search" class="chats-page__search-form">
@@ -34,7 +35,8 @@
                         </div>
                         <div class="chats-page__chat-preview">
                             <span class="chats-page__chat-message">
-                                {{#if isLastMessageFromMe}}<span class="chats-page__chat-from-me">Вы: </span>{{/if}}{{lastMessage}}
+                                {{#if isLastMessageFromMe}}<span class="chats-page__chat-from-me">Вы:
+                                </span>{{/if}}{{lastMessage}}
                             </span>
                             {{#if unreadCount}}
                             <span class="chats-page__chat-badge">{{unreadCount}}</span>
@@ -86,11 +88,7 @@
                 <button class="chats-page__message-attach" type="button">
                     <span class="chats-page__message-attach-icon"></span>
                 </button>
-                <input 
-                    type="text" 
-                    class="chats-page__message-field" 
-                    placeholder="Сообщение"
-                >
+                <input name="message" type="text" class="chats-page__message-field" placeholder="Сообщение">
                 <button class="chats-page__message-send" type="submit">
                     <span class="chats-page__message-send-icon"></span>
                 </button>

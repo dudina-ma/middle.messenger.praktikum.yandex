@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "start": "npm run build && vite preview",
+    "build": "tsc && vite build"
   },
   "devDependencies": {
     "sass": "^1.93.3",
