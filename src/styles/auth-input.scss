@@ -1,0 +1,23 @@
+@use "./variables" as *;
+@use "../components/partials/input" as *;
+
+.input-field {
+  margin-bottom: 16px;
+
+  &__label {
+    display: block;
+    font-size: 9px;
+    color: $text-secondary;
+    font-weight: 500;
+    line-height: 9px;
+    letter-spacing: 0;
+  }
+
+  &__input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid $secondary-color;
+    padding: 5px 0;
+  }
+}
+

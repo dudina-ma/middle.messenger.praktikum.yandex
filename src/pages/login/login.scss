@@ -1,0 +1,14 @@
+@use "../../styles/form" as *;
+
+.login-page {
+  @include auth-page;
+
+  .login-form-container {
+    @include auth-form-container;
+    height: 450px;
+  }
+}
+
+.login-form {
+  @include auth-form;
+}
