@@ -1,6 +1,8 @@
 @use "../../styles/common" as *;
 @use "../../styles/form" as *;
 @use "../../components/partials/input" as *;
+@use "sass:string";
+@use "sass:color";
 
 .profile-page {
     display: flex;
@@ -36,7 +38,7 @@
 .profile-page__back-icon {
     width: 13px;
     height: 13px;
-    $white-hex: str-slice(ie-hex-str($primary-color), 4);
+    $white-hex: string.slice(color.ie-hex-str($primary-color), 4);
     background-image: url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.5 1L1 6.5L6.5 12M1 6.5H12' stroke='%23#{$white-hex}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
