@@ -1,7 +1,7 @@
-@import "./variables";
-@import "./mixins";
-@import "./common";
-@import "./auth-input";
+@use "./variables" as *;
+@use "./mixins" as *;
+@use "./common" as *;
+@use "./auth-input" as *;
 
 @mixin auth-page {
   @include flex-center;

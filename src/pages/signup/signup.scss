@@ -1,4 +1,4 @@
-@import "../../styles/form";
+@use "../../styles/form" as *;
 
 .signup-page {
   @include auth-page;

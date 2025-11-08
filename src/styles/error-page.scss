@@ -1,6 +1,6 @@
-@import "./variables";
-@import "./mixins";
-@import "./common";
+@use "./variables" as *;
+@use "./mixins" as *;
+@use "./common" as *;
 
 .error-page {
   @include flex-center;

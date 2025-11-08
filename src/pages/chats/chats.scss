@@ -1,9 +1,15 @@
-@import "../../styles/common";
+@use "../../styles/common" as *;
 
 .chats-page {
     display: flex;
     height: 100vh;
     overflow: hidden;
+}
+
+.chats-page main {
+    display: flex;
+    flex: 1;
+    min-width: 0;
 }
 
 .chats-page__sidebar {

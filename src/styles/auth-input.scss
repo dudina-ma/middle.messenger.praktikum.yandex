@@ -1,5 +1,5 @@
-@import "./variables";
-@import "../components/partials/input";
+@use "./variables" as *;
+@use "../components/partials/input" as *;
 
 .input-field {
   margin-bottom: 16px;
