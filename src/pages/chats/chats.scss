@@ -404,11 +404,12 @@
 }
 
 .chats-page__message-attach-icon {
-    width: 14px;
-    height: 14px;
-    background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.5 1.5V9.5M7.5 1.5C7.5 1.5 4.5 1.5 4.5 4.5V9.5C4.5 12.5 7.5 12.5 7.5 12.5M7.5 1.5C7.5 1.5 10.5 1.5 10.5 4.5V9.5C10.5 12.5 7.5 12.5 7.5 12.5' stroke='%231E1E1E' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/images/attach-icon.png");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;
 }
 
 .chats-page__message-send {
