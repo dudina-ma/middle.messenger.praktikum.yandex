@@ -15,8 +15,8 @@
 1. **Склонировать репозиторий**
 
 ```bash
-git clone https://github.com/dudina-ma/yandex-praktikum-messenger.git
-cd yandex-praktikum-messenger
+git clone https://github.com/dudina-ma/middle.messenger.praktikum.yandex.git
+cd middle.messenger.praktikum.yandex
 ```
 
 2. **Установить зависимости**
@@ -47,9 +47,9 @@ https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=1
 
 ### Ссылки на страницы
 
-- логин https://yandex-praktikum-messenger-dudina.netlify.app/pages/login/login
-- регистриация https://yandex-praktikum-messenger-dudina.netlify.app/pages/signup/signup
-- список чатов https://yandex-praktikum-messenger-dudina.netlify.app/pages/chats/chats
-- настройки пользователя https://yandex-praktikum-messenger-dudina.netlify.app/pages/profile/profile
-- ошибка 404 https://yandex-praktikum-messenger-dudina.netlify.app/pages/error404/error404
-- ошибка 500 https://yandex-praktikum-messenger-dudina.netlify.app/pages/error500/error500
+- логин https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/login/login
+- регистриация https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/signup/signup
+- список чатов https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/chats/chats
+- настройки пользователя https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/profile/profile
+- ошибка 404 https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/error404/error404
+- ошибка 500 https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/error500/error500
