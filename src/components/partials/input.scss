@@ -9,6 +9,8 @@
     outline: none;
     background: transparent;
     color: rgba(30, 30, 30, 1);
+    border: none;
+    border-bottom: 1px solid transparent;
 
     &::placeholder {
       color: $text-secondary;

@@ -1,5 +1,4 @@
 @use "../../styles/common" as *;
-@use "../../styles/form" as *;
 @use "../../components/partials/input" as *;
 @use "sass:string";
 @use "sass:color";
@@ -68,6 +67,10 @@
     height: 130px;
     border-radius: 50%;
     background-color: $background-gray;
+    background-image: url("../../assets/images/image-placeholder.png");
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
     margin-bottom: 20px;
     border: none;
     cursor: pointer;
@@ -76,6 +79,7 @@
     
     &:hover {
         background-color: rgba(0, 0, 0, 0.5);
+        background-blend-mode: overlay;
         
         .profile-page__avatar-text {
             display: block;
@@ -132,6 +136,7 @@
         &__input {
             flex: 1;
             text-align: right;
+            color: rgba(153, 153, 153, 1);
         }
     }
 
