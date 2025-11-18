@@ -1,9 +1,12 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { fileURLToPath, URL } from 'url';
 import handlebars from 'vite-plugin-handlebars';
 import { chatsData } from './src/mock/chatsData.ts';
 import { dialogData } from './src/mock/dialogData.ts';
 import { profileData } from './src/mock/profileData.ts';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   root: resolve(__dirname, 'src'),
