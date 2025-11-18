@@ -1,0 +1,20 @@
+{
+  "name": "praktikum-messenger",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "start": "npm run build && vite preview",
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "sass": "^1.93.3",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7",
+    "vite-plugin-handlebars": "^2.0.0"
+  }
+}

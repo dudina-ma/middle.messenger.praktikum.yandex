@@ -1,0 +1,14 @@
+@use "../../styles/form" as *;
+
+.signup-page {
+  @include auth-page;
+
+  .signup-form-container {
+    @include auth-form-container;
+    height: 615px;
+  }
+}
+
+.signup-form {
+  @include auth-form;
+}
