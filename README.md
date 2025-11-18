@@ -53,3 +53,7 @@ https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=1
 - настройки пользователя https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/profile/profile
 - ошибка 404 https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/error404/error404
 - ошибка 500 https://yandex-praktikum-messenger-dudina-ma.netlify.app/pages/error500/error500
+
+### Ссылкa на PR
+
+https://github.com/dudina-ma/middle.messenger.praktikum.yandex/pull/3
