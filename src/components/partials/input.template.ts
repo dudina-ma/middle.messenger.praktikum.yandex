@@ -1,4 +1,4 @@
-<div class="input-field">
+export default `<div class="input-field">
   {{#if label}}
     <label for="{{name}}" class="input-field__label">{{label}}</label>
   {{/if}}
@@ -17,4 +17,4 @@
   {{#if error}}
     <div class="input-field__error">{{errorText}}</div>
   {{/if}}
-</div>
+</div>`;

@@ -1,0 +1,61 @@
+export default `
+        <section class="signup-form-container">
+            <form class="signup-form">
+                <h1 class="signup-form__title">Регистрация</h1>
+
+                {{> input
+                type="email"
+                name="email"
+                label="Почта"
+                placeholder="Почта"
+                }}
+
+                {{> input
+                type="text"
+                name="login"
+                label="Логин"
+                placeholder="Логин"
+                }}
+
+                {{> input
+                type="text"
+                name="first_name"
+                label="Имя"
+                placeholder="Имя"
+                }}
+
+                {{> input
+                type="text"
+                name="second_name"
+                label="Фамилия"
+                placeholder="Фамилия"
+                }}
+
+                {{> input
+                type="tel"
+                name="phone"
+                label="Телефон"
+                placeholder="Телефон"
+                }}
+
+                {{> input
+                type="password"
+                name="password"
+                label="Пароль"
+                placeholder="Пароль"
+                }}
+
+                {{> input
+                type="password"
+                name="password-repeated"
+                label="Пароль (еще раз)"
+                placeholder="Пароль (еще раз)"
+                }}
+
+                <button type="submit" class="signup-form__button">Зарегистрироваться</button>
+
+                <a href="/pages/login/login" class="signup-form__link">Войти</a>
+            </form>
+        </section>
+    `;
+
