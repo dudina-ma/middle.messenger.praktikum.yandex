@@ -6,14 +6,14 @@ import errorTemplate from '../../components/partials/error.template';
 Handlebars.registerPartial('error', errorTemplate);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const root = document.querySelector('#error500');
+	const root = document.querySelector('#error500');
 
-    const template = Handlebars.compile(error500Template);
+	const template = Handlebars.compile(error500Template);
 
-    const result = template({});
+	const result = template({});
 
-    if (root) {
-        root.innerHTML = result;
-    }
+	if (root) {
+		root.innerHTML = result;
+	}
 });
 

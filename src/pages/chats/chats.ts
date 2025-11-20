@@ -8,15 +8,15 @@ import { dialogData } from '../../mock/dialogData';
 Handlebars.registerPartial('input', inputTemplate);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const root = document.querySelector('#chats');
+	const root = document.querySelector('#chats');
 
-    const template = Handlebars.compile(chatsTemplate);
+	const template = Handlebars.compile(chatsTemplate);
 
-    const result = template({ chats: chatsData, dialog: dialogData });
+	const result = template({ chats: chatsData, dialog: dialogData });
 
-    if (root) {
-        root.innerHTML = result;
-    }
+	if (root) {
+		root.innerHTML = result;
+	}
 });
 
 

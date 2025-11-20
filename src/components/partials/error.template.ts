@@ -4,3 +4,4 @@ export default `<div class="error-page__content">
     <a href="/pages/chats/chats" class="error-page__link">Назад к чатам</a>
 </div>`;
 
+

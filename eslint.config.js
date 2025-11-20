@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import globals from 'globals'; 
 
 export default [
   js.configs.recommended,
@@ -11,7 +12,13 @@ export default [
       parser: tsParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2021,
+      },
     },
+   
     plugins: {
       '@typescript-eslint': ts,
     },
@@ -20,7 +27,7 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       
-      'indent': ['error', 2],
+      'indent': ['error', 'tab'],
       'quotes': ['error', 'single'],
       'semi': ['error', 'always'],
       'comma-dangle': ['error', 'always-multiline'],

@@ -6,13 +6,13 @@ import inputTemplate from '../../components/partials/input.template';
 Handlebars.registerPartial('input', inputTemplate);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const root = document.querySelector('#signup');
+	const root = document.querySelector('#signup');
 
-    const template = Handlebars.compile(signupTemplate);
+	const template = Handlebars.compile(signupTemplate);
 
-    const result = template({});
+	const result = template({});
 
-    if (root) {
-        root.innerHTML = result;
-    }
+	if (root) {
+		root.innerHTML = result;
+	}
 });
