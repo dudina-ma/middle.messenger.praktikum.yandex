@@ -1,22 +1,34 @@
 import './chats.scss';
-import Handlebars from 'handlebars';
 import chatsTemplate from './chats.template';
-import inputTemplate from '../../components/partials/input.template';
 import { chatsData } from '../../mock/chatsData';
 import { dialogData } from '../../mock/dialogData';
+import Input from '../../components/input/input';
+import render from '../../utils/render';
+import Block from '../../services/block';
 
-Handlebars.registerPartial('input', inputTemplate);
-
-document.addEventListener('DOMContentLoaded', () => {
-	const root = document.querySelector('#chats');
-
-	const template = Handlebars.compile(chatsTemplate);
-
-	const result = template({ chats: chatsData, dialog: dialogData });
-
-	if (root) {
-		root.innerHTML = result;
-	}
+const input = new Input('div', {
+	name: 'message',
+	type: 'text',
+	placeholder: 'Сообщение',
+	'class': 'chats-page__input',
+	attr: {
+		class: 'chats-page__message-field',
+	},
 });
 
+class ChatsPage extends Block {
+	render() {
+		return this.compile(chatsTemplate, { 
+			chats: chatsData, 
+			dialog: dialogData, 
+			input,
+		});
+	}
+}
 
+const chatsPage = new ChatsPage('div', {
+	input,
+	attr: { class: 'chats-page__main-content' },
+});
+
+render('#chats', chatsPage);

@@ -74,12 +74,12 @@ export default `
                 {{/each}}
             </section>
 
-            <footer class="chats-page__message-input">
+            <footer class="chats-page__message-block">
                 <form class="chats-page__message-form">
                     <button class="chats-page__message-attach" type="button">
                         <span class="chats-page__message-attach-icon"></span>
                     </button>
-                    <input name="message" type="text" class="chats-page__message-field" placeholder="Сообщение">
+                    {{{input}}}
                     <button class="chats-page__message-send" type="submit">
                         <span class="chats-page__message-send-icon"></span>
                     </button>
