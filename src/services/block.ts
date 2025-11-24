@@ -22,12 +22,16 @@ export default class Block {
 	eventBus: () => EventBus; 
 	_id: string;
 	children: Record<string, Block>;
+	lists: Record<string, Block[]>;
 
 	constructor(tagName: string = 'div', propsAndChilds: Props = {}) {
-		const { children, props } = this.getChildren(propsAndChilds);
+		const { children, props, lists } = this.getChildren(propsAndChilds);
 		const eventBus = new EventBus();
 		this._id = makeUUID();
+		// _makePropsProxy
 		this.children = children;
+		// _makePropsProxy
+		this.lists = lists;
 		this.props = this._makePropsProxy({ ...props, __id: this._id });
 		this._meta = {
 			tagName,
@@ -101,6 +105,9 @@ export default class Block {
 	}
 
 	compile(template: string, props: Props) {
+		// if (typeof props === 'undefined')
+		// 	props = this._props;
+
 		const propsAndStubs = { ...props };
 
 		Object.entries(this.children).forEach(([key, child]) => {
@@ -112,6 +119,10 @@ export default class Block {
 				throw new Error(`Child component ${key} failed to initialize`);
 			}
 			propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+		});
+
+		Object.entries(this.lists).forEach(([key, list]) => {
+			propsAndStubs[key] = list.map((item) => `<div data-id="${item._id}"></div>`);
 		});
 
 		const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
@@ -130,9 +141,22 @@ export default class Block {
 			}
 		});
 
+		Object.values(this.lists).forEach((list) => {
+			list.forEach((item) => {
+				const stub = fragment.content.querySelector(`[data-id="${item._id}"]`);
+
+				if (stub) {
+					const content = item.getContent();
+	
+					if (content) {
+						stub.replaceWith(content);
+					}
+				}
+			});
+		});
+
 		return fragment.content;
 	}
-
 
 	_render() {
 		if (!this._element) {
@@ -167,18 +191,20 @@ export default class Block {
 	}
 
 	getChildren(propsAndChilds: Props) {
-
 		const children: Record<string, Block> = {};
 		const props: Props = {};
+		const lists: Record<string, Block[]> = {};
 	
 		Object.keys(propsAndChilds).forEach(key => {
 			if (propsAndChilds[key] instanceof Block)
 				children[key] = propsAndChilds[key];
+			else if (Array.isArray(propsAndChilds[key]))
+				lists[key] = propsAndChilds[key];
 			else
 				props[key] = propsAndChilds[key];
 		});
 	
-		return { children, props };
+		return { children, props, lists };
 	}
 	
 	_makePropsProxy(props: Props) {

@@ -15,15 +15,9 @@ export default `
                 </div>
 
                 <ul class="profile-page__settings-list">
-                    {{#each profile.settings}}
+                    {{#each inputComponents}}
                     <li class="profile-page__setting-item">
-                        {{> input
-                        type=type
-                        name=name
-                        label=label
-                        value=value
-                        readonly=readonly
-                        }}
+                        {{{this}}}
                     </li>
                     {{/each}}
                 </ul>
