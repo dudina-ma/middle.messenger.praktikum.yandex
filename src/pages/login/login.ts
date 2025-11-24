@@ -1,18 +1,44 @@
 import './login.scss';
-import Handlebars from 'handlebars';
 import loginTemplate from './login.template';
-import inputTemplate from '../../components/partials/input.template';
+import Input from '../../components/input/input';
+import render from '../../utils/render';
+import Block from '../../services/block';
 
-Handlebars.registerPartial('input', inputTemplate);
-
-document.addEventListener('DOMContentLoaded', () => {
-	const root = document.querySelector('#login');
-
-	const template = Handlebars.compile(loginTemplate);
-
-	const result = template({});
-
-	if (root) {
-		root.innerHTML = result;
-	}
+const loginInput = new Input('div', {
+	name: 'login',
+	type: 'text',
+	placeholder: 'Логин',
+	label: 'Логин',
+	class: 'input-field__input',
+	attr: {
+		class: 'input-field',
+	},
 });
+
+const passwordInput = new Input('div', {
+	name: 'message',
+	type: 'password',
+	placeholder: 'Пароль',
+	label: 'Пароль',
+	class: 'input-field__input',
+	attr: {
+		class: 'input-field',
+	},
+});
+
+class LoginPage extends Block {
+	render() {
+		return this.compile(loginTemplate, { 
+			loginInput,
+			passwordInput,
+		});
+	}
+}
+
+const loginPage = new LoginPage('div', {
+	loginInput,
+	passwordInput,
+});
+
+render('#login', loginPage);
+
