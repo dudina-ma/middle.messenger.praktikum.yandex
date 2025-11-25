@@ -1,19 +1,24 @@
 import './error500.scss';
-import Handlebars from 'handlebars';
+import Error from '../../components/error/error';
 import error500Template from './error500.template';
-import errorTemplate from '../../components/partials/error.template';
+import render from '../../utils/render';
+import Block from '../../services/block';
 
-Handlebars.registerPartial('error', errorTemplate);
-
-document.addEventListener('DOMContentLoaded', () => {
-	const root = document.querySelector('#error500');
-
-	const template = Handlebars.compile(error500Template);
-
-	const result = template({});
-
-	if (root) {
-		root.innerHTML = result;
-	}
+const error = new Error('div', {
+	code: '500',
+	message: 'Мы уже фиксим',
 });
 
+class Error500Page extends Block {
+	render() {
+		return this.compile(error500Template, { 
+			error,
+		});
+	}
+}
+
+const error500Page = new Error500Page('div', {
+	error,
+});
+
+render('#error500', error500Page);
