@@ -111,13 +111,6 @@ export default class Block {
 		const propsAndStubs = { ...props };
 
 		Object.entries(this.children).forEach(([key, child]) => {
-			 if (!child.element) {
-				child.init();
-			}
-
-			if (!child.element) {
-				throw new Error(`Child component ${key} failed to initialize`);
-			}
 			propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
 		});
 
@@ -130,32 +123,28 @@ export default class Block {
 		fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
 
 		Object.values(this.children).forEach(child => {
-			const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-            
-			if (stub) {
-				const content = child.getContent();
-
-				if (content) {
-					stub.replaceWith(content);
-				}
-			}
+			this._replaceStubWithContent(fragment.content, child);
 		});
 
 		Object.values(this.lists).forEach((list) => {
 			list.forEach((item) => {
-				const stub = fragment.content.querySelector(`[data-id="${item._id}"]`);
-
-				if (stub) {
-					const content = item.getContent();
-	
-					if (content) {
-						stub.replaceWith(content);
-					}
-				}
+				this._replaceStubWithContent(fragment.content, item);
 			});
 		});
 
 		return fragment.content;
+	}
+
+	_replaceStubWithContent(fragment: DocumentFragment, block: Block): void {
+		const stub = fragment.querySelector(`[data-id="${block._id}"]`);
+		
+		if (stub) {
+			const content = block.getContent();
+
+			if (content) {
+				stub.replaceWith(content);
+			}
+		}
 	}
 
 	_render() {
