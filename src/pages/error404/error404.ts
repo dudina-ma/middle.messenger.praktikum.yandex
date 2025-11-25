@@ -1,19 +1,24 @@
 import './error404.scss';
-import Handlebars from 'handlebars';
+import Error from '../../components/error/error';
 import error404Template from './error404.template';
-import errorTemplate from '../../components/partials/error.template';
+import render from '../../utils/render';
+import Block from '../../services/block';
 
-Handlebars.registerPartial('error', errorTemplate);
-
-document.addEventListener('DOMContentLoaded', () => {
-	const root = document.querySelector('#error404');
-
-	const template = Handlebars.compile(error404Template);
-
-	const result = template({});
-
-	if (root) {
-		root.innerHTML = result;
-	}
+const error = new Error('div', {
+	code: '404',
+	message: 'Не туда попали',
 });
 
+class Error404Page extends Block {
+	render() {
+		return this.compile(error404Template, { 
+			error,
+		});
+	}
+}
+
+const error404Page = new Error404Page('div', {
+	error,
+});
+
+render('#error404', error404Page);
