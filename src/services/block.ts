@@ -16,83 +16,84 @@ export default class Block {
 		FLOW_CDU: 'flow:component-did-update',
 	};
 
-	_element: HTMLElement | null = null;
-	_meta: { tagName: string, props: Props } | null = null;
-	props: Props;
-	eventBus: () => EventBus; 
-	_id: string;
-	children: Record<string, Block>;
-	lists: Record<string, Block[]>;
+	private element: HTMLElement | null = null;
+	private meta: { tagName: string, props: Props } | null = null;
+	private id: string;
+	private children: Record<string, Block>;
+	private lists: Record<string, Block[]>;
+
+	public props: Props;
+	public eventBus: () => EventBus;
 
 	constructor(tagName: string = 'div', propsAndChilds: Props = {}) {
 		const { children, props, lists } = this.getChildren(propsAndChilds);
 		const eventBus = new EventBus();
-		this._id = makeUUID();
-		// _makePropsProxy
+		this.id = makeUUID();
+		// makePropsProxy
 		this.children = children;
-		// _makePropsProxy
+		// makePropsProxy
 		this.lists = lists;
-		this.props = this._makePropsProxy({ ...props, __id: this._id });
-		this._meta = {
+		this.props = this.makePropsProxy({ ...props, id: this.id });
+		this.meta = {
 			tagName,
 			props,
 		};
 
-		this.props = this._makePropsProxy(props);
+		this.props = this.makePropsProxy(props);
 		this.eventBus = () => eventBus;
 
-		this._registerEvents(eventBus);
+		this.registerEvents(eventBus);
 		eventBus.emit(Block.EVENTS.INIT);
 	}
 
-	_registerEvents(eventBus: EventBus): void {
+	private registerEvents(eventBus: EventBus): void {
 		eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
-		eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
-		eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+		eventBus.on(Block.EVENTS.FLOW_CDM, this.componentDidMountInternal.bind(this));
+		eventBus.on(Block.EVENTS.FLOW_RENDER, this.renderInternal.bind(this));
 		eventBus.on(Block.EVENTS.FLOW_CDU, (...args: unknown[]) => {
-			this._componentDidUpdate(args[0] as Props, args[1] as Props);
+			this.componentDidUpdateInternal(args[0] as Props, args[1] as Props);
 		});
 	}
 
-	_createResources() {
-		if (!this._meta) {
+	private createResources() {
+		if (!this.meta) {
 			throw new Error('Meta is not defined');
 		}
-		const { tagName } = this._meta;
-		this._element = this._createDocumentElement(tagName);
+		const { tagName } = this.meta;
+		this.element = this.createDocumentElement(tagName);
 	}
 
-	init() {
-		this._createResources();
+	private init() {
+		this.createResources();
 		this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
 	}
 
-	_componentDidMount() {
+	private componentDidMountInternal() {
 		this.componentDidMount();
 	}
 
 	// Может переопределять пользователь, необязательно трогать
-	componentDidMount() {
+	public componentDidMount() {
 	}
 
-	dispatchComponentDidMount() {
+	public dispatchComponentDidMount() {
 		this.eventBus().emit(Block.EVENTS.FLOW_CDM);
 	}
 
-	_componentDidUpdate(oldProps: Props, newProps: Props) {
+	private componentDidUpdateInternal(oldProps: Props, newProps: Props) {
 		const response = this.componentDidUpdate(oldProps, newProps);
 		if (response) {
-			this._render();
+			this.renderInternal();
 		} 
 	}
 
 	// Может переопределять пользователь, необязательно трогать
-	componentDidUpdate(_oldProps: Props, _newProps: Props) {
+	public componentDidUpdate(_oldProps: Props, _newProps: Props) {
 		console.log(_oldProps, _newProps);
 		return true;
 	}
 
-	setProps = (nextProps: Props) => {
+	public setProps = (nextProps: Props) => {
 		if (!nextProps) {
 			return;
 		}
@@ -100,43 +101,36 @@ export default class Block {
 		Object.assign(this.props, nextProps);
 	};
 
-	get element() {
-		return this._element;
-	}
-
-	compile(template: string, props: Props) {
-		// if (typeof props === 'undefined')
-		// 	props = this._props;
-
+	public compile(template: string, props: Props) {
 		const propsAndStubs = { ...props };
 
 		Object.entries(this.children).forEach(([key, child]) => {
-			propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+			propsAndStubs[key] = `<div data-id="${child.id}"></div>`;
 		});
 
 		Object.entries(this.lists).forEach(([key, list]) => {
-			propsAndStubs[key] = list.map((item) => `<div data-id="${item._id}"></div>`);
+			propsAndStubs[key] = list.map((item) => `<div data-id="${item.id}"></div>`);
 		});
 
-		const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
+		const fragment = this.createDocumentElement('template') as HTMLTemplateElement;
 
 		fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
 
 		Object.values(this.children).forEach(child => {
-			this._replaceStubWithContent(fragment.content, child);
+			this.replaceStubWithContent(fragment.content, child);
 		});
 
 		Object.values(this.lists).forEach((list) => {
 			list.forEach((item) => {
-				this._replaceStubWithContent(fragment.content, item);
+				this.replaceStubWithContent(fragment.content, item);
 			});
 		});
 
 		return fragment.content;
 	}
 
-	_replaceStubWithContent(fragment: DocumentFragment, block: Block): void {
-		const stub = fragment.querySelector(`[data-id="${block._id}"]`);
+	private replaceStubWithContent(fragment: DocumentFragment, block: Block): void {
+		const stub = fragment.querySelector(`[data-id="${block.id}"]`);
 		
 		if (stub) {
 			const content = block.getContent();
@@ -147,23 +141,23 @@ export default class Block {
 		}
 	}
 
-	_render() {
-		if (!this._element) {
+	private renderInternal() {
+		if (!this.element) {
 			throw new Error('Element is not created. Call init() first.');
 		}
 
 		const block = this.render();
-		this._element.innerHTML = '';
-		this._element.appendChild(block);
+		this.element.innerHTML = '';
+		this.element.appendChild(block);
 
 		this.addAttribute();
 	}
 
-	render(): DocumentFragment {
+	public render(): DocumentFragment {
 		return new DocumentFragment();
 	}
 
-	addAttribute() {
+	private addAttribute() {
 		if (!this.element) {
 			throw new Error('Element is not created. Call init() first.');
 		}
@@ -175,11 +169,11 @@ export default class Block {
 		});
 	}
 
-	getContent() {
+	public getContent() {
 		return this.element;
 	}
 
-	getChildren(propsAndChilds: Props) {
+	private getChildren(propsAndChilds: Props) {
 		const children: Record<string, Block> = {};
 		const props: Props = {};
 		const lists: Record<string, Block[]> = {};
@@ -196,10 +190,8 @@ export default class Block {
 		return { children, props, lists };
 	}
 	
-	_makePropsProxy(props: Props) {
-
+	private makePropsProxy(props: Props) {
 		return new Proxy(props, {
-
 			get(target: Props, prop: string) {
 				const value = target[prop];
 				return typeof value === 'function' ? value.bind(target) : value;
@@ -218,21 +210,20 @@ export default class Block {
 		});
 	}
 
-
-	_createDocumentElement(tagName: string) {
+	private createDocumentElement(tagName: string) {
 		// Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
 		return document.createElement(tagName);
 	}
 
-	show() {
-		if (this._element) {
-			this._element.style.display = 'block';
+	public show() {
+		if (this.element) {
+			this.element.style.display = 'block';
 		}
 	}
 
-	hide() {
-		if (this._element) {
-			this._element.style.display = 'none';
+	public hide() {
+		if (this.element) {
+			this.element.style.display = 'none';
 		}
 	}
 }
