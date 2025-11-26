@@ -2,6 +2,7 @@ import EventBus from './event-bus';
 import Handlebars from 'handlebars';
 
 type Props = Record<string, unknown>;
+type Events = Record<string, (e: Event) => void>;
 
 // TODO: переписать на uuid
 function makeUUID() {
@@ -141,16 +142,42 @@ export default class Block {
 		}
 	}
 
+	private addEvents() {
+		const { events = {} } = this.props as { events: Events };
+
+		if (!this.element) {
+			return;
+		}
+	
+		Object.keys(events).forEach((eventName) => {
+			this.element!.addEventListener(eventName, events[eventName]);
+		});
+	}
+	
+	private removeEvents() {
+		const { events = {} } = this.props as { events: Events };
+
+		if (!this.element) {
+			return;
+		}
+	
+		Object.keys(events).forEach((eventName) => {
+			this.element!.removeEventListener(eventName, events[eventName]);
+		});
+	}
+
 	private renderInternal() {
 		if (!this.element) {
 			throw new Error('Element is not created. Call init() first.');
 		}
 
 		const block = this.render();
+		this.removeEvents();
 		this.element.innerHTML = '';
 		this.element.appendChild(block);
 
 		this.addAttribute();
+		this.addEvents();
 	}
 
 	public render(): DocumentFragment {
@@ -205,6 +232,8 @@ export default class Block {
 			},
 
 			deleteProperty(target: Props, key: string) {
+				// убрать console.log
+				console.log('deleteProperty', target, key);
 				throw new Error(`Нельзя удалить свойство ${key} из props`);
 			},
 		});

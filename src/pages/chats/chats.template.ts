@@ -5,12 +5,7 @@ export default `
                         class="chats-page__profile-link-arrow">&gt;</span></a>
 
                 <search class="chats-page__search-box">
-                    <form role="search" class="chats-page__search-form">
-                        <div class="chats-page__search-wrapper">
-                            <span class="chats-page__search-icon"></span>
-                            <input type="search" class="chats-page__search-input" placeholder="Поиск">
-                        </div>
-                    </form>
+                    {{{searchForm}}}
                 </search>
             </header>
 
@@ -75,15 +70,7 @@ export default `
             </section>
 
             <footer class="chats-page__message-block">
-                <form class="chats-page__message-form">
-                    <button class="chats-page__message-attach" type="button">
-                        <span class="chats-page__message-attach-icon"></span>
-                    </button>
-                    {{{input}}}
-                    <button class="chats-page__message-send" type="submit">
-                        <span class="chats-page__message-send-icon"></span>
-                    </button>
-                </form>
+                {{{messageForm}}}
             </footer>
         </section>
     `;
