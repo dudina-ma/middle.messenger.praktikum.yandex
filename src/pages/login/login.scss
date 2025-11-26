@@ -6,6 +6,8 @@
   .login-form-container {
     @include auth-form-container;
     height: 450px;
+    display: flex;
+    flex-direction: column;
   }
 }
 

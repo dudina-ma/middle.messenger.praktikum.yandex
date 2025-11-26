@@ -1,9 +1,4 @@
 export default `
-  <button 
-    type="{{type}}" 
-    {{#if attr.class}}class="{{attr.class}}"{{/if}}
-    {{#if disabled}}disabled{{/if}}
-  >
     {{#if icon}}
       <span class="{{iconClass}}"></span>
     {{/if}}
@@ -15,5 +10,4 @@ export default `
         {{{this}}}
       {{/each}}
     {{/if}}
-  </button>
 `;
