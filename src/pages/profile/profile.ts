@@ -8,13 +8,26 @@ import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import { validateField, validateForm } from '../../services/validation';
 
-const inputComponents: Input[] = profileData.settings.map((setting) => {
+const readonlyInputs: Input[] = profileData.settings.map((setting) => {
 	return new Input('div', {
 		type: setting.type,
 		name: setting.name,
 		label: setting.label,
 		value: setting.value,
-		readonly: setting.readonly,
+		readonly: true,
+		class: 'input-field__input',
+		attr: {
+			class: 'input-field profile-page__setting-item',
+		},
+	});
+});
+
+const editableInputs: Input[] = profileData.settings.map((setting) => {
+	return new Input('div', {
+		type: setting.type,
+		name: setting.name,
+		label: setting.label,
+		value: setting.value,
 		class: 'input-field__input',
 		attr: {
 			class: 'input-field profile-page__setting-item',
@@ -23,11 +36,27 @@ const inputComponents: Input[] = profileData.settings.map((setting) => {
 });
 
 const inputsByName: Record<string, Input> = {};
-inputComponents.forEach((input) => {
+readonlyInputs.forEach((input) => {
 	const name = input.props.name as string;
 	if (name) {
 		inputsByName[name] = input;
 	}
+});
+
+const profileChangeDataButton = new Button('button', {
+	type: 'button',
+	text: 'Изменить данные',
+	attr: {
+		class: 'profile-page__action-button',
+	},
+	events: {
+		click: () => {
+			profilePage.setProps({
+				isEditData: true,
+				isViewData: false,
+			});
+		},
+	},
 });
 
 const submitButton = new Button('button', {
@@ -36,14 +65,30 @@ const submitButton = new Button('button', {
 	attr: {
 		class: 'profile-form__button',
 	},
+	events: {
+		click: () => {
+			profilePage.setProps({
+				isEditData: false,
+				isViewData: true,
+			});
+		},
+	},
 });
 
-const profileForm = new Form('form', {
+const profileViewForm = new Form('form', {
 	attr: {
 		class: 'profile-form',
 	},
 	class: 'profile-page__settings-list',
-	formChildren: [...inputComponents, submitButton],
+	formChildren: [...readonlyInputs],
+});
+
+const profileEditForm = new Form('form', {
+	attr: {
+		class: 'profile-form',
+	},
+	class: 'profile-page__settings-list',
+	formChildren: [...editableInputs, submitButton],
 	events: {
 		focusout: (e: Event) => {
 			if (!(e.target instanceof HTMLInputElement)) {
@@ -76,7 +121,7 @@ const profileForm = new Form('form', {
 
 			const errors = validateForm(data);
 
-			inputComponents.forEach((input) => {
+			readonlyInputs.forEach((input) => {
 				const name = input.props.name as string;
 				if (name) {
 					input.setProps({
@@ -95,14 +140,20 @@ const profileForm = new Form('form', {
 class ProfilePage extends Block {
 	render() {
 		return this.compile(profileTemplate, {
-			profileForm,
+			...this.props,
 			profile: profileData,
+			profileChangeDataButton,
 		});
 	}
 }
 
 const profilePage = new ProfilePage('div', {
-	profileForm,
+	isViewData: true,
+	isEditData: false,
+	isPasswordChange: false,
+	profileViewForm,
+	profileEditForm,
+	profileChangeDataButton,
 	attr: { class: 'profile-page' },
 });
 

@@ -14,14 +14,23 @@ export default `
                     <h1 class="profile-page__name">{{profile.name}}</h1>
                 </div>
 
-                {{{profileForm}}}
+                {{#if isViewData}}
+                    VIEW    
+                    {{{profileViewForm}}}
 
-                <div class="profile-page__actions">
-                    <button type="button" class="profile-page__action-button">Изменить данные</button>
-                    <button type="button" class="profile-page__action-button">Изменить пароль</button>
-                    <button type="button"
-                        class="profile-page__action-button profile-page__action-button--danger">Выйти</button>
-                </div>
+                     <div class="profile-page__actions">
+                        {{{profileChangeDataButton}}}
+                        <button type="button" class="profile-page__action-button">Изменить пароль</button>
+                        <button type="button"
+                            class="profile-page__action-button profile-page__action-button--danger">Выйти</button>
+                    </div>
+                {{/if}}
+
+                {{#if isEditData}}
+                    EDIT
+                
+                    {{{profileEditForm}}}
+                {{/if}}
             </section>
         </main>
     `;
