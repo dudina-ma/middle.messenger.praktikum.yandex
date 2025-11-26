@@ -6,6 +6,8 @@
   .signup-form-container {
     @include auth-form-container;
     height: 615px;
+    display: flex;
+    flex-direction: column;
   }
 }
 

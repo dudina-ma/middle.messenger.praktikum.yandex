@@ -63,7 +63,7 @@ const loginForm = new Form('form', {
 				data[key] = value.toString();
 			}
 	
-			console.log('loginForm:', data);
+			console.log('Form data:', data);
 		},
 	},
 });

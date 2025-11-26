@@ -3,6 +3,9 @@ import signupTemplate from './signup.template';
 import Input from '../../components/input/input';
 import render from '../../utils/render';
 import Block from '../../services/block';
+import Form from '../../components/form/form';
+import Button from '../../components/button/button';
+import Link from '../../components/link/link';
 
 const emailInput = new Input('div', {
 	name: 'email',
@@ -81,30 +84,57 @@ const passwordRepeatedInput = new Input('div', {
 	},
 });
 
+const submitButton = new Button('button', {
+	type: 'submit',
+	text: 'Зарегистрироваться',
+	attr: {
+		class: 'signup-form__button',
+	},
+});
+
+const signupForm = new Form('form', {
+	attr: {
+		class: 'signup-form',
+	},
+	title: 'Регистрация',
+	titleClass: 'signup-form__title',
+	formChildren: [emailInput, loginInput, firstNameInput, secondNameInput, phoneInput, passwordInput, passwordRepeatedInput, submitButton],
+	events: {
+		submit: (e: Event) => {
+			e.preventDefault();
+			const form = e.target as HTMLFormElement;
+			const formData = new FormData(form);
+			
+			const data: Record<string, string> = {};
+			for (const [key, value] of formData.entries()) {
+				data[key] = value.toString();
+			}
+	
+			console.log('Form data:', data);
+		},
+	},
+});
+
+const signupLink = new Link('a', {
+	text: 'Войти',
+	attr: {
+		href: '/pages/login/login',
+		class: 'signup-form__link',
+	},
+});
+
 class SignupPage extends Block {
 	render() {
 		return this.compile(signupTemplate, { 
-			emailInput,
-			loginInput,
-			firstNameInput,
-			secondNameInput,
-			phoneInput,
-			passwordInput,
-			passwordRepeatedInput,
+			signupForm,
+			signupLink,
 		});
 	}
 }
 
 const signupPage = new SignupPage('div', {
-	emailInput,
-	loginInput,
-	firstNameInput,
-	secondNameInput,
-	phoneInput,
-	passwordInput,
-	passwordRepeatedInput,
+	signupForm,
+	signupLink,
 });
 
 render('#signup', signupPage);
-
-
