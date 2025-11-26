@@ -14,13 +14,7 @@ export default `
                     <h1 class="profile-page__name">{{profile.name}}</h1>
                 </div>
 
-                <ul class="profile-page__settings-list">
-                    {{#each inputComponents}}
-                    <li class="profile-page__setting-item">
-                        {{{this}}}
-                    </li>
-                    {{/each}}
-                </ul>
+                {{{profileForm}}}
 
                 <div class="profile-page__actions">
                     <button type="button" class="profile-page__action-button">Изменить данные</button>
