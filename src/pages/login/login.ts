@@ -6,6 +6,7 @@ import Block from '../../services/block';
 import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import Link from '../../components/link/link';
+import { validateField, validateForm } from '../../services/validation';
 
 const loginInput = new Input('div', {
 	name: 'login',
@@ -45,6 +46,11 @@ const loginLink = new Link('a', {
 	},
 });
 
+const inputsByName = {
+	login: loginInput,
+	password: passwordInput,
+};
+
 const loginForm = new Form('form', {
 	attr: {
 		class: 'login-form',
@@ -53,6 +59,23 @@ const loginForm = new Form('form', {
 	titleClass: 'login-form__title',
 	formChildren: [loginInput, passwordInput, submitButton],
 	events: {
+		focusout: (e: Event) => {
+			if (!(e.target instanceof HTMLInputElement)) {
+				return;
+			}
+			
+			const target = e.target as HTMLInputElement;
+			const name = target.name;
+			const value = target.value;
+
+			const errors = validateField(name, value);
+
+			inputsByName[name as keyof typeof inputsByName].setProps({
+				error: Boolean(errors),
+				errorText: errors,
+				value,
+			});
+		},
 		submit: (e: Event) => {
 			e.preventDefault();
 			const form = e.target as HTMLFormElement;
@@ -63,6 +86,20 @@ const loginForm = new Form('form', {
 				data[key] = value.toString();
 			}
 	
+			const errors = validateForm(data);
+
+			loginInput.setProps({
+				error: Boolean(errors.login),
+				errorText: errors.login,
+				value: data.login,
+			});
+
+			passwordInput.setProps({
+				error: Boolean(errors.password),
+				errorText: errors.password,
+				value: data.password,
+			});
+
 			console.log('Form data:', data);
 		},
 	},

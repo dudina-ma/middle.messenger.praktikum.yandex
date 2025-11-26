@@ -11,7 +11,7 @@ export default `
     type="{{type}}" 
     id="{{name}}"
     name="{{name}}" 
-    class="{{class}}"
+    class="{{inputClass}}"
     {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}
     {{#if value}}value="{{value}}"{{/if}}
     {{#if readonly}}readonly{{/if}}
