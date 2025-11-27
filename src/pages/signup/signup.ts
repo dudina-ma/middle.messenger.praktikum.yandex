@@ -6,6 +6,7 @@ import Block from '../../services/block';
 import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import Link from '../../components/link/link';
+import { validateField, validateForm } from '../../services/validation';
 
 const emailInput = new Input('div', {
 	name: 'email',
@@ -74,7 +75,7 @@ const passwordInput = new Input('div', {
 });
 
 const passwordRepeatedInput = new Input('div', {
-	name: 'password-repeated',
+	name: 'password_repeated',
 	type: 'password',
 	placeholder: 'Пароль (еще раз)',
 	label: 'Пароль (еще раз)',
@@ -83,6 +84,16 @@ const passwordRepeatedInput = new Input('div', {
 		class: 'input-field',
 	},
 });
+
+const inputsByName = {
+	email: emailInput,
+	login: loginInput,
+	first_name: firstNameInput,
+	second_name: secondNameInput,
+	phone: phoneInput,
+	password: passwordInput,
+	password_repeated: passwordRepeatedInput,
+};
 
 const submitButton = new Button('button', {
 	type: 'submit',
@@ -100,6 +111,40 @@ const signupForm = new Form('form', {
 	titleClass: 'signup-form__title',
 	formChildren: [emailInput, loginInput, firstNameInput, secondNameInput, phoneInput, passwordInput, passwordRepeatedInput, submitButton],
 	events: {
+		focusout: (e: Event) => {
+			if (!(e.target instanceof HTMLInputElement)) {
+				return;
+			}
+			
+			const target = e.target as HTMLInputElement;
+			const name = target.name;
+			const value = target.value;
+			const form = target.form;
+
+			let errors = validateField(name, value);
+
+			if (name === 'password_repeated' && form) {
+				const passwordInput = form.querySelector('input[name="password"]') as HTMLInputElement;
+				if (passwordInput && value && value !== passwordInput.value) {
+					errors = 'Пароли не совпадают';
+				}
+			}
+
+			if (name === 'password' && form) {
+				const passwordRepeatedInput = form.querySelector('input[name="password_repeated"]') as HTMLInputElement;
+				if (passwordRepeatedInput && passwordRepeatedInput.value && value !== passwordRepeatedInput.value) {
+					passwordRepeatedInput.dispatchEvent(new Event('focusout'));
+				}
+			}
+
+			if (inputsByName[name as keyof typeof inputsByName]) {
+				inputsByName[name as keyof typeof inputsByName].setProps({
+					error: Boolean(errors),
+					errorText: errors,
+					value,
+				});
+			}
+		},
 		submit: (e: Event) => {
 			e.preventDefault();
 			const form = e.target as HTMLFormElement;
@@ -109,7 +154,22 @@ const signupForm = new Form('form', {
 			for (const [key, value] of formData.entries()) {
 				data[key] = value.toString();
 			}
-	
+
+			const errors = validateForm(data);
+
+			if (data.password && data.password_repeated && data.password !== data.password_repeated) {
+				errors.password_repeated = 'Пароли не совпадают';
+			}
+
+			Object.keys(inputsByName).forEach((key) => {
+				const input = inputsByName[key as keyof typeof inputsByName];
+				input.setProps({
+					error: Boolean(errors[key]),
+					errorText: errors[key],
+					value: data[key] || input.props.value,
+				});
+			});
+
 			console.log('Form data:', data);
 		},
 	},
@@ -117,9 +177,9 @@ const signupForm = new Form('form', {
 
 const signupLink = new Link('a', {
 	text: 'Войти',
-	href: '/pages/login/login',
 	attr: {
 		class: 'signup-form__link',
+		href: '/pages/login/login',
 	},
 });
 
