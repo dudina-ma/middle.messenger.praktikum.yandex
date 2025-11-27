@@ -56,4 +56,4 @@ https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=1
 
 ### Ссылкa на PR
 
-https://github.com/dudina-ma/middle.messenger.praktikum.yandex/pull/3
+https://github.com/dudina-ma/middle.messenger.praktikum.yandex/pull/4
