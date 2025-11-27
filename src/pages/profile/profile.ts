@@ -43,6 +43,14 @@ readonlyInputs.forEach((input) => {
 	}
 });
 
+const editableInputsByName: Record<string, Input> = {};
+editableInputs.forEach((input) => {
+	const name = input.props.name as string;
+	if (name) {
+		editableInputsByName[name] = input;
+	}
+});
+
 const profileChangeDataButton = new Button('button', {
 	type: 'button',
 	text: 'Изменить данные',
@@ -54,6 +62,24 @@ const profileChangeDataButton = new Button('button', {
 			profilePage.setProps({
 				isEditData: true,
 				isViewData: false,
+				isPasswordChange: false,
+			});
+		},
+	},
+});
+
+const profileChangePasswordButton = new Button('button', {
+	type: 'button',
+	text: 'Изменить пароль',
+	attr: {
+		class: 'profile-page__action-button',
+	},
+	events: {
+		click: () => {
+			profilePage.setProps({
+				isPasswordChange: true,
+				isViewData: false,
+				isEditData: false,
 			});
 		},
 	},
@@ -64,15 +90,7 @@ const submitButton = new Button('button', {
 	text: 'Сохранить',
 	attr: {
 		class: 'profile-form__button',
-	},
-	events: {
-		click: () => {
-			profilePage.setProps({
-				isEditData: false,
-				isViewData: true,
-			});
-		},
-	},
+	}
 });
 
 const profileViewForm = new Form('form', {
@@ -99,8 +117,8 @@ const profileEditForm = new Form('form', {
 
 			const errors = validateField(name, value);
 
-			if (inputsByName[name]) {
-				inputsByName[name].setProps({
+			if (editableInputsByName[name]) {
+				editableInputsByName[name].setProps({
 					error: Boolean(errors),
 					errorText: errors,
 					value,
@@ -119,18 +137,155 @@ const profileEditForm = new Form('form', {
 
 			const errors = validateForm(data);
 
-			readonlyInputs.forEach((input) => {
+			editableInputs.forEach((input) => {
 				const name = input.props.name as string;
 				if (name) {
 					input.setProps({
 						error: Boolean(errors[name]),
 						errorText: errors[name],
 						value: data[name] || input.props.value,
+						readonly: false,
 					});
 				}
 			});
 
+			const hasErrors = Object.values(errors).some(error => Boolean(error));
+			
+			if (!hasErrors) {
+				readonlyInputs.forEach((input) => {
+					const name = input.props.name as string;
+					if (name && data[name]) {
+						input.setProps({
+							value: data[name],
+							readonly: true,
+						});
+					}
+				});
+							
+				profilePage.setProps({
+					isEditData: false,
+					isViewData: true,
+					isPasswordChange: false,
+				});
+			}
+			
 			console.log('Form data:', data);
+		},
+	},
+});
+
+const oldPasswordInput = new Input('div', {
+	type: 'password',
+	name: 'oldPassword',
+	label: 'Старый пароль',
+	class: 'input-field__input',
+	attr: {
+		class: 'input-field profile-form__item',
+	},
+});
+
+const newPasswordInput = new Input('div', {
+	type: 'password',
+	name: 'newPassword',
+	label: 'Новый пароль',
+	class: 'input-field__input',
+	attr: {
+		class: 'input-field profile-form__item',
+	},
+});
+
+const repeatPasswordInput = new Input('div', {
+	type: 'password',
+	name: 'repeatPassword',
+	label: 'Повторите новый пароль',
+	class: 'input-field__input',
+	attr: {
+		class: 'input-field profile-form__item',
+	},
+});
+
+const passwordSubmitButton = new Button('button', {
+	type: 'submit',
+	text: 'Сохранить',
+	attr: {
+		class: 'profile-form__button',
+	}
+});
+
+const passwordInputsByName: Record<string, Input> = {
+	oldPassword: oldPasswordInput,
+	newPassword: newPasswordInput,
+	repeatPassword: repeatPasswordInput,
+};
+
+const profilePasswordChangeForm = new Form('form', {
+	attr: {
+		class: 'profile-form',
+	},
+	formChildren: [oldPasswordInput, newPasswordInput, repeatPasswordInput, passwordSubmitButton],
+	events: {
+		focusout: (e: Event) => {
+			if (!(e.target instanceof HTMLInputElement)) {
+				return;
+			}
+			
+			const target = e.target as HTMLInputElement;
+			const name = target.name;
+			const value = target.value;
+			const form = target.form;
+
+			let errors = validateField(name, value);
+
+			if (name === 'repeatPassword' && form) {
+				const newPasswordInput = form.querySelector('input[name="newPassword"]') as HTMLInputElement;
+				if (newPasswordInput && value && value !== newPasswordInput.value) {
+					errors = 'Пароли не совпадают';
+				}
+			}
+
+			if (passwordInputsByName[name]) {
+				passwordInputsByName[name].setProps({
+					error: Boolean(errors),
+					errorText: errors,
+					value,
+				});
+			}
+		},
+		submit: (e: Event) => {
+			e.preventDefault();
+			const form = e.target as HTMLFormElement;
+			const formData = new FormData(form);
+			
+			const data: Record<string, string> = {};
+			for (const [key, value] of formData.entries()) {
+				data[key] = value.toString();
+			}
+
+			const errors = validateForm(data);
+
+			if (data.newPassword && data.repeatPassword && data.newPassword !== data.repeatPassword) {
+				errors.repeatPassword = 'Пароли не совпадают';
+			}
+
+			Object.keys(passwordInputsByName).forEach((name) => {
+				const input = passwordInputsByName[name];
+				input.setProps({
+					error: Boolean(errors[name]),
+					errorText: errors[name],
+					value: data[name] || '',
+				});
+			});
+
+			const hasErrors = Object.values(errors).some(error => Boolean(error));
+			if (!hasErrors && data.newPassword && data.repeatPassword && data.newPassword === data.repeatPassword) {
+				profilePage.setProps({
+					isPasswordChange: false,
+					isViewData: true,
+					isEditData: false,
+				});
+			}
+
+			console.log('Password change data:', data);
 		},
 	},
 });
@@ -142,15 +297,19 @@ interface ProfilePageProps {
 	profileViewForm: Form;
 	profileEditForm: Form;
 	profileChangeDataButton: Button;
+	profileChangePasswordButton: Button;
+	profilePasswordChangeForm: Form;
 	profile: typeof profileData;
 	attr?: Record<string, string>;
 }
+
 class ProfilePage extends Block<ProfilePageProps> {
 	render() {
 		return this.compile(profileTemplate, {
 			...this.props,
 			profile: profileData,
 			profileChangeDataButton,
+			profileChangePasswordButton,
 		});
 	}
 }
@@ -161,7 +320,9 @@ const profilePage = new ProfilePage('div', {
 	isPasswordChange: false,
 	profileViewForm,
 	profileEditForm,
+	profilePasswordChangeForm,
 	profileChangeDataButton,
+	profileChangePasswordButton,
 	attr: { class: 'profile-page' },
 	profile: profileData,
 });

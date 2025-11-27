@@ -69,6 +69,32 @@ export const validationRules: Record<string, ValidationRule[]> = {
 			message: 'Пароль должен содержать хотя бы одну цифру',
 		},
 	],
+	oldPassword: [
+		{
+			rule: (value: string) => value.length > 0,
+			message: 'Введите старый пароль',
+		},
+	],
+	newPassword: [
+		{
+			rule: (value: string) => value.length >= 8 && value.length <= 40,
+			message: 'Пароль должен быть от 8 до 40 символов',
+		},
+		{
+			rule: (value: string) => /[A-Z]/.test(value),
+			message: 'Пароль должен содержать хотя бы одну заглавную букву',
+		},
+		{
+			rule: (value: string) => /[0-9]/.test(value),
+			message: 'Пароль должен содержать хотя бы одну цифру',
+		},
+	],
+	repeatPassword: [
+		{
+			rule: (value: string) => value.length > 0,
+			message: 'Повторите новый пароль',
+		},
+	],
 	phone: [
 		{
 			rule: (value: string) => {

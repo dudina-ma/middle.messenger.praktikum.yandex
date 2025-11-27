@@ -47,7 +47,7 @@ export const profileData: ProfileData = {
 			type: 'tel',
 			name: 'phone',
 			label: 'Телефон',
-			value: '+7 (909) 967 30 30',
+			value: '+79099673030',
 		},
 	],
 };

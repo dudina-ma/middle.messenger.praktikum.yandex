@@ -17,9 +17,9 @@ export default `
                 {{#if isViewData}}
                     {{{profileViewForm}}}
 
-                     <div class="profile-page__actions">
+                    <div class="profile-page__actions">
                         {{{profileChangeDataButton}}}
-                        <button type="button" class="profile-page__action-button">Изменить пароль</button>
+                        {{{profileChangePasswordButton}}}
                         <button type="button"
                             class="profile-page__action-button profile-page__action-button--danger">Выйти</button>
                     </div>
@@ -27,6 +27,10 @@ export default `
 
                 {{#if isEditData}}
                     {{{profileEditForm}}}
+                {{/if}}
+
+                {{#if isPasswordChange}}
+                    {{{profilePasswordChangeForm}}}
                 {{/if}}
             </section>
         </main>
