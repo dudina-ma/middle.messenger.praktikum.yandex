@@ -54,3 +54,43 @@ export function handleInputFocusOut(
 
 	return true;
 }
+
+export function validatePasswordMatch(
+	name: string,
+	value: string,
+	form: HTMLFormElement | null,
+	passwordFieldName: string,
+	repeatedFieldName: string,
+	triggerRepeatedValidation = false
+): string | null {
+	if (!form) {
+		return null;
+	}
+
+	if (name === repeatedFieldName) {
+		const passwordInput = form.querySelector(`input[name="${passwordFieldName}"]`) as HTMLInputElement;
+		if (passwordInput && value && value !== passwordInput.value) {
+			return 'Пароли не совпадают';
+		}
+	}
+
+	if (triggerRepeatedValidation && name === passwordFieldName) {
+		const repeatedInput = form.querySelector(`input[name="${repeatedFieldName}"]`) as HTMLInputElement;
+		if (repeatedInput && repeatedInput.value && value !== repeatedInput.value) {
+			repeatedInput.dispatchEvent(new Event('focusout'));
+		}
+	}
+
+	return null;
+}
+
+export function validatePasswordMatchOnSubmit(
+	data: Record<string, string>,
+	errors: Record<string, string>,
+	passwordFieldName: string,
+	repeatedFieldName: string
+): void {
+	if (data[passwordFieldName] && data[repeatedFieldName] && data[passwordFieldName] !== data[repeatedFieldName]) {
+		errors[repeatedFieldName] = 'Пароли не совпадают';
+	}
+}

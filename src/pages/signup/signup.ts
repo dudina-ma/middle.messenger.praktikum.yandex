@@ -7,7 +7,7 @@ import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import Link from '../../components/link/link';
 import { validateForm } from '../../services/validation';
-import { handleFormSubmit, handleInputFocusOut } from '../../utils/formHelpers';
+import { handleFormSubmit, handleInputFocusOut, validatePasswordMatch, validatePasswordMatchOnSubmit } from '../../utils/formHelpers';
 
 const emailInput = new Input('div', {
 	name: 'email',
@@ -114,21 +114,7 @@ const signupForm = new Form('form', {
 	events: {
 		focusout: (e: Event) => {
 			handleInputFocusOut(e, inputsByName, (name, value, form) => {
-				if (name === 'password_repeated' && form) {
-					const passwordInput = form.querySelector('input[name="password"]') as HTMLInputElement;
-					if (passwordInput && value && value !== passwordInput.value) {
-						return 'Пароли не совпадают';
-					}
-				}
-
-				if (name === 'password' && form) {
-					const passwordRepeatedInput = form.querySelector('input[name="password_repeated"]') as HTMLInputElement;
-					if (passwordRepeatedInput && passwordRepeatedInput.value && value !== passwordRepeatedInput.value) {
-						passwordRepeatedInput.dispatchEvent(new Event('focusout'));
-					}
-				}
-
-				return null;
+				return validatePasswordMatch(name, value, form, 'password', 'password_repeated', true);
 			});
 		},
 		submit: (e: Event) => {
@@ -137,9 +123,7 @@ const signupForm = new Form('form', {
 
 			const errors = validateForm(data);
 
-			if (data.password && data.password_repeated && data.password !== data.password_repeated) {
-				errors.password_repeated = 'Пароли не совпадают';
-			}
+			validatePasswordMatchOnSubmit(data, errors, 'password', 'password_repeated');
 
 			Object.keys(inputsByName).forEach((key) => {
 				const input = inputsByName[key as keyof typeof inputsByName];

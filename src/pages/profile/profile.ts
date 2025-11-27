@@ -7,7 +7,7 @@ import render from '../../utils/render';
 import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import { validateForm } from '../../services/validation';
-import { handleFormSubmit, handleInputFocusOut } from '../../utils/formHelpers';
+import { handleFormSubmit, handleInputFocusOut, validatePasswordMatch, validatePasswordMatchOnSubmit } from '../../utils/formHelpers';
 
 const readonlyInputs: Input[] = profileData.settings.map((setting) => {
 	return new Input('div', {
@@ -205,14 +205,7 @@ const profilePasswordChangeForm = new Form('form', {
 	events: {
 		focusout: (e: Event) => {
 			handleInputFocusOut(e, passwordInputsByName, (name, value, form) => {
-				if (name === 'repeatPassword' && form) {
-					const newPasswordInput = form.querySelector('input[name="newPassword"]') as HTMLInputElement;
-					if (newPasswordInput && value && value !== newPasswordInput.value) {
-						return 'Пароли не совпадают';
-					}
-				}
-
-				return null;
+				return validatePasswordMatch(name, value, form, 'newPassword', 'repeatPassword');
 			});
 		},
 		submit: (e: Event) => {
@@ -221,9 +214,7 @@ const profilePasswordChangeForm = new Form('form', {
 
 			const errors = validateForm(data);
 
-			if (data.newPassword && data.repeatPassword && data.newPassword !== data.repeatPassword) {
-				errors.repeatPassword = 'Пароли не совпадают';
-			}
+			validatePasswordMatchOnSubmit(data, errors, 'newPassword', 'repeatPassword');
 
 			Object.keys(passwordInputsByName).forEach((name) => {
 				const input = passwordInputsByName[name];
