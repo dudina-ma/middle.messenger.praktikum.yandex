@@ -7,6 +7,7 @@ import render from '../../utils/render';
 import Block from '../../services/block';
 import Form from '../../components/form/form';
 import Button from '../../components/button/button';
+import { handleFormSubmit } from '../../utils/formHelpers';
 
 const messageInput = new Input('div', {
 	name: 'message',
@@ -43,14 +44,8 @@ const messageForm = new Form('form', {
 	formChildren: [attachButton, messageInput, submitButton],
 	events: {
 		submit: (e: Event) => {
-			e.preventDefault();
-			const form = e.target as HTMLFormElement;
-			const formData = new FormData(form);
-			
-			const data: Record<string, string> = {};
-			for (const [key, value] of formData.entries()) {
-				data[key] = value.toString();
-			}
+			const data = handleFormSubmit(e);
+			if (!data) return;
 	
 			console.log('Form data:', data);
 		},

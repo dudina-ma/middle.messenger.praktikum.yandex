@@ -6,7 +6,8 @@ import Block from '../../services/block';
 import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import Link from '../../components/link/link';
-import { validateField, validateForm } from '../../services/validation';
+import { validateForm } from '../../services/validation';
+import { handleFormSubmit, handleInputFocusOut } from '../../utils/formHelpers';
 
 const loginInput = new Input('div', {
 	name: 'login',
@@ -60,31 +61,11 @@ const loginForm = new Form('form', {
 	formChildren: [loginInput, passwordInput, submitButton],
 	events: {
 		focusout: (e: Event) => {
-			if (!(e.target instanceof HTMLInputElement)) {
-				return;
-			}
-			
-			const target = e.target as HTMLInputElement;
-			const name = target.name;
-			const value = target.value;
-
-			const errors = validateField(name, value);
-
-			inputsByName[name as keyof typeof inputsByName].setProps({
-				error: Boolean(errors),
-				errorText: errors,
-				value,
-			});
+			handleInputFocusOut(e, inputsByName);
 		},
 		submit: (e: Event) => {
-			e.preventDefault();
-			const form = e.target as HTMLFormElement;
-			const formData = new FormData(form);
-			
-			const data: Record<string, string> = {};
-			for (const [key, value] of formData.entries()) {
-				data[key] = value.toString();
-			}
+			const data = handleFormSubmit(e);
+			if (!data) return;
 	
 			const errors = validateForm(data);
 

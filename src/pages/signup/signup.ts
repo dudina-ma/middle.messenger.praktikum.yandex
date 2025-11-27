@@ -6,7 +6,8 @@ import Block from '../../services/block';
 import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import Link from '../../components/link/link';
-import { validateField, validateForm } from '../../services/validation';
+import { validateForm } from '../../services/validation';
+import { handleFormSubmit, handleInputFocusOut } from '../../utils/formHelpers';
 
 const emailInput = new Input('div', {
 	name: 'email',
@@ -112,48 +113,27 @@ const signupForm = new Form('form', {
 	formChildren: [emailInput, loginInput, firstNameInput, secondNameInput, phoneInput, passwordInput, passwordRepeatedInput, submitButton],
 	events: {
 		focusout: (e: Event) => {
-			if (!(e.target instanceof HTMLInputElement)) {
-				return;
-			}
-			
-			const target = e.target as HTMLInputElement;
-			const name = target.name;
-			const value = target.value;
-			const form = target.form;
-
-			let errors = validateField(name, value);
-
-			if (name === 'password_repeated' && form) {
-				const passwordInput = form.querySelector('input[name="password"]') as HTMLInputElement;
-				if (passwordInput && value && value !== passwordInput.value) {
-					errors = 'Пароли не совпадают';
+			handleInputFocusOut(e, inputsByName, (name, value, form) => {
+				if (name === 'password_repeated' && form) {
+					const passwordInput = form.querySelector('input[name="password"]') as HTMLInputElement;
+					if (passwordInput && value && value !== passwordInput.value) {
+						return 'Пароли не совпадают';
+					}
 				}
-			}
 
-			if (name === 'password' && form) {
-				const passwordRepeatedInput = form.querySelector('input[name="password_repeated"]') as HTMLInputElement;
-				if (passwordRepeatedInput && passwordRepeatedInput.value && value !== passwordRepeatedInput.value) {
-					passwordRepeatedInput.dispatchEvent(new Event('focusout'));
+				if (name === 'password' && form) {
+					const passwordRepeatedInput = form.querySelector('input[name="password_repeated"]') as HTMLInputElement;
+					if (passwordRepeatedInput && passwordRepeatedInput.value && value !== passwordRepeatedInput.value) {
+						passwordRepeatedInput.dispatchEvent(new Event('focusout'));
+					}
 				}
-			}
 
-			if (inputsByName[name as keyof typeof inputsByName]) {
-				inputsByName[name as keyof typeof inputsByName].setProps({
-					error: Boolean(errors),
-					errorText: errors,
-					value,
-				});
-			}
+				return null;
+			});
 		},
 		submit: (e: Event) => {
-			e.preventDefault();
-			const form = e.target as HTMLFormElement;
-			const formData = new FormData(form);
-			
-			const data: Record<string, string> = {};
-			for (const [key, value] of formData.entries()) {
-				data[key] = value.toString();
-			}
+			const data = handleFormSubmit(e);
+			if (!data) return;
 
 			const errors = validateForm(data);
 
