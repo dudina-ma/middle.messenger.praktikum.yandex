@@ -40,9 +40,9 @@ const submitButton = new Button('button', {
 
 const loginLink = new Link('a', {
 	text: 'Создать аккаунт',
-	href: '/pages/signup/signup',
 	attr: {
 		class: 'login-form__link',
+		href: '/pages/signup/signup',
 	},
 });
 
@@ -125,4 +125,3 @@ const loginPage = new LoginPage('div', {
 });
 
 render('#login', loginPage);
-
