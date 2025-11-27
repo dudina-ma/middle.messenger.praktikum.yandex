@@ -89,7 +89,6 @@ export default class Block<TProps extends object> {
 
 	// Может переопределять пользователь, необязательно трогать
 	public componentDidUpdate(_oldProps: TProps, _newProps: TProps) {
-		console.log(_oldProps, _newProps);
 		return true;
 	}
 

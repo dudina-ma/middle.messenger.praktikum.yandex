@@ -10,6 +10,7 @@
     "dev": "vite",
     "start": "npm run build && vite preview",
     "build": "tsc && vite build",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint . && stylelint \"**/*.css\"",
     "lint:fix": "eslint --fix . && stylelint --fix \"**/*.css\"",
     "lint:css": "stylelint \"**/*.css\"",
