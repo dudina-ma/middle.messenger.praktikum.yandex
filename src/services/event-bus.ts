@@ -1,6 +1,3 @@
-/* eslint-disable */
-// TODO: убрать 
-
 interface Listeners {
   [eventName: string]: ((...args: unknown[]) => void)[];
 }

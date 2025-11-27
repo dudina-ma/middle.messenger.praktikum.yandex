@@ -17,7 +17,7 @@ const readonlyInputs: Input[] = profileData.settings.map((setting) => {
 		readonly: true,
 		class: 'input-field__input',
 		attr: {
-			class: 'input-field profile-page__setting-item',
+			class: 'input-field profile-form__item',
 		},
 	});
 });
@@ -30,7 +30,7 @@ const editableInputs: Input[] = profileData.settings.map((setting) => {
 		value: setting.value,
 		class: 'input-field__input',
 		attr: {
-			class: 'input-field profile-page__setting-item',
+			class: 'input-field profile-form__item',
 		},
 	});
 });
@@ -79,7 +79,6 @@ const profileViewForm = new Form('form', {
 	attr: {
 		class: 'profile-form',
 	},
-	class: 'profile-page__settings-list',
 	formChildren: [...readonlyInputs],
 });
 
@@ -87,7 +86,6 @@ const profileEditForm = new Form('form', {
 	attr: {
 		class: 'profile-form',
 	},
-	class: 'profile-page__settings-list',
 	formChildren: [...editableInputs, submitButton],
 	events: {
 		focusout: (e: Event) => {
@@ -137,7 +135,17 @@ const profileEditForm = new Form('form', {
 	},
 });
 
-class ProfilePage extends Block {
+interface ProfilePageProps {
+	isViewData: boolean;
+	isEditData: boolean;
+	isPasswordChange: boolean;
+	profileViewForm: Form;
+	profileEditForm: Form;
+	profileChangeDataButton: Button;
+	profile: typeof profileData;
+	attr?: Record<string, string>;
+}
+class ProfilePage extends Block<ProfilePageProps> {
 	render() {
 		return this.compile(profileTemplate, {
 			...this.props,
@@ -155,6 +163,7 @@ const profilePage = new ProfilePage('div', {
 	profileEditForm,
 	profileChangeDataButton,
 	attr: { class: 'profile-page' },
+	profile: profileData,
 });
 
 render('#profile', profilePage);

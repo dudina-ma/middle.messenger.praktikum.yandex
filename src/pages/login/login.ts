@@ -40,8 +40,8 @@ const submitButton = new Button('button', {
 
 const loginLink = new Link('a', {
 	text: 'Создать аккаунт',
+	href: '/pages/signup/signup',
 	attr: {
-		href: '/pages/signup/signup',
 		class: 'login-form__link',
 	},
 });
@@ -105,7 +105,12 @@ const loginForm = new Form('form', {
 	},
 });
 
-class LoginPage extends Block {
+interface LoginPageProps {
+	loginForm: Form;
+	loginLink: Link;
+}
+
+class LoginPage extends Block<LoginPageProps> {
 	render() {
 		return this.compile(loginTemplate, { 
 			loginForm,

@@ -9,7 +9,11 @@ const error = new Error('div', {
 	message: 'Мы уже фиксим',
 });
 
-class Error500Page extends Block {
+interface Error500PageProps {
+	error: Error;
+}
+
+class Error500Page extends Block<Error500PageProps> {
 	render() {
 		return this.compile(error500Template, { 
 			error,

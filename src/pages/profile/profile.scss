@@ -102,14 +102,7 @@
     color: $text-primary;
 }
 
-.profile-page__settings-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-}
-
-.profile-page__setting-item {
+.profile-form__item {
     &:last-child {
         margin-bottom: 0;
     }

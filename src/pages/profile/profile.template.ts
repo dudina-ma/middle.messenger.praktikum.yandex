@@ -15,7 +15,6 @@ export default `
                 </div>
 
                 {{#if isViewData}}
-                    VIEW    
                     {{{profileViewForm}}}
 
                      <div class="profile-page__actions">
@@ -27,8 +26,6 @@ export default `
                 {{/if}}
 
                 {{#if isEditData}}
-                    EDIT
-                
                     {{{profileEditForm}}}
                 {{/if}}
             </section>

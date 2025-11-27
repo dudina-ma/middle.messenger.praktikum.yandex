@@ -23,6 +23,8 @@ export default [
       '@typescript-eslint': ts,
     },
     rules: {
+      'no-unused-vars': 'off',
+
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -36,7 +38,7 @@ export default [
       'eqeqeq': ['error', 'always'],
       'no-var': 'error',
       'prefer-const': 'error',
-      'no-console': 'warn',
+      'no-console': ['warn', { allow: ['log'] }],
     },
   },
   

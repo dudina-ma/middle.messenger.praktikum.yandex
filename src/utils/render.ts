@@ -1,6 +1,6 @@
 import Block from '../services/block';
 
-export default function render(rootSelector: string, block: Block) {
+export default function render(rootSelector: string, block: Block<object>) {
 
 	const root = document.querySelector(rootSelector) as HTMLElement | null;
 

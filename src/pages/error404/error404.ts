@@ -9,7 +9,11 @@ const error = new Error('div', {
 	message: 'Не туда попали',
 });
 
-class Error404Page extends Block {
+interface Error404PageProps {
+	error: Error;
+}
+
+class Error404Page extends Block<Error404PageProps> {
 	render() {
 		return this.compile(error404Template, { 
 			error,

@@ -12,7 +12,7 @@ const messageInput = new Input('div', {
 	name: 'message',
 	type: 'text',
 	placeholder: 'Сообщение',
-	'class': 'chats-page__input',
+	class: 'chats-page__input',
 	attr: {
 		class: 'chats-page__message-field',
 	},
@@ -91,17 +91,28 @@ const searchForm = new Form('form', {
 	},
 });
 
-class ChatsPage extends Block {
+interface ChatsPageProps {
+	messageForm: Form;
+	searchForm: Form;
+	attr?: Record<string, string>;
+	chats: typeof chatsData;
+	dialog: typeof dialogData;
+}
+
+class ChatsPage extends Block<ChatsPageProps> {
 	render() {
 		return this.compile(chatsTemplate, { 
-			chats: chatsData, 
-			dialog: dialogData, 
-			messageForm,
+			chats: this.props.chats, 
+			dialog: this.props.dialog, 
+			messageForm: this.props.messageForm,
+			searchForm: this.props.searchForm,
 		});
 	}
 }
 
 const chatsPage = new ChatsPage('div', {
+	chats: chatsData,
+	dialog: dialogData,
 	messageForm,
 	searchForm,
 	attr: { class: 'chats-page__main-content' },

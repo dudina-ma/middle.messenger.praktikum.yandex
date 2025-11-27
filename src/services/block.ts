@@ -1,7 +1,6 @@
 import EventBus from './event-bus';
 import Handlebars from 'handlebars';
 
-type Props = Record<string, unknown>;
 type Events = Record<string, (e: Event) => void>;
 
 // TODO: переписать на uuid
@@ -9,7 +8,7 @@ function makeUUID() {
 	return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-export default class Block {
+export default class Block<TProps extends object> {
 	static EVENTS = {
 		INIT: 'init',
 		FLOW_CDM: 'flow:component-did-mount',
@@ -18,15 +17,15 @@ export default class Block {
 	};
 
 	private element: HTMLElement | null = null;
-	private meta: { tagName: string, props: Props } | null = null;
+	private meta: { tagName: string, props: TProps } | null = null;
 	private id: string;
-	private children: Record<string, Block>;
-	private lists: Record<string, Block[]>;
+	private children: Record<string, Block<object>>;
+	private lists: Record<string, Block<object>[]>;
 
-	public props: Props;
+	public props: TProps;
 	public eventBus: () => EventBus;
 
-	constructor(tagName: string = 'div', propsAndChilds: Props = {}) {
+	constructor(tagName: string = 'div', propsAndChilds: TProps = {} as TProps) {
 		const { children, props, lists } = this.getChildren(propsAndChilds);
 		const eventBus = new EventBus();
 		this.id = makeUUID();
@@ -34,7 +33,7 @@ export default class Block {
 		this.children = children;
 		// makePropsProxy
 		this.lists = lists;
-		this.props = this.makePropsProxy({ ...props, id: this.id });
+		this.props = this.makePropsProxy(props);
 		this.meta = {
 			tagName,
 			props,
@@ -52,7 +51,7 @@ export default class Block {
 		eventBus.on(Block.EVENTS.FLOW_CDM, this.componentDidMountInternal.bind(this));
 		eventBus.on(Block.EVENTS.FLOW_RENDER, this.renderInternal.bind(this));
 		eventBus.on(Block.EVENTS.FLOW_CDU, (...args: unknown[]) => {
-			this.componentDidUpdateInternal(args[0] as Props, args[1] as Props);
+			this.componentDidUpdateInternal(args[0] as TProps, args[1] as TProps);
 		});
 	}
 
@@ -81,7 +80,7 @@ export default class Block {
 		this.eventBus().emit(Block.EVENTS.FLOW_CDM);
 	}
 
-	private componentDidUpdateInternal(oldProps: Props, newProps: Props) {
+	private componentDidUpdateInternal(oldProps: TProps, newProps: TProps) {
 		const response = this.componentDidUpdate(oldProps, newProps);
 		if (response) {
 			this.renderInternal();
@@ -89,12 +88,12 @@ export default class Block {
 	}
 
 	// Может переопределять пользователь, необязательно трогать
-	public componentDidUpdate(_oldProps: Props, _newProps: Props) {
+	public componentDidUpdate(_oldProps: TProps, _newProps: TProps) {
 		console.log(_oldProps, _newProps);
 		return true;
 	}
 
-	public setProps = (nextProps: Props) => {
+	public setProps = (nextProps: Partial<TProps>) => {
 		if (!nextProps) {
 			return;
 		}
@@ -102,15 +101,15 @@ export default class Block {
 		Object.assign(this.props, nextProps);
 	};
 
-	public compile(template: string, props: Props) {
+	public compile(template: string, props: TProps) {
 		const propsAndStubs = { ...props };
 
 		Object.entries(this.children).forEach(([key, child]) => {
-			propsAndStubs[key] = `<div data-id="${child.id}"></div>`;
+			propsAndStubs[key as keyof TProps] = `<div data-id="${child.id}"></div>` as TProps[keyof TProps];
 		});
 
 		Object.entries(this.lists).forEach(([key, list]) => {
-			propsAndStubs[key] = list.map((item) => `<div data-id="${item.id}"></div>`);
+			propsAndStubs[key as keyof TProps] = list.map((item) => `<div data-id="${item.id}"></div>`) as TProps[keyof TProps];
 		});
 
 		const fragment = this.createDocumentElement('template') as HTMLTemplateElement;
@@ -130,7 +129,7 @@ export default class Block {
 		return fragment.content;
 	}
 
-	private replaceStubWithContent(fragment: DocumentFragment, block: Block): void {
+	private replaceStubWithContent(fragment: DocumentFragment, block: Block<object>): void {
 		const stub = fragment.querySelector(`[data-id="${block.id}"]`);
 		
 		if (stub) {
@@ -200,38 +199,40 @@ export default class Block {
 		return this.element;
 	}
 
-	private getChildren(propsAndChilds: Props) {
-		const children: Record<string, Block> = {};
-		const props: Props = {};
-		const lists: Record<string, Block[]> = {};
-	
-		Object.keys(propsAndChilds).forEach(key => {
-			if (propsAndChilds[key] instanceof Block)
-				children[key] = propsAndChilds[key];
-			else if (Array.isArray(propsAndChilds[key]))
-				lists[key] = propsAndChilds[key];
+	private getChildren(propsAndChildren: TProps) {
+		const children: Record<string, Block<object>> = {};
+		const props = {} as TProps;
+		const lists: Record<string, Block<object>[]> = {};
+		
+		Object.keys(propsAndChildren).forEach(key => {
+			const k = key as keyof TProps;
+
+			if (propsAndChildren[k] instanceof Block)
+				children[key] = propsAndChildren[k];
+			else if (Array.isArray(propsAndChildren[k]))
+				lists[key] = propsAndChildren[k];
 			else
-				props[key] = propsAndChilds[key];
+				props[k] = propsAndChildren[k];
 		});
 	
 		return { children, props, lists };
 	}
 	
-	private makePropsProxy(props: Props) {
+	private makePropsProxy(props: TProps): TProps {
 		return new Proxy(props, {
-			get(target: Props, prop: string) {
-				const value = target[prop];
+			get(target: TProps, prop: string): TProps[keyof TProps] {
+				const value = target[prop as keyof TProps];
 				return typeof value === 'function' ? value.bind(target) : value;
 			},
 
-			set: (target: Props, prop: string, value: unknown) => {
+			set: (target: TProps, prop: string, value: unknown) => {
 				const oldValue = { ...target };
-				target[prop] = value;
+				target[prop as keyof TProps] = value as TProps[keyof TProps];
 				this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldValue, target);
 				return true;
 			},
 
-			deleteProperty(target: Props, key: string) {
+			deleteProperty(target: TProps, key: string) {
 				// убрать console.log
 				console.log('deleteProperty', target, key);
 				throw new Error(`Нельзя удалить свойство ${key} из props`);

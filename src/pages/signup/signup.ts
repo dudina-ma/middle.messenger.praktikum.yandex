@@ -117,13 +117,18 @@ const signupForm = new Form('form', {
 
 const signupLink = new Link('a', {
 	text: 'Войти',
+	href: '/pages/login/login',
 	attr: {
-		href: '/pages/login/login',
 		class: 'signup-form__link',
 	},
 });
 
-class SignupPage extends Block {
+interface SignupPageProps {
+	signupForm: Form;
+	signupLink: Link;
+}
+
+class SignupPage extends Block<SignupPageProps> {
 	render() {
 		return this.compile(signupTemplate, { 
 			signupForm,
