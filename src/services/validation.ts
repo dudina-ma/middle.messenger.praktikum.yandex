@@ -1,3 +1,5 @@
+import type { Nullable } from '../types/types';
+
 type ValidationRule = {
 	rule: (value: string) => boolean;
 	message: string;
@@ -84,7 +86,7 @@ export const validationRules: Record<string, ValidationRule[]> = {
 	],
 };
 
-export function validateField(name: string, value: string): string | null {
+export function validateField(name: string, value: string): Nullable<string> {
 	const rules = validationRules[name];
 	if (!rules) {
 		return null;

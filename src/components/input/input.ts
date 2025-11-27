@@ -1,6 +1,7 @@
 import Block from '../../services/block';
 import inputTemplate from './input.template';
 import './input.scss';
+import type { Nullable } from '../../types/types';
 
 interface InputProps {
 	attr?: Record<string, string>;
@@ -15,7 +16,7 @@ interface InputProps {
 	required?: boolean;
 	class?: string;
 	error?: boolean;
-	errorText?: string | null;
+	errorText?: Nullable<string>;
 }
 
 export default class Input extends Block<InputProps> {

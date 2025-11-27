@@ -1,9 +1,9 @@
 import EventBus from './event-bus';
 import Handlebars from 'handlebars';
+import type { Nullable } from '../types/types';
 
 type Events = Record<string, (e: Event) => void>;
 
-// TODO: переписать на uuid
 function makeUUID() {
 	return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
@@ -16,8 +16,8 @@ export default class Block<TProps extends object> {
 		FLOW_CDU: 'flow:component-did-update',
 	};
 
-	private element: HTMLElement | null = null;
-	private meta: { tagName: string, props: TProps } | null = null;
+	private element: Nullable<HTMLElement> = null;
+	private meta: Nullable<{ tagName: string, props: TProps }> = null;
 	private id: string;
 	private children: Record<string, Block<object>>;
 	private lists: Record<string, Block<object>[]>;
@@ -29,9 +29,7 @@ export default class Block<TProps extends object> {
 		const { children, props, lists } = this.getChildren(propsAndChilds);
 		const eventBus = new EventBus();
 		this.id = makeUUID();
-		// makePropsProxy
 		this.children = children;
-		// makePropsProxy
 		this.lists = lists;
 		this.props = this.makePropsProxy(props);
 		this.meta = {
@@ -72,7 +70,6 @@ export default class Block<TProps extends object> {
 		this.componentDidMount();
 	}
 
-	// Может переопределять пользователь, необязательно трогать
 	public componentDidMount() {
 	}
 
@@ -87,7 +84,6 @@ export default class Block<TProps extends object> {
 		} 
 	}
 
-	// Может переопределять пользователь, необязательно трогать
 	public componentDidUpdate(_oldProps: TProps, _newProps: TProps) {
 		return true;
 	}
@@ -208,7 +204,7 @@ export default class Block<TProps extends object> {
 
 			if (propsAndChildren[k] instanceof Block)
 				children[key] = propsAndChildren[k];
-			else if (Array.isArray(propsAndChildren[k]))
+			else if (Array.isArray(propsAndChildren[k]) && propsAndChildren[k][0] instanceof Block)
 				lists[key] = propsAndChildren[k];
 			else
 				props[k] = propsAndChildren[k];
@@ -231,16 +227,13 @@ export default class Block<TProps extends object> {
 				return true;
 			},
 
-			deleteProperty(target: TProps, key: string) {
-				// убрать console.log
-				console.log('deleteProperty', target, key);
+			deleteProperty(_target: TProps, key: string) {
 				throw new Error(`Нельзя удалить свойство ${key} из props`);
 			},
 		});
 	}
 
 	private createDocumentElement(tagName: string) {
-		// Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
 		return document.createElement(tagName);
 	}
 

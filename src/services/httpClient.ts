@@ -27,7 +27,7 @@ function queryStringify(data: Record<string, string>) {
 	return result.slice(0, -1);
 }
 
-class HTTPTransport {
+export default class HTTPTransport {
 	get = (url: string, options: Options = {}) => {
 		return this.request(
 			url,
