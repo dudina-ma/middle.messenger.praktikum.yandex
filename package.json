@@ -11,10 +11,10 @@
     "start": "npm run build && vite preview",
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit && eslint . && stylelint \"**/*.css\"",
-    "lint:fix": "eslint --fix . && stylelint --fix \"**/*.css\"",
-    "lint:css": "stylelint \"**/*.css\"",
-    "lint:css-fix": "stylelint --fix \"**/*.css\""
+    "lint": "tsc --noEmit && eslint . && stylelint \"**/*.{css,scss}\"",
+    "lint:fix": "eslint --fix . && stylelint --fix \"**/*.{css,scss}\"",
+    "lint:css": "stylelint \"**/*.{css,scss,sass,styl,less,pcss}\"",
+    "lint:css-fix": "stylelint --fix \"**/*.{css,scss}\""
   },
   "dependencies": {
     "handlebars": "^4.7.8"
@@ -24,9 +24,11 @@
     "@typescript-eslint/parser": "^8.47.0",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
+    "postcss-scss": "^4.0.9",
     "sass": "^1.93.3",
     "stylelint": "^16.25.0",
     "stylelint-config-standard": "^39.0.1",
+    "stylelint-config-standard-scss": "^16.0.0",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
     "vite-plugin-handlebars": "^2.0.0"

@@ -10,6 +10,7 @@
 
 .profile-page__sidebar {
     @include flex-center;
+
     width: 64px;
     background-color: $sidebar-background;
     border-right: 1px solid $background-gray;
@@ -24,6 +25,7 @@
 
 .profile-page__back-button {
     @include flex-center;
+
     width: 28px;
     height: 28px;
     background: $secondary-color;
@@ -36,7 +38,9 @@
 .profile-page__back-icon {
     width: 13px;
     height: 13px;
+
     $white-hex: string.slice(color.ie-hex-str($primary-color), 4);
+
     background-image: url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.5 1L1 6.5L6.5 12M1 6.5H12' stroke='%23#{$white-hex}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
@@ -44,6 +48,7 @@
 
 .profile-page__content {
     @include flex-column-center;
+
     flex: 1;
     min-width: 0;
     padding: 60px 20px;
@@ -57,11 +62,13 @@
 
 .profile-page__header {
     @include flex-column-center;
+
     margin-bottom: 60px;
 }
 
 .profile-page__avatar {
     @include flex-center;
+
     width: 130px;
     height: 130px;
     border-radius: 50%;
@@ -77,7 +84,7 @@
     position: relative;
     
     &:hover {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgb(0 0 0 / 50%);
         background-blend-mode: overlay;
         
         .profile-page__avatar-text {
@@ -129,7 +136,7 @@
     .input-field__input {
         flex: 1;
         text-align: right;
-        color: rgba(153, 153, 153, 1);
+        color: rgb(153 153 153 / 100%);
         order: 2;
         min-width: 0;
     }
@@ -178,6 +185,7 @@
 
 .profile-page__actions {
     @include flex-column-center;
+
     margin-top: 60px;
     width: 100%;
 }
