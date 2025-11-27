@@ -46,6 +46,7 @@ export default [
       'no-var': 'error',
       'prefer-const': 'error',
       'no-console': ['warn', { allow: ['log'] }],
+      'eol-last': ['error', 'always'],
     },
   },
   
