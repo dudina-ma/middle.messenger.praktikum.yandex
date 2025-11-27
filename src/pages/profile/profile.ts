@@ -91,7 +91,7 @@ const submitButton = new Button('button', {
 	text: 'Сохранить',
 	attr: {
 		class: 'profile-form__button',
-	}
+	},
 });
 
 const profileViewForm = new Form('form', {
@@ -188,7 +188,7 @@ const passwordSubmitButton = new Button('button', {
 	text: 'Сохранить',
 	attr: {
 		class: 'profile-form__button',
-	}
+	},
 });
 
 const passwordInputsByName: Record<string, Input> = {

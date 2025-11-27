@@ -23,7 +23,7 @@ export function handleFormSubmit(e: Event): Record<string, string> | null {
 export function handleInputFocusOut(
 	e: Event,
 	inputsByName: Record<string, Input>,
-	additionalValidation?: (name: string, value: string, form: HTMLFormElement | null) => string | null
+	additionalValidation?: (name: string, value: string, form: HTMLFormElement | null) => string | null,
 ): boolean {
 	if (!(e.target instanceof HTMLInputElement)) {
 		return false;
@@ -61,7 +61,7 @@ export function validatePasswordMatch(
 	form: HTMLFormElement | null,
 	passwordFieldName: string,
 	repeatedFieldName: string,
-	triggerRepeatedValidation = false
+	triggerRepeatedValidation = false,
 ): string | null {
 	if (!form) {
 		return null;
@@ -88,7 +88,7 @@ export function validatePasswordMatchOnSubmit(
 	data: Record<string, string>,
 	errors: Record<string, string>,
 	passwordFieldName: string,
-	repeatedFieldName: string
+	repeatedFieldName: string,
 ): void {
 	if (data[passwordFieldName] && data[repeatedFieldName] && data[passwordFieldName] !== data[repeatedFieldName]) {
 		errors[repeatedFieldName] = 'Пароли не совпадают';

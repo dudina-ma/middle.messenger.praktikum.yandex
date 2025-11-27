@@ -2,7 +2,7 @@ export default `
   {{#if label}}
     <label for="{{name}}" class="input-field__label">{{label}}</label>
   {{/if}}
-
+  
   {{#if icon}}
     <span class="{{iconClass}}"></span>
   {{/if}}
