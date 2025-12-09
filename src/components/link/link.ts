@@ -4,6 +4,7 @@ import linkTemplate from './link.template';
 interface LinkProps {
 	attr?: Record<string, string>;
 	text: string;
+	events?: Record<string, (e: Event) => void>;
 }
 
 export default class Link extends Block<LinkProps> {

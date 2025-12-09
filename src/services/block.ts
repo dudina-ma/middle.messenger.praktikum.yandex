@@ -19,7 +19,7 @@ export default class Block<TProps extends object> {
 	private element: Nullable<HTMLElement> = null;
 	private meta: Nullable<{ tagName: string, props: TProps }> = null;
 	private id: string;
-	private children: Record<string, Block<object>>;
+	protected children: Record<string, Block<object>>;
 	private lists: Record<string, Block<object>[]>;
 
 	public props: TProps;
