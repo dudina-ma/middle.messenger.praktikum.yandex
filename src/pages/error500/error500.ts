@@ -1,28 +1,45 @@
 import './error500.scss';
 import Error from '../../components/error/error';
 import error500Template from './error500.template';
-import render from '../../utils/render';
 import Block from '../../services/block';
+import Router from '../../services/router';
+import Link from '../../components/link/link';
 
-const error = new Error('div', {
-	code: '500',
-	message: 'Мы уже фиксим',
-});
-
-interface Error500PageProps {
-	error: Error;
-}
-
-class Error500Page extends Block<Error500PageProps> {
+class Error500Page extends Block<object> {
 	render() {
+		const error = new Error('div', {
+			code: '500',
+			message: 'Мы уже фиксим',
+		});
+
+		const profileLink = new Link('a', {
+			text: 'Назад к чатам',
+			attr: {
+				href: '/chats',
+				class: 'error-page__link',
+			},
+			events: {
+				click: (event: Event) => {
+					event.preventDefault();
+
+					const router = Router.getInstance();
+					// else
+					if (router) {
+						router.go('/chats');
+					}
+				},
+			},
+		});
+	
+		this.children = {
+			error,
+			profileLink,
+		};
+
 		return this.compile(error500Template, { 
 			error,
 		});
 	}
 }
 
-const error500Page = new Error500Page('div', {
-	error,
-});
-
-render('#error500', error500Page);
+export default Error500Page;

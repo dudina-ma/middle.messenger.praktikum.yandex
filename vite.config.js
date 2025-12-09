@@ -21,7 +21,6 @@ export default defineConfig({
         login: resolve(__dirname, 'src/pages/login/login.html'),
         signup: resolve(__dirname, 'src/pages/signup/signup.html'),
         profile: resolve(__dirname, 'src/pages/profile/profile.html'),
-        error500: resolve(__dirname, 'src/pages/error500/error500.html'),
       }
     }
   }
