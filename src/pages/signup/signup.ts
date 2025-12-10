@@ -150,7 +150,7 @@ class SignupPage extends Block<object> {
 			text: 'Войти',
 			attr: {
 				class: 'signup-form__link',
-				href: '/pages/login/login',
+				href: '/',
 			},
 			events: {
 				click: (event: Event) => {

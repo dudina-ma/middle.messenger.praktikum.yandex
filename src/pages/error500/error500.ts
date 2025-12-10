@@ -15,7 +15,7 @@ class Error500Page extends Block<object> {
 		const profileLink = new Link('a', {
 			text: 'Назад к чатам',
 			attr: {
-				href: '/chats',
+				href: '/messenger',
 				class: 'error-page__link',
 			},
 			events: {
@@ -25,7 +25,7 @@ class Error500Page extends Block<object> {
 					const router = Router.getInstance();
 					// else
 					if (router) {
-						router.go('/chats');
+						router.go('/messenger');
 					}
 				},
 			},

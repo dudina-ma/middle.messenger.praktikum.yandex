@@ -37,7 +37,8 @@ class Route {
 	leave() {
         // else
 		if (this.page) {
-			this.page.hide();
+			this.page.destroy();
+            this.page = null;
 		}
 	}
 

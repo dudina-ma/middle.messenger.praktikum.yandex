@@ -8,6 +8,7 @@ import Button from '../../components/button/button';
 import { validateForm } from '../../services/validation';
 import { handleFormSubmit, handleInputFocusOut, validatePasswordMatch, validatePasswordMatchOnSubmit } from '../../utils/formHelpers';
 import Link from '../../components/link/link';
+import Router from '../../services/router';
 
 interface ProfilePageProps {
 	isViewData: boolean;
@@ -261,6 +262,15 @@ class ProfilePage extends Block<object> {
 			},
 			icon: true,
 			iconClass: 'profile-page__back-icon',
+			events: {
+				click: (event: Event) => {
+					event.preventDefault();
+					const router = Router.getInstance();
+					if (router) {
+						router.go('/messenger');
+					}
+				},
+			},
 		});
 
 		this.children = {

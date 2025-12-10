@@ -248,4 +248,11 @@ export default class Block<TProps extends object> {
 			this.element.style.display = 'none';
 		}
 	}
+
+	public destroy() {
+		if (this.element && this.element.parentNode) {
+			this.element.parentNode.removeChild(this.element);
+		}
+		this.element = null;
+	}
 }

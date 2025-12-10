@@ -100,8 +100,9 @@ class ChatsPage extends Block<object> {
 		const profileLink = new Link('a', {
 			text: 'Профиль',
 			attr: {
-				href: '/pages/profile/profile',
 				class: 'chats-page__profile-link',
+				// нужна ли
+				href: '/settings',
 			},
 			icon: true,
 			iconText: '>',
