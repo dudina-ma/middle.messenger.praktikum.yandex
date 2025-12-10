@@ -1,9 +1,7 @@
 export default `
         <section class="chats-page__sidebar">
             <header class="chats-page__header">
-                <a href="/pages/profile/profile" class="chats-page__profile-link">Профиль <span
-                        class="chats-page__profile-link-arrow">&gt;</span></a>
-
+                {{{profileLink}}}
                 <search class="chats-page__search-box">
                     {{{searchForm}}}
                 </search>

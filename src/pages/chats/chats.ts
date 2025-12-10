@@ -7,6 +7,8 @@ import Block from '../../services/block';
 import Form from '../../components/form/form';
 import Button from '../../components/button/button';
 import { handleFormSubmit } from '../../utils/formHelpers';
+import Router from '../../services/router';
+import Link from '../../components/link/link';
 
 interface ChatsPageProps {
 	messageForm: Form;
@@ -95,9 +97,32 @@ class ChatsPage extends Block<object> {
 			},
 		});
 
+		const profileLink = new Link('a', {
+			text: 'Профиль',
+			attr: {
+				href: '/pages/profile/profile',
+				class: 'chats-page__profile-link',
+			},
+			icon: true,
+			iconText: '>',
+			iconClass: 'chats-page__profile-link-arrow',
+			events: {
+				click: (event: Event) => {
+					event.preventDefault();
+
+					const router = Router.getInstance();
+					// else
+					if (router) {
+						router.go('/settings');
+					}
+				},
+			}
+		});
+
 		this.children = {
 			messageForm,
 			searchForm,
+			profileLink
 		};
 
 		const chats = (this.props as ChatsPageProps).chats || chatsData;
@@ -108,6 +133,7 @@ class ChatsPage extends Block<object> {
 			dialog, 
 			messageForm,
 			searchForm,
+			profileLink
 		});
 	}
 }

@@ -1,8 +1,6 @@
 export default `
         <aside class="profile-page__sidebar">
-            <a href="/pages/chats/chats" class="profile-page__back-button">
-                <span class="profile-page__back-icon"></span>
-            </a>
+            {{{chatsBackLink}}}
         </aside>
 
         <main>

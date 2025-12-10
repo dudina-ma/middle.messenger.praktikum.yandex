@@ -3,8 +3,11 @@ import linkTemplate from './link.template';
 
 interface LinkProps {
 	attr?: Record<string, string>;
-	text: string;
+	text?: string;
 	events?: Record<string, (e: Event) => void>;
+	icon?: boolean;
+	iconText?: string;
+	iconClass?: string;
 }
 
 export default class Link extends Block<LinkProps> {
