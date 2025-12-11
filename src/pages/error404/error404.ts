@@ -36,7 +36,7 @@ class Error404Page extends Block<object> {
 
 		this.children = {
 			error,
-			profileLink
+			profileLink,
 		};
 
 		return this.compile(error404Template, { 

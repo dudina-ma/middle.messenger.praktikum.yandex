@@ -35,10 +35,10 @@ class Route {
 	}
 
 	leave() {
-        // else
+		// else
 		if (this.page) {
 			this.page.destroy();
-            this.page = null;
+			this.page = null;
 		}
 	}
 

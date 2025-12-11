@@ -10,10 +10,10 @@ import ProfilePage from './pages/profile/profile';
 const router = new Router('#app');
 
 router
-    .use('/', LoginPage, {
-        tagName: 'main',
-        attr: { class: 'login-page' },
-    })
+	.use('/', LoginPage, {
+		tagName: 'main',
+		attr: { class: 'login-page' },
+	})
 	.use('/messenger', ChatsPage, { 
 		tagName: 'main',
 		attr: { class: 'chats-page' }, 
@@ -26,12 +26,12 @@ router
 		tagName: 'main',
 		attr: { class: 'error-page' }, 
 	})
-    .use('/sign-up', SignupPage, {
-        tagName: 'main',
-        attr: { class: 'signup-page' },
-    })
-    .use('/settings', ProfilePage, {
-        tagName: 'div',
-        attr: { class: 'profile-page' },
-    })
+	.use('/sign-up', SignupPage, {
+		tagName: 'main',
+		attr: { class: 'signup-page' },
+	})
+	.use('/settings', ProfilePage, {
+		tagName: 'div',
+		attr: { class: 'profile-page' },
+	})
 	.start();

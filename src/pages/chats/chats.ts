@@ -117,13 +117,13 @@ class ChatsPage extends Block<object> {
 						router.go('/settings');
 					}
 				},
-			}
+			},
 		});
 
 		this.children = {
 			messageForm,
 			searchForm,
-			profileLink
+			profileLink,
 		};
 
 		const chats = (this.props as ChatsPageProps).chats || chatsData;
@@ -134,7 +134,7 @@ class ChatsPage extends Block<object> {
 			dialog, 
 			messageForm,
 			searchForm,
-			profileLink
+			profileLink,
 		});
 	}
 }

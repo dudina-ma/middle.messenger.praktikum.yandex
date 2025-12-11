@@ -8,6 +8,10 @@ import Link from '../../components/link/link';
 import Router from '../../services/router';
 import { validateForm } from '../../services/validation';
 import { handleFormSubmit, handleInputFocusOut, validatePasswordMatch, validatePasswordMatchOnSubmit } from '../../utils/formHelpers';
+import AuthController from '../../controllers/auth-controller';
+import type { SignupFormData } from '../../types/types';
+import connect from '../../services/hoc';
+import type { State } from '../../store/store';
 
 interface SignupPageProps {
 	signupForm: Form;
@@ -142,6 +146,17 @@ class SignupPage extends Block<object> {
 					});
 		
 					console.log('Form data:', data);
+
+					const signupData: SignupFormData = {
+						first_name: data.first_name,
+						second_name: data.second_name,
+						login: data.login,
+						email: data.email,
+						password: data.password,
+						phone: data.phone,
+					};
+
+					AuthController.signup(signupData);
 				},
 			},
 		});
@@ -176,4 +191,10 @@ class SignupPage extends Block<object> {
 	}
 }
 
-export default SignupPage;
+function mapUserToProps(state: State) {
+	return {
+	  id: state.user?.id,
+	};
+}
+
+export default connect(mapUserToProps)(SignupPage);

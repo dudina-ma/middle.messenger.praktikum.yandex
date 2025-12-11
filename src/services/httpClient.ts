@@ -27,7 +27,13 @@ function queryStringify(data: Record<string, string>) {
 	return result.slice(0, -1);
 }
 
-export default class HTTPTransport {
+class HttpClient {
+	private baseUrl: string;
+
+	constructor(baseUrl: string) {
+		this.baseUrl = baseUrl;
+	}
+
 	get = (url: string, options: Options = {}) => {
 		return this.request(
 			url,
@@ -60,11 +66,13 @@ export default class HTTPTransport {
 		);
 	};
 
-	request = (url: string, options: Options, timeout = 5000) => {
+	request = (url: string, options: Options, timeout = 5000): Promise<XMLHttpRequest> => {
 		const { method, data } = options;
 
-		return new Promise((resolve, reject) => {
+		return new Promise<XMLHttpRequest>((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
+
+			url = this.baseUrl + url;
 
 			if (method === METHODS.GET) {
 				url += queryStringify(data || {});
@@ -103,3 +111,5 @@ export default class HTTPTransport {
 		});
 	};
 }
+
+export default HttpClient;
