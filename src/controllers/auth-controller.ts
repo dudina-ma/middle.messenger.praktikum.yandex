@@ -1,12 +1,19 @@
 import AuthAPI from '../api/auth/auth-api';
 import store from '../store/store';
-import type { SignupFormData } from '../types/types';
+import type { SignupFormData, LoginFormData } from '../types/types';
+import Router from '../services/router';
 
 class AuthController {
+	private router: Router | null;
+
+	constructor() {
+		this.router = Router.getInstance();
+	}
+
 	public signup(data: SignupFormData) {
 		// крутилка
-		// валидация данных 
-		AuthAPI.create(data)
+		// валидация данных где должна быть
+		AuthAPI.signup(data)
 			.then((xhr) => {
 				if (xhr.status >= 200 && xhr.status < 300) {
 					const response = JSON.parse(xhr.responseText || '{}');
@@ -14,10 +21,28 @@ class AuthController {
 					if (id) {
 						store.set('user', { id });
 					}
+
+					if (this.router) {
+						this.router.go('/messenger');
+					}
 				}
 			})
 			.catch((error) => {
 				console.error('Signup error:', error);
+			});
+	}
+
+	public login(data: LoginFormData) {
+		AuthAPI.login(data)
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					if (this.router) {
+						this.router.go('/messenger');
+					}
+				}
+			})
+			.catch((error) => {
+				console.error('Login error:', error);
 			});
 	}
 
@@ -43,17 +68,3 @@ class AuthController {
 }
 
 export default new AuthController();
-
-// interface LoginFormModel {
-// 	email: string;
-// 	password: string;
-//   }
-  
-//   // controllers/user-login.ts
-  
-//   const loginApi = new LoginAPI();
-//   const userLoginValidator = validateLoginFields(validateRules);
-  
-//   class UserLoginController {
-	
-//   }

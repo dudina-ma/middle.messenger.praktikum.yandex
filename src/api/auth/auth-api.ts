@@ -1,9 +1,11 @@
 import HttpClient from '../../services/httpClient';
 import { API_BASE_URLS } from '../index';
 import type { SignupFormData } from '../../types/types';
+import type { LoginFormData } from '../../types/types';
 
 const authAPIInstance = new HttpClient(API_BASE_URLS.auth);
 
+// где должен быть then
 // class LoginAPI extends BaseAPI {
 //     public request(user: LoginRequest) {
 //       return authAPIInstance.post<LoginRequest, LoginResponse>('/login', user)
@@ -13,7 +15,7 @@ const authAPIInstance = new HttpClient(API_BASE_URLS.auth);
 
 //  BaseAPI
 class AuthAPI {
-	create(data: SignupFormData) {
+	signup(data: SignupFormData) {
 		return authAPIInstance.post('/signup', { data: {
 			first_name: data.first_name,
 			second_name: data.second_name,
@@ -21,6 +23,12 @@ class AuthAPI {
 			email: data.email,
 			password: data.password,
 			phone: data.phone,
+		} });
+	}
+	login(data: LoginFormData) {
+		return authAPIInstance.post('/login', { data: {
+			login: data.login,
+			password: data.password,
 		} });
 	}
 }

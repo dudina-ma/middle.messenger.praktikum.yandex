@@ -43,7 +43,7 @@ class Route {
 	}
 
 	match(pathname: string) {
-		return isEqual(pathname, this.pathname);
+		return pathname === this.pathname;
 	}
 
 	render() {

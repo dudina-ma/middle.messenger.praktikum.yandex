@@ -12,3 +12,8 @@ export interface SignupFormData {
 	password: string;
 	phone: string;
 }
+
+export interface LoginFormData {
+	login: string;
+	password: string;
+}

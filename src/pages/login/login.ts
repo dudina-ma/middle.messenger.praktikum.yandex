@@ -8,6 +8,8 @@ import Link from '../../components/link/link';
 import { validateForm } from '../../services/validation';
 import { handleFormSubmit, handleInputFocusOut } from '../../utils/formHelpers';
 import Router from '../../services/router';
+import AuthController from '../../controllers/auth-controller';
+import type { LoginFormData } from '../../types/types';
 
 interface LoginPageProps {
 	loginForm: Form;
@@ -99,6 +101,13 @@ class LoginPage extends Block<object> {
 					});
 		
 					console.log('Form data:', data);
+
+					const loginData: LoginFormData = {
+						login: data.login,
+						password: data.password,
+					};
+
+					AuthController.login(loginData);
 				},
 			},
 		});
