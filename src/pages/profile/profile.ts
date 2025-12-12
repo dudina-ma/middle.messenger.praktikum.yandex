@@ -9,6 +9,7 @@ import { validateForm } from '../../services/validation';
 import { handleFormSubmit, handleInputFocusOut, validatePasswordMatch, validatePasswordMatchOnSubmit } from '../../utils/formHelpers';
 import Link from '../../components/link/link';
 import Router from '../../services/router';
+import AuthController from '../../controllers/auth-controller';
 
 interface ProfilePageProps {
 	isViewData: boolean;
@@ -109,12 +110,25 @@ class ProfilePage extends Block<object> {
 				class: 'profile-form__button',
 			},
 		});
+
+		const profileLogoutButton = new Button('button', {
+			type: 'button',
+			text: 'Выйти',
+			attr: {
+				class: 'profile-page__action-button profile-page__action-button--danger',
+			},
+			events: {
+				click: () => {
+					AuthController.logout();
+				},
+			},
+		});
 		
 		const profileViewForm = new Form('form', {
 			attr: {
 				class: 'profile-form',
 			},
-			formChildren: [...readonlyInputs],
+			formChildren: [...readonlyInputs, profileLogoutButton],
 		});
 		
 		const profileEditForm = new Form('form', {
@@ -279,7 +293,8 @@ class ProfilePage extends Block<object> {
 			profilePasswordChangeForm,
 			profileChangeDataButton,
 			profileChangePasswordButton,
-			chatsBackLink
+			profileLogoutButton,
+			chatsBackLink,
 		};
 
 		return this.compile(profileTemplate, {
@@ -287,6 +302,7 @@ class ProfilePage extends Block<object> {
 			profile: profileData,
 			profileChangeDataButton,
 			profileChangePasswordButton,
+			profileLogoutButton,
 		});
 	}
 }

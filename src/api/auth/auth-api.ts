@@ -26,10 +26,13 @@ class AuthAPI {
 		} });
 	}
 	login(data: LoginFormData) {
-		return authAPIInstance.post('/login', { data: {
+		return authAPIInstance.post('/signin', { data: {
 			login: data.login,
 			password: data.password,
 		} });
+	}
+	logout() {
+		return authAPIInstance.post('/logout');
 	}
 }
 

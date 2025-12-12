@@ -4,12 +4,6 @@ import type { SignupFormData, LoginFormData } from '../types/types';
 import Router from '../services/router';
 
 class AuthController {
-	private router: Router | null;
-
-	constructor() {
-		this.router = Router.getInstance();
-	}
-
 	public signup(data: SignupFormData) {
 		// крутилка
 		// валидация данных где должна быть
@@ -22,8 +16,9 @@ class AuthController {
 						store.set('user', { id });
 					}
 
-					if (this.router) {
-						this.router.go('/messenger');
+					const router = Router.getInstance();
+					if (router) {
+						router.go('/messenger');
 					}
 				}
 			})
@@ -36,13 +31,29 @@ class AuthController {
 		AuthAPI.login(data)
 			.then((xhr) => {
 				if (xhr.status >= 200 && xhr.status < 300) {
-					if (this.router) {
-						this.router.go('/messenger');
+					const router = Router.getInstance();
+					if (router) {
+						router.go('/messenger');
 					}
 				}
 			})
 			.catch((error) => {
 				console.error('Login error:', error);
+			});
+	}
+
+	public logout() {
+		AuthAPI.logout()
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					const router = Router.getInstance();
+					if (router) {
+						router.go('/');
+					}
+				}
+			})
+			.catch((error) => {
+				console.error('Logout error:', error);
 			});
 	}
 

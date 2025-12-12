@@ -79,6 +79,7 @@ class HttpClient {
 			}
 
 			xhr.timeout = timeout;
+			xhr.withCredentials = true;
 
 			xhr.open(method || '', url);
 

@@ -12,16 +12,13 @@ export default `
                     <h1 class="profile-page__name">{{profile.name}}</h1>
                 </div>
 
-                {{#if isViewData}}
                     {{{profileViewForm}}}
 
                     <div class="profile-page__actions">
                         {{{profileChangeDataButton}}}
                         {{{profileChangePasswordButton}}}
-                        <button type="button"
-                            class="profile-page__action-button profile-page__action-button--danger">Выйти</button>
+                        {{{profileLogoutButton}}}
                     </div>
-                {{/if}}
 
                 {{#if isEditData}}
                     {{{profileEditForm}}}
