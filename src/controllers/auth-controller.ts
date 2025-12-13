@@ -10,16 +10,20 @@ class AuthController {
 		AuthAPI.signup(data)
 			.then((xhr) => {
 				if (xhr.status >= 200 && xhr.status < 300) {
-					const response = JSON.parse(xhr.responseText || '{}');
-					const id = response.id || response.user_id;
-					if (id) {
-						store.set('user', { id });
-					}
+					// надо ли это тут
 
-					const router = Router.getInstance();
-					if (router) {
-						router.go('/messenger');
-					}
+					//const response = JSON.parse(xhr.responseText || '{}');
+					//const id = response.id || response.user_id;
+					// if (id) {
+					// 	store.set('user', { id });
+					// }
+
+					this.getUser().then(() => {
+						const router = Router.getInstance();
+						if (router) {
+							router.go('/messenger');
+						}
+					});
 				}
 			})
 			.catch((error) => {
@@ -31,10 +35,12 @@ class AuthController {
 		AuthAPI.login(data)
 			.then((xhr) => {
 				if (xhr.status >= 200 && xhr.status < 300) {
-					const router = Router.getInstance();
-					if (router) {
-						router.go('/messenger');
-					}
+					this.getUser().then(() => {
+						const router = Router.getInstance();
+						if (router) {
+							router.go('/messenger');
+						}
+					});
 				}
 			})
 			.catch((error) => {
@@ -54,6 +60,25 @@ class AuthController {
 			})
 			.catch((error) => {
 				console.error('Logout error:', error);
+			})
+			.finally(() => {
+				store.set('user', null);
+			});
+	}
+	public getUser() {
+		return AuthAPI.getUser()
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					const response = JSON.parse(xhr.responseText || '{}');
+					store.set('user', response);
+					return response;
+				} else {
+					throw new Error(`Failed to get user: ${xhr.status}`);
+				}
+			})
+			.catch((error) => {
+				console.error('Get user error:', error);
+				throw error;
 			});
 	}
 

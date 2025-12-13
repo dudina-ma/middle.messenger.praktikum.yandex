@@ -1,6 +1,5 @@
 import './profile.scss';
 import profileTemplate from './profile.template';
-import { profileData } from '../../mock/profileData';
 import Input from '../../components/input/input';
 import Block from '../../services/block';
 import Form from '../../components/form/form';
@@ -10,64 +9,201 @@ import { handleFormSubmit, handleInputFocusOut, validatePasswordMatch, validateP
 import Link from '../../components/link/link';
 import Router from '../../services/router';
 import AuthController from '../../controllers/auth-controller';
+import type { User } from '../../types/types';
+import type { State } from '../../store/store';
+import connect from '../../services/hoc';
+import UserController from '../../controllers/user-controller';
+import { ProfilePageMode } from '../../controllers/user-controller';
 
 interface ProfilePageProps {
-	isViewData: boolean;
-	isEditData: boolean;
-	isPasswordChange: boolean;
-	profileViewForm: Form;
-	profileEditForm: Form;
-	profileChangeDataButton: Button;
-	profileChangePasswordButton: Button;
-	profilePasswordChangeForm: Form;
-	profile: typeof profileData;
-	attr?: Record<string, string>;
+	profile: User;
+	isViewData?: boolean;
+	isEditData?: boolean;
+	isPasswordChange?: boolean;
 }
 
-class ProfilePage extends Block<object> {
+class ProfilePage extends Block<ProfilePageProps> {
+	// типизация
+	constructor(...args: ConstructorParameters<typeof Block<ProfilePageProps>>) {
+		super(...args);
+
+		UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
+
+		AuthController.getUser().then((user) => {
+			this.setProps({
+				profile: user,
+			});
+		});
+		//UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
+	}
+
 	render() {
-		const readonlyInputs: Input[] = profileData.settings.map((setting) => {
-			return new Input('div', {
-				type: setting.type,
-				name: setting.name,
-				label: setting.label,
-				value: setting.value,
-				readonly: true,
-				class: 'input-field__input',
-				attr: {
-					class: 'input-field profile-form__item',
-				},
-			});
-		});
+		const user = this.props.profile;
 		
-		const editableInputs: Input[] = profileData.settings.map((setting) => {
-			return new Input('div', {
-				type: setting.type,
-				name: setting.name,
-				label: setting.label,
-				value: setting.value,
-				class: 'input-field__input',
-				attr: {
-					class: 'input-field profile-form__item',
-				},
-			});
+		const emailInputReadonly = new Input('div', {
+			type: 'email',
+			name: 'email',
+			label: 'Почта',
+			value: user?.email || '',
+			readonly: true,
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
 		});
-		
-		const inputsByName: Record<string, Input> = {};
-		readonlyInputs.forEach((input) => {
-			const name = input.props.name as string;
-			if (name) {
-				inputsByName[name] = input;
-			}
+
+		const loginInputReadonly = new Input('div', {
+			type: 'text',
+			name: 'login',
+			label: 'Логин',
+			value: user?.login || '',
+			readonly: true,
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
 		});
-		
-		const editableInputsByName: Record<string, Input> = {};
-		editableInputs.forEach((input) => {
-			const name = input.props.name as string;
-			if (name) {
-				editableInputsByName[name] = input;
-			}
+
+		const firstNameInputReadonly = new Input('div', {
+			type: 'text',
+			name: 'first_name',
+			label: 'Имя',
+			value: user?.first_name || '',
+			readonly: true,
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
 		});
+
+		const secondNameInputReadonly = new Input('div', {
+			type: 'text',
+			name: 'second_name',
+			label: 'Фамилия',
+			value: user?.second_name || '',
+			readonly: true,
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const displayNameInputReadonly = new Input('div', {
+			type: 'text',
+			name: 'display_name',
+			label: 'Имя в чате',
+			value: user?.display_name || '',
+			readonly: true,
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const phoneInputReadonly = new Input('div', {
+			type: 'tel',
+			name: 'phone',
+			label: 'Телефон',
+			value: user?.phone || '',
+			readonly: true,
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const readonlyInputs: Input[] = [
+			emailInputReadonly,
+			loginInputReadonly,
+			firstNameInputReadonly,
+			secondNameInputReadonly,
+			displayNameInputReadonly,
+			phoneInputReadonly,
+		];
+
+		const emailInputEditable = new Input('div', {
+			type: 'email',
+			name: 'email',
+			label: 'Почта',
+			value: user?.email || '',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const loginInputEditable = new Input('div', {
+			type: 'text',
+			name: 'login',
+			label: 'Логин',
+			value: user?.login || '',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const firstNameInputEditable = new Input('div', {
+			type: 'text',
+			name: 'first_name',
+			label: 'Имя',
+			value: user?.first_name || '',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const secondNameInputEditable = new Input('div', {
+			type: 'text',
+			name: 'second_name',
+			label: 'Фамилия',
+			value: user?.second_name || '',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const displayNameInputEditable = new Input('div', {
+			type: 'text',
+			name: 'display_name',
+			label: 'Имя в чате',
+			value: user?.display_name || '',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const phoneInputEditable = new Input('div', {
+			type: 'tel',
+			name: 'phone',
+			label: 'Телефон',
+			value: user?.phone || '',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field profile-form__item',
+			},
+		});
+
+		const editableInputs: Input[] = [
+			emailInputEditable,
+			loginInputEditable,
+			firstNameInputEditable,
+			secondNameInputEditable,
+			displayNameInputEditable,
+			phoneInputEditable,
+		];
+
+		const editableInputsByName: Record<string, Input> = {
+			email: emailInputEditable,
+			login: loginInputEditable,
+			first_name: firstNameInputEditable,
+			second_name: secondNameInputEditable,
+			display_name: displayNameInputEditable,
+			phone: phoneInputEditable,
+		};
 		
 		const profileChangeDataButton = new Button('button', {
 			type: 'button',
@@ -77,11 +213,7 @@ class ProfilePage extends Block<object> {
 			},
 			events: {
 				click: () => {
-					this.setProps({
-						isEditData: true,
-						isViewData: false,
-						isPasswordChange: false,
-					});
+					UserController.setProfilePageMode(ProfilePageMode.EDIT_DATA);
 				},
 			},
 		});
@@ -94,11 +226,7 @@ class ProfilePage extends Block<object> {
 			},
 			events: {
 				click: () => {
-					this.setProps({
-						isPasswordChange: true,
-						isViewData: false,
-						isEditData: false,
-					});
+					UserController.setProfilePageMode(ProfilePageMode.CHANGE_PASSWORD);
 				},
 			},
 		});
@@ -170,15 +298,22 @@ class ProfilePage extends Block<object> {
 								});
 							}
 						});
-									
-						this.setProps({
-							isEditData: false,
-							isViewData: true,
-							isPasswordChange: false,
-						});
+
+						UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
 					}
 					
 					console.log('Form data:', data);
+
+					const editProfileData: User = {
+						first_name: data.first_name,
+						second_name: data.second_name,
+						login: data.login,
+						email: data.email,
+						phone: data.phone,
+						display_name: data.display_name,
+					};
+
+					UserController.editProfile(editProfileData);
 				},
 			},
 		});
@@ -257,11 +392,7 @@ class ProfilePage extends Block<object> {
 		
 					const hasErrors = Object.values(errors).some(error => Boolean(error));
 					if (!hasErrors && data.newPassword && data.repeatPassword && data.newPassword === data.repeatPassword) {
-						this.setProps({
-							isPasswordChange: false,
-							isViewData: true,
-							isEditData: false,
-						});
+						UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
 					}
 		
 					console.log('Password change data:', data);
@@ -299,12 +430,18 @@ class ProfilePage extends Block<object> {
 
 		return this.compile(profileTemplate, {
 			...this.props,
-			profile: profileData,
-			profileChangeDataButton,
-			profileChangePasswordButton,
-			profileLogoutButton,
+			profile: user,
 		});
 	}
 }
 
-export default ProfilePage;
+function mapStateToProps(state: State) {
+	return {
+	  profile: state.user,
+	  isViewData: state.profile?.pageMode === ProfilePageMode.VIEW_DATA,
+	  isEditData: state.profile?.pageMode === ProfilePageMode.EDIT_DATA,
+	  isPasswordChange: state.profile?.pageMode === ProfilePageMode.CHANGE_PASSWORD,
+	};
+}
+
+export default connect(mapStateToProps)(ProfilePage);

@@ -1,47 +1,18 @@
 import EventBus from '../services/event-bus';
+import type { User } from '../types/types';
+import { ProfilePageMode } from '../controllers/user-controller';
+import { set } from '../utils/helpers';
 
-type Indexed<T = unknown> = {
-    [key in string]: T;
-};
+// правильно ли сделано, что это необязательные поля
+export interface State {
+	user?: User;
+	profile?: {
+		pageMode: ProfilePageMode;
+	};
+}
 
 export enum StoreEvents {
   Updated = 'updated',
-}
-
-function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {
-	if (typeof path !== 'string') {
-		throw new Error('path must be string');
-	}
-
-	if (object === null || typeof object !== 'object') {
-		return object;
-	}
-
-	const pathItems = path.split('.');
-    
-	if (pathItems.length === 1) {
-		(object as any)[pathItems[0]] = value;
-		return object;
-	}
-
-	const key = pathItems[0];
-	const restPath = pathItems.slice(1).join('.');
-    
-	if (object && !(key in object) || 
-        typeof (object as any)[key] !== 'object' || 
-        (object as any)[key] === null) {
-		(object as any)[key] = {};
-	}
-    
-	set((object as any)[key], restPath, value);
-    
-	return object;
-}
-
-export interface State {
-	user?: {
-		id: number;
-	};
 }
 
 class Store extends EventBus {

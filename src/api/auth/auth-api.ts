@@ -34,6 +34,9 @@ class AuthAPI {
 	logout() {
 		return authAPIInstance.post('/logout');
 	}
+	getUser() {
+		return authAPIInstance.get('/user');
+	}
 }
 
 export default new AuthAPI();

@@ -1,48 +1,70 @@
 import type { Indexed } from '../types/types';
 
 export function isEqual(a: object, b: object): boolean {
-	let result: boolean = true;
+    const aKeys = Object.keys(a);
+    const bKeys = Object.keys(b);
+    
+    if (aKeys.length !== bKeys.length) {
+        return false;
+    }
+    
+    const bKeySet = new Set(bKeys);
+    for (const key of aKeys) {
+        if (!bKeySet.has(key)) {
+            return false;
+        }
+    }
+    
+    for (const key of aKeys) {
+        const aValue = (a as any)[key];
+        const bValue = (b as any)[key];
+        
+        if (typeof aValue === 'object' && aValue !== null &&
+            typeof bValue === 'object' && bValue !== null) {
+            
+            if (!isEqual(aValue, bValue)) {
+                return false;
+            }
+        } 
+        else if (typeof aValue !== 'object' && typeof bValue !== 'object') {
+            if (aValue !== bValue) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    
+    return true;
+}
 
-	if (Object.keys(a).length !== Object.keys(b).length) {
-		result = false;
+export function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {
+	if (typeof path !== 'string') {
+		throw new Error('path must be string');
 	}
 
-	const bKeys = new Set(Object.keys(b));
-
-	for (let i = 0; i < Object.keys(a).length; i++) {
-		if (bKeys.has(Object.keys(a)[i])) {
-			bKeys.delete(Object.keys(a)[i]);
-		} else {
-			result = false;
-			return result;
-		}
+	if (object === null || typeof object !== 'object') {
+		return object;
 	}
 
-	if (bKeys.size > 0) {
-		result = false;
-		return result;
+	const pathItems = path.split('.');
+    
+	if (pathItems.length === 1) {
+		(object as any)[pathItems[0]] = value;
+		return object;
 	}
 
-	for (let i = 0; i < Object.keys(a).length; i++) {
-		const aValue = (a as Indexed)[Object.keys(a)[i]];
-		const bValue = (b as Indexed)[Object.keys(a)[i]];
-
-		if (typeof aValue === 'object') {
-			if (typeof bValue === 'object') {
-				return isEqual(aValue as Indexed, bValue as Indexed);
-			} else {
-				result = false;
-				return result;
-			}
-		} else {
-			if (typeof bValue === 'object') {
-				result = false;
-				return result;
-			} else {
-				return aValue === bValue;
-			}
-		} 
+	const key = pathItems[0];
+	const restPath = pathItems.slice(1).join('.');
+    
+	if (object && !(key in object) || 
+        typeof (object as any)[key] !== 'object' || 
+        (object as any)[key] === null) {
+		(object as any)[key] = {};
 	}
-
-	return result;
+    
+	set((object as any)[key], restPath, value);
+    
+	return object;
 }

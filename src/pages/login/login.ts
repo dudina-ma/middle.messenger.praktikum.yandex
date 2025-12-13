@@ -11,11 +11,6 @@ import Router from '../../services/router';
 import AuthController from '../../controllers/auth-controller';
 import type { LoginFormData } from '../../types/types';
 
-interface LoginPageProps {
-	loginForm: Form;
-	loginLink: Link;
-}
-
 class LoginPage extends Block<object> {
 	render() {
 		const loginInput = new Input('div', {

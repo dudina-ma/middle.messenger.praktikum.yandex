@@ -25,8 +25,8 @@ export default class Block<TProps extends object> {
 	public props: TProps;
 	public eventBus: () => EventBus;
 
-	constructor(tagName: string = 'div', propsAndChilds: TProps = {} as TProps) {
-		const { children, props, lists } = this.getChildren(propsAndChilds);
+	constructor(tagName: string = 'div', propsAndChildren: TProps = {} as TProps) {
+		const { children, props, lists } = this.getChildren(propsAndChildren);
 		const eventBus = new EventBus();
 		this.id = makeUUID();
 		this.children = children;

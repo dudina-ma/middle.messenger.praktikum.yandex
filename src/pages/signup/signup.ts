@@ -191,10 +191,10 @@ class SignupPage extends Block<object> {
 	}
 }
 
-function mapUserToProps(state: State) {
+function mapStateToProps(state: State) {
 	return {
 	  id: state.user?.id,
 	};
 }
 
-export default connect(mapUserToProps)(SignupPage);
+export default connect(mapStateToProps)(SignupPage);
