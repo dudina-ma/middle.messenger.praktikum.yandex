@@ -1,5 +1,5 @@
 import EventBus from '../services/event-bus';
-import type { User } from '../types/types';
+import type { User, Chat } from '../types/types';
 import { ProfilePageMode } from '../controllers/user-controller';
 import { set } from '../utils/helpers';
 
@@ -9,6 +9,7 @@ export interface State {
 	profile?: {
 		pageMode: ProfilePageMode;
 	};
+	chats?: Chat[];
 }
 
 export enum StoreEvents {

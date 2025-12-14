@@ -1,6 +1,5 @@
 import './chats.scss';
 import chatsTemplate from './chats.template';
-import { chatsData } from '../../mock/chatsData';
 import { dialogData } from '../../mock/dialogData';
 import Input from '../../components/input/input';
 import Block from '../../services/block';
@@ -9,16 +8,23 @@ import Button from '../../components/button/button';
 import { handleFormSubmit } from '../../utils/formHelpers';
 import Router from '../../services/router';
 import Link from '../../components/link/link';
+import type { Chat } from '../../types/types';
+import ChatsController from '../../controllers/chats-controller';
+import connect from '../../services/hoc';
+import type { State } from '../../store/store';
 
 interface ChatsPageProps {
-	messageForm: Form;
-	searchForm: Form;
-	attr?: Record<string, string>;
-	chats: typeof chatsData;
+	chats: Chat[];
 	dialog: typeof dialogData;
 }
 
-class ChatsPage extends Block<object> {
+// TODO: возможно, для компонентов, у которых по смыслу нет пропсов, надо закрывать дженерик {}
+class ChatsPage extends Block<ChatsPageProps> {
+	constructor(...args: ConstructorParameters<typeof Block<ChatsPageProps>>) {
+		super(...args);
+
+		ChatsController.getChats();
+	}
 	render() {
 		const messageInput = new Input('div', {
 			name: 'message',
@@ -126,17 +132,16 @@ class ChatsPage extends Block<object> {
 			profileLink,
 		};
 
-		const chats = (this.props as ChatsPageProps).chats || chatsData;
 		const dialog = (this.props as ChatsPageProps).dialog || dialogData;
 
-		return this.compile(chatsTemplate, { 
-			chats, 
-			dialog, 
-			messageForm,
-			searchForm,
-			profileLink,
-		});
+		return this.compile(chatsTemplate, this.props);
 	}
 }
 
-export default ChatsPage;
+function mapStateToProps(state: State) {
+	return {
+		chats: state.chats,
+	};
+}
+
+export default connect(mapStateToProps)(ChatsPage);

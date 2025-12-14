@@ -435,10 +435,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 			chatsBackLink,
 		};
 
-		return this.compile(profileTemplate, {
-			...this.props,
-			profile: user,
-		});
+		return this.compile(profileTemplate, this.props);
 	}
 }
 

@@ -34,3 +34,19 @@ export interface ChangePasswortdData {
 	oldPassword: string;
 	newPassword: string;
 }
+
+
+export interface LastMessage {
+	user: User;
+	time: string; // ISO date string
+	content: string;
+}
+
+export interface Chat {
+	id: number;
+	title: string;
+	avatar: string;
+	unread_count: number;
+	created_by: number;
+	last_message: LastMessage;
+}
