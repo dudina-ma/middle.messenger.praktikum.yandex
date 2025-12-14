@@ -29,3 +29,8 @@ export interface User {
 	avatar?: string;
 	email: string;
 }
+
+export interface ChangePasswortdData {
+	oldPassword: string;
+	newPassword: string;
+}

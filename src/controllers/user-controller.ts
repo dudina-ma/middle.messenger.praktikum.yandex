@@ -1,6 +1,6 @@
 import UserAPI from '../api/user/user-api';
 import store from '../store/store';
-import type { User } from '../types/types';
+import type { User, ChangePasswortdData } from '../types/types';
 
 // где должен быть этот enum
 export enum ProfilePageMode {
@@ -14,6 +14,7 @@ class UserController {
         store.set('profile.pageMode', mode);
     }
 
+    // работа с ошибками
     public editProfile(data: User) {
         return UserAPI.editProfile(data)
             .then((xhr) => {
@@ -22,6 +23,21 @@ class UserController {
                     store.set('user', response);
                     return response;
                 }
+            });
+    }
+
+    public changePassword(data: ChangePasswortdData) {
+        return UserAPI.changePassword(data)
+            .then((xhr) => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    return true;
+                } else {
+                    throw new Error(`Failed to change password: ${xhr.status}`);
+                }
+            })
+            .catch((error) => {
+                console.error('Change password error:', error);
+                throw error;
             });
     }
 }

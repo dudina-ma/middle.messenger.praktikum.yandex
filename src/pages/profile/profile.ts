@@ -9,7 +9,7 @@ import { handleFormSubmit, handleInputFocusOut, validatePasswordMatch, validateP
 import Link from '../../components/link/link';
 import Router from '../../services/router';
 import AuthController from '../../controllers/auth-controller';
-import type { User } from '../../types/types';
+import type { User, ChangePasswortdData } from '../../types/types';
 import type { State } from '../../store/store';
 import connect from '../../services/hoc';
 import UserController from '../../controllers/user-controller';
@@ -396,6 +396,13 @@ class ProfilePage extends Block<ProfilePageProps> {
 					}
 		
 					console.log('Password change data:', data);
+
+					const changePasswordData: ChangePasswortdData = {
+						oldPassword: data.oldPassword,
+						newPassword: data.newPassword,
+					};
+
+					UserController.changePassword(changePasswordData);
 				},
 			},
 		});
