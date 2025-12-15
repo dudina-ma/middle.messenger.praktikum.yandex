@@ -1,10 +1,12 @@
 export default `
+        {{{modal}}}
         <section class="chats-page__sidebar">
             <header class="chats-page__header">
                 {{{profileLink}}}
                 <search class="chats-page__search-box">
                     {{{searchForm}}}
                 </search>
+                {{{createChatButton}}}
             </header>
 
             <section class="chats-page__chat-list">
@@ -14,7 +16,7 @@ export default `
                         <div class="chats-page__chat-avatar"></div>
                         <div class="chats-page__chat-info">
                             <div class="chats-page__chat-header">
-                                <span class="chats-page__chat-name">{{name}}</span>
+                                <span class="chats-page__chat-title">{{title}}</span>
                                 <span class="chats-page__chat-time">{{time}}</span>
                             </div>
                             <div class="chats-page__chat-preview">

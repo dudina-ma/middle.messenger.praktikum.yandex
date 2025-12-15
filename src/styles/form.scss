@@ -1,7 +1,7 @@
 @use "./variables" as *;
 @use "./mixins" as *;
 @use "./common" as *;
-@use "./auth-input" as *;
+@use "./form-input" as *;
 
 @mixin auth-page {
   @include flex-center;

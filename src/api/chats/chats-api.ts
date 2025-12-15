@@ -19,6 +19,21 @@ class UserAPI {
 			throw error;
 		});
 	}
+
+	createChat(data: { title: string }) {
+		return userAPIInstance.post('/', { data: { title: data.title } })
+		.then((xhr) => {
+			if (xhr.status >= 200 && xhr.status < 300) {
+				const response = JSON.parse(xhr.responseText || '{}');
+				// возвращается id
+				return response;
+			}
+		})
+		.catch((error) => {
+			console.error('Create chat error:', error);
+			throw error;
+		});
+	}
 }
 
 export default new UserAPI();

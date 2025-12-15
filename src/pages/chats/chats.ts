@@ -12,6 +12,7 @@ import type { Chat } from '../../types/types';
 import ChatsController from '../../controllers/chats-controller';
 import connect from '../../services/hoc';
 import type { State } from '../../store/store';
+import Modal from '../../components/modal/modal';
 
 interface ChatsPageProps {
 	chats: Chat[];
@@ -103,6 +104,60 @@ class ChatsPage extends Block<ChatsPageProps> {
 			},
 		});
 
+		const createChatInput = new Input('div', {
+			name: 'chatTitle',
+			type: 'text',
+			label: 'Название чата',
+			placeholder: 'Название чата',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field',
+			},
+		});
+
+		const createChatSubmitButton = new Button('button', {
+			type: 'submit',
+			text: 'Создать',
+			attr: {
+				class: 'create-chat-submit-button',
+			},
+		});
+
+		const createChatForm = new Form('form', {
+			attr: {
+				class: 'create-chat-form',
+			},
+			formChildren: [createChatInput, createChatSubmitButton],
+			events: {
+				submit: (e: Event) => {
+					const data = handleFormSubmit(e);
+					if (!data) return;
+					console.log('Form data:', data);
+
+					ChatsController.createChat({ title: data.chatTitle });
+					modal.close();
+				},
+			},
+		});
+
+		const modal = new Modal('dialog', {
+			title: 'Создание чата',
+			formChildren: [createChatForm],
+		});
+
+		const createChatButton = new Button('button', {
+			type: 'button',
+			text: 'Создать чат',
+			attr: {
+				class: 'chats-page__create-chat-button',
+			},
+			events: {
+				click: () => {
+					modal.open();
+				},
+			},
+		});
+
 		const profileLink = new Link('a', {
 			text: 'Профиль',
 			attr: {
@@ -130,6 +185,8 @@ class ChatsPage extends Block<ChatsPageProps> {
 			messageForm,
 			searchForm,
 			profileLink,
+			createChatButton,
+			modal,
 		};
 
 		const dialog = (this.props as ChatsPageProps).dialog || dialogData;

@@ -1,7 +1,8 @@
 @use "./variables" as *;
 
 .login-form .input-field,
-.signup-form .input-field {
+.signup-form .input-field,
+.create-chat-form .input-field {
   margin-bottom: 16px;
 
   &__label {
@@ -20,4 +21,3 @@
     padding: 5px 0;
   }
 }
-
