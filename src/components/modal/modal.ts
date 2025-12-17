@@ -3,7 +3,7 @@ import modalTemplate from './modal.template';
 import './modal.scss';
 
 interface ModalProps {
-	formChildren?: Block<object>[];
+	modalChildren?: Block<object>[];
 	attr?: Record<string, string>;
 
 	// скорее всего не понадобится

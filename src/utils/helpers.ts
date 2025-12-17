@@ -1,42 +1,42 @@
 import type { Indexed } from '../types/types';
 
 export function isEqual(a: object, b: object): boolean {
-    const aKeys = Object.keys(a);
-    const bKeys = Object.keys(b);
+	const aKeys = Object.keys(a);
+	const bKeys = Object.keys(b);
     
-    if (aKeys.length !== bKeys.length) {
-        return false;
-    }
+	if (aKeys.length !== bKeys.length) {
+		return false;
+	}
     
-    const bKeySet = new Set(bKeys);
-    for (const key of aKeys) {
-        if (!bKeySet.has(key)) {
-            return false;
-        }
-    }
+	const bKeySet = new Set(bKeys);
+	for (const key of aKeys) {
+		if (!bKeySet.has(key)) {
+			return false;
+		}
+	}
     
-    for (const key of aKeys) {
-        const aValue = (a as any)[key];
-        const bValue = (b as any)[key];
+	for (const key of aKeys) {
+		const aValue = (a as any)[key];
+		const bValue = (b as any)[key];
         
-        if (typeof aValue === 'object' && aValue !== null &&
+		if (typeof aValue === 'object' && aValue !== null &&
             typeof bValue === 'object' && bValue !== null) {
             
-            if (!isEqual(aValue, bValue)) {
-                return false;
-            }
-        } 
-        else if (typeof aValue !== 'object' && typeof bValue !== 'object') {
-            if (aValue !== bValue) {
-                return false;
-            }
-        }
-        else {
-            return false;
-        }
-    }
+			if (!isEqual(aValue, bValue)) {
+				return false;
+			}
+		} 
+		else if (typeof aValue !== 'object' && typeof bValue !== 'object') {
+			if (aValue !== bValue) {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
     
-    return true;
+	return true;
 }
 
 export function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {

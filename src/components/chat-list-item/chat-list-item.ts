@@ -1,16 +1,16 @@
-import './chat.scss';
+import './chat-list-item.scss';
 import Block from '../../services/block';
-import chatTemplate from './chat.template';
+import chatTemplate from './chat-list-item.template';
 import type { Chat as ChatType} from '../../types/types';
 
-interface ChatProps {
+interface ChatsListItemProps {
 	chatData: ChatType;
 	attr?: Record<string, string>;
 	events?: Record<string, (e: Event) => void>;
 	isSelected?: boolean;
 }
 
-export default class Chat extends Block<ChatProps> {
+export default class ChatsListItem extends Block<ChatsListItemProps> {
 	render(): DocumentFragment {
 		return this.compile(chatTemplate, this.props);
 	}

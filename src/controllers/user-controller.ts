@@ -10,36 +10,50 @@ export enum ProfilePageMode {
 }
 
 class UserController {
-    public setProfilePageMode(mode: ProfilePageMode) {
-        store.set('profile.pageMode', mode);
-    }
+	public setProfilePageMode(mode: ProfilePageMode) {
+		store.set('profile.pageMode', mode);
+	}
 
-    // работа с ошибками
-    public editProfile(data: User) {
-        return UserAPI.editProfile(data)
-            .then((xhr) => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    const response = JSON.parse(xhr.responseText || '{}');
-                    store.set('user', response);
-                    return response;
-                }
-            });
-    }
+	// работа с ошибками
+	public editProfile(data: User) {
+		return UserAPI.editProfile(data)
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					const response = JSON.parse(xhr.responseText || '{}');
+					store.set('user', response);
+					return response;
+				}
+			});
+	}
 
-    public changePassword(data: ChangePasswortdData) {
-        return UserAPI.changePassword(data)
-            .then((xhr) => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    return true;
-                } else {
-                    throw new Error(`Failed to change password: ${xhr.status}`);
-                }
-            })
-            .catch((error) => {
-                console.error('Change password error:', error);
-                throw error;
-            });
-    }
+	public changePassword(data: ChangePasswortdData) {
+		return UserAPI.changePassword(data)
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					return true;
+				} else {
+					throw new Error(`Failed to change password: ${xhr.status}`);
+				}
+			})
+			.catch((error) => {
+				console.error('Change password error:', error);
+				throw error;
+			});
+	}
+
+	public getUserByLogin(login: string) {
+		return UserAPI.getUserByLogin(login)
+			.then((user: User[] | undefined) => {
+				if (!user) {
+					throw new Error('User not found');
+				}
+				return user[0];
+			})
+			.catch((error) => {
+				console.error('Get user by login error:', error);
+				throw error;
+			});
+	}
 }
 
 export default new UserController();

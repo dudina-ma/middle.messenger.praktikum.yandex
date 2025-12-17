@@ -1,5 +1,6 @@
 export default `
-        {{{modal}}}
+        {{{createChatModal}}}
+        {{{addUserModal}}}
         <section class="chats-page__sidebar">
             <header class="chats-page__header">
                 {{{profileLink}}}
@@ -11,25 +12,8 @@ export default `
 
             <section class="chats-page__chat-list">
                 <ul>
-                    {{#each chats}}
-                    <li class="chats-page__chat-item {{#if isSelected}}chats-page__chat-item--selected{{/if}}">
-                        <div class="chats-page__chat-avatar"></div>
-                        <div class="chats-page__chat-info">
-                            <div class="chats-page__chat-header">
-                                <span class="chats-page__chat-title">{{title}}</span>
-                                <span class="chats-page__chat-time">{{time}}</span>
-                            </div>
-                            <div class="chats-page__chat-preview">
-                                <span class="chats-page__chat-message">
-                                    {{#if isLastMessageFromMe}}<span class="chats-page__chat-from-me">Вы:
-                                    </span>{{/if}}{{lastMessage}}
-                                </span>
-                                {{#if unreadCount}}
-                                <span class="chats-page__chat-badge">{{unreadCount}}</span>
-                                {{/if}}
-                            </div>
-                        </div>
-                    </li>
+                    {{#each chatList}}
+                        {{{this}}}
                     {{/each}}
                 </ul>
             </section>
@@ -41,9 +25,13 @@ export default `
                 <div class="chats-page__dialog-info">
                     <span class="chats-page__dialog-name">{{dialog.name}}</span>
                 </div>
-                <button class="chats-page__dialog-menu" type="button">
-                    <span class="chats-page__dialog-menu-icon"></span>
-                </button>
+                <div class="chats-page__dialog-menu-wrapper">
+                    {{{dialogMenuButton}}}
+                    <div class="chats-page__context-menu">
+                        {{{addUserButton}}}
+                        {{{deleteUserButton}}}
+                    </div>
+                </div>
             </header>
 
             <section class="chats-page__messages">

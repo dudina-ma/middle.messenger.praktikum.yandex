@@ -20,7 +20,7 @@ export default class Block<TProps extends object> {
 	private meta: Nullable<{ tagName: string, props: TProps }> = null;
 	private id: string;
 	protected children: Record<string, Block<object>>;
-	private lists: Record<string, Block<object>[]>;
+	protected lists: Record<string, Block<object>[]>;
 
 	public props: TProps;
 	public eventBus: () => EventBus;

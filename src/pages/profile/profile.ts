@@ -395,7 +395,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 						UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
 					}
 		
-					console.log('Password change data:', data);
+					console.log('Form data::', data);
 
 					const changePasswordData: ChangePasswortdData = {
 						oldPassword: data.oldPassword,

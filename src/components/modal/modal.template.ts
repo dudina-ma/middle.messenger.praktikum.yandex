@@ -4,8 +4,8 @@ export default `
       <h1 class="modal__title">{{title}}</h1>
     {{/if}}
 
-    {{#if formChildren}}
-      {{#each formChildren}}
+    {{#if modalChildren}}
+      {{#each modalChildren}}
         {{{this}}}
       {{/each}}
     {{/if}}

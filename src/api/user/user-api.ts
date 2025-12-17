@@ -17,14 +17,27 @@ class UserAPI {
 			login: data.login,
 			email: data.email,
 			phone: data.phone,
-            display_name: data.display_name
+			display_name: data.display_name,
 		} });
 	}
 	changePassword(data: ChangePasswortdData) {
 		return userAPIInstance.put('/password', { data: {
 			oldPassword: data.oldPassword,
-			newPassword: data.newPassword
+			newPassword: data.newPassword,
 		} });
+	}
+	getUserByLogin(data: string) {
+		return userAPIInstance.post('/search', { data: { login: data } })
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					const response = JSON.parse(xhr.responseText || '{}') as User[];
+					return response;
+				}	
+			})
+			.catch((error) => {
+				console.error('Get user by login error:', error);
+				throw error;
+			});
 	}
 }
 

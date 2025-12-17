@@ -9,10 +9,10 @@ type Options = {
 	method?: string;
 	timeout?: number;
 	headers?: Record<string, string>;
-	data?: Record<string, string>;
+	data?: Record<string, unknown>;
 };
 
-function queryStringify(data: Record<string, string>) {
+function queryStringify(data: Record<string, unknown>) {
 	if (!Object.keys(data).length) {
 		return '';
 	}
@@ -20,7 +20,7 @@ function queryStringify(data: Record<string, string>) {
 	let result = '?';
 
 	Object.keys(data).forEach(key => {
-		const value = data[key].toString();
+		const value = String(data[key]);
 		result = result + key + '=' + value + '&';
 	});
 

@@ -8,25 +8,54 @@ import Button from '../../components/button/button';
 import { handleFormSubmit } from '../../utils/formHelpers';
 import Router from '../../services/router';
 import Link from '../../components/link/link';
-import type { Chat } from '../../types/types';
+import type { Chat as ChatType } from '../../types/types';
 import ChatsController from '../../controllers/chats-controller';
 import connect from '../../services/hoc';
 import type { State } from '../../store/store';
 import Modal from '../../components/modal/modal';
+import ChatListItem from '../../components/chat-list-item/chat-list-item';
 
 interface ChatsPageProps {
-	chats: Chat[];
+	chats: ChatType[];
 	dialog: typeof dialogData;
+	selectedChatId: number | null;
 }
 
 // TODO: возможно, для компонентов, у которых по смыслу нет пропсов, надо закрывать дженерик {}
 class ChatsPage extends Block<ChatsPageProps> {
+	// типизация
 	constructor(...args: ConstructorParameters<typeof Block<ChatsPageProps>>) {
 		super(...args);
 
 		ChatsController.getChats();
 	}
+
 	render() {
+ 		const chats = this.props.chats || [];
+
+		console.log(chats);
+
+		let chatList: Block<object>[] = [];
+
+		if (chats) {
+			chatList = chats.map((chat) => {
+				return new ChatListItem('li', {
+					chatData: chat,
+					events: {
+						click: () => {
+							this.props.selectedChatId = chat.id;
+							this.setProps({
+								selectedChatId: chat.id,
+							});
+						},
+					},
+					attr: {
+						class: chat.id === this.props.selectedChatId ? 'chat__item chat__item--selected' : 'chat__item',
+					},
+				});
+			});
+		}
+
 		const messageInput = new Input('div', {
 			name: 'message',
 			type: 'text',
@@ -135,14 +164,14 @@ class ChatsPage extends Block<ChatsPageProps> {
 					console.log('Form data:', data);
 
 					ChatsController.createChat({ title: data.chatTitle });
-					modal.close();
+					createChatModal.close();
 				},
 			},
 		});
 
-		const modal = new Modal('dialog', {
+		const createChatModal = new Modal('dialog', {
 			title: 'Создание чата',
-			formChildren: [createChatForm],
+			modalChildren: [createChatForm],
 		});
 
 		const createChatButton = new Button('button', {
@@ -153,7 +182,7 @@ class ChatsPage extends Block<ChatsPageProps> {
 			},
 			events: {
 				click: () => {
-					modal.open();
+					createChatModal.open();
 				},
 			},
 		});
@@ -181,13 +210,99 @@ class ChatsPage extends Block<ChatsPageProps> {
 			},
 		});
 
+		const dialogMenuButton = new Button('button', {
+			type: 'button',
+			attr: {
+				class: 'chats-page__dialog-menu',
+			},
+			icon: true,
+			iconClass: 'chats-page__dialog-menu-icon',
+		});
+
+		const addUserButton = new Button('button', {
+			type: 'button',
+			attr: {
+				class: 'chats-page__context-menu-item',
+			},
+			icon: true,
+			iconClass: 'chats-page__context-menu-icon chats-page__context-menu-icon--add',
+			text: 'Добавить пользователя',
+			events: {
+				click: () => {
+					addUserModal.open();
+				},
+			},
+		});
+
+		const addUserInput = new Input('div', {
+			name: 'username',
+			type: 'text',
+			placeholder: 'Логин',
+			label: 'Логин',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field',
+			},
+		});
+
+		const addUserSubmitButton = new Button('button', {
+			type: 'submit',
+			text: 'Добавить',
+			attr: {
+				class: 'add-user-submit-button',
+			},
+		});
+
+		const addUserForm = new Form('form', {
+			attr: {
+				class: 'add-user-form',
+			},
+			formChildren: [addUserInput, addUserSubmitButton],
+			events: {
+				submit: (e: Event) => {
+					const data = handleFormSubmit(e);
+					if (!data) return;
+
+					console.log('Form data:', data);
+					
+					ChatsController.addUser({ userName: data.username, chatId: this.props.selectedChatId as number });
+					addUserModal.close();
+				},
+			},
+		});
+
+		const addUserModal = new Modal('dialog', {
+			title: 'Добавить пользователя',
+			modalChildren: [addUserForm],
+		});
+
+		const deleteUserButton = new Button('button', {
+			type: 'button',
+			attr: {
+				class: 'chats-page__context-menu-item',
+			},
+			icon: true,
+			iconClass: 'chats-page__context-menu-icon chats-page__context-menu-icon--delete',
+			text: 'Удалить пользователя',
+		});
+
 		this.children = {
 			messageForm,
 			searchForm,
 			profileLink,
 			createChatButton,
-			modal,
+			createChatModal,
+			dialogMenuButton,
+			addUserButton,
+			deleteUserButton,
+			addUserModal,
 		};
+
+		if (chats.length) {
+			this.lists = {
+				chatList,
+			};
+		}
 
 		const dialog = (this.props as ChatsPageProps).dialog || dialogData;
 
