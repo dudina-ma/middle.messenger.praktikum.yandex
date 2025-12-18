@@ -284,6 +284,53 @@ class ChatsPage extends Block<ChatsPageProps> {
 			icon: true,
 			iconClass: 'chats-page__context-menu-icon chats-page__context-menu-icon--delete',
 			text: 'Удалить пользователя',
+			events: {
+				click: () => {
+					deleteUserModal.open();
+				},
+			},
+		});
+
+		const deleteUserInput = new Input('div', {
+			name: 'username',
+			type: 'text',
+			placeholder: 'Логин',
+			label: 'Логин',
+			class: 'input-field__input',
+			attr: {
+				class: 'input-field',
+			},
+		});
+
+		const deleteUserSubmitButton = new Button('button', {
+			type: 'submit',
+			text: 'Удалить',
+			attr: {
+				class: 'delete-user-submit-button',
+			},
+		});
+
+		const deleteUserForm = new Form('form', {
+			attr: {
+				class: 'delete-user-form',
+			},
+			formChildren: [deleteUserInput, deleteUserSubmitButton],
+			events: {
+				submit: (e: Event) => {
+					const data = handleFormSubmit(e);
+					if (!data) return;
+
+					console.log('Form data:', data);
+					
+					ChatsController.deleteUser({ userName: data.username, chatId: this.props.selectedChatId as number });
+					deleteUserModal.close();
+				},
+			},
+		});
+
+		const deleteUserModal = new Modal('dialog', {
+			title: 'Удалить пользователя',
+			modalChildren: [deleteUserForm],
 		});
 
 		this.children = {
@@ -296,6 +343,7 @@ class ChatsPage extends Block<ChatsPageProps> {
 			addUserButton,
 			deleteUserButton,
 			addUserModal,
+			deleteUserModal,
 		};
 
 		if (chats.length) {

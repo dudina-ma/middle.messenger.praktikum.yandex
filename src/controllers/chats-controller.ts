@@ -40,6 +40,24 @@ class ChatsController {
 		// 	throw new Error('User not found');
 		// }
 	}
+
+	public deleteUser(data: { userName: string, chatId: number }) {
+		UserController.getUserByLogin(data.userName)
+			.then((user: User) => {
+				return user.id;
+			})
+			.catch((error) => {
+				console.error('Get user by login error:', error);
+				throw error;
+			})
+			.then((id) => {
+				return ChatsAPI.deleteUser({ userId: id as number, chatId: data.chatId });
+			});
+		// где должна быть обработка ошибки
+		// if (!userId) {
+		// 	throw new Error('User not found');
+		// }
+	}
 }
 
 export default new ChatsController();

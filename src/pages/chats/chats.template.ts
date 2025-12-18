@@ -1,6 +1,8 @@
 export default `
         {{{createChatModal}}}
         {{{addUserModal}}}
+        {{{deleteUserModal}}}
+        
         <section class="chats-page__sidebar">
             <header class="chats-page__header">
                 {{{profileLink}}}

@@ -51,6 +51,22 @@ class UserAPI {
 				throw error;
 			});
 	}
+
+	deleteUser(data: { userId: number, chatId: number }) {
+		return chatsAPIInstance.delete('/users', { data: { 
+			users: [data.userId],
+			chatId: data.chatId,
+		} })
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					return true;
+				}
+			})
+			.catch((error) => {
+				console.error('Add user error:', error);
+				throw error;
+			});
+	}
 }
 
 export default new UserAPI();

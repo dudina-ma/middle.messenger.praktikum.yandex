@@ -420,7 +420,8 @@
 }
 
 .create-chat-form, 
-.add-user-form {
+.add-user-form, 
+.delete-user-form {
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -428,7 +429,8 @@
 }
 
 .create-chat-submit-button,
-.add-user-submit-button {
+.add-user-submit-button,
+.delete-user-submit-button {
     @include primary-button;
 
     width: 100%;

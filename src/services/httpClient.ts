@@ -101,7 +101,7 @@ class HttpClient {
 
 			if (method === METHODS.GET || !data) {
 				xhr.send();
-			} else if (method === METHODS.POST || method === METHODS.PUT) {
+			} else if (method === METHODS.POST || method === METHODS.PUT || method === METHODS.DELETE) {
 				if (!options.headers?.['Content-Type']) {
 					xhr.setRequestHeader('Content-Type', 'application/json');
 				}
