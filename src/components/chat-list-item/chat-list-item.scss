@@ -1,7 +1,7 @@
 @use "../../styles/common" as *;
 @use "../../styles/mixins" as *;
 
-.chat__item {
+.chat-list-item {
     display: flex;
     align-items: center;
     padding: 12px 10px;
@@ -28,7 +28,7 @@
     }
 }
 
-.chat__avatar {
+.chat-list-item__avatar {
     width: 47px;
     height: 47px;
     border-radius: 50%;
@@ -37,19 +37,19 @@
     margin-right: 10px;
 }
 
-.chat__info {
+.chat-list-item__info {
     flex: 1;
     min-width: 0;
 }
 
-.chat__header {
+.chat-list-item__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 4px;
 }
 
-.chat__title {
+.chat-list-item__title {
     display: inline-block;
     font-family: Inter, sans-serif;
     font-size: 13px;
@@ -59,7 +59,7 @@
     color: $text-primary;
 }
 
-.chat__time {
+.chat-list-item__time {
     font-size: 9px;
     font-weight: 500;
     line-height: 9px;
@@ -68,13 +68,13 @@
     margin-left: 10px;
 }
 
-.chat__preview {
+.chat-list-item__preview {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.chat__message {
+.chat-list-item__message {
     font-size: 12px;
     font-weight: 500;
     line-height: 12px;
@@ -86,7 +86,7 @@
     min-width: 0;
 }
 
-.chat__from-me {
+.chat-list-item__from-me {
     font-weight: 500;
     font-size: 12px;
     line-height: 15px;
@@ -94,7 +94,7 @@
     color: $text-primary;
 }
 
-.chat__badge {
+.chat-list-item__badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;

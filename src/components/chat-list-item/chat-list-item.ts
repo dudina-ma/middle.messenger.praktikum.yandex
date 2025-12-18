@@ -7,7 +7,6 @@ interface ChatsListItemProps {
 	chatData: ChatType;
 	attr?: Record<string, string>;
 	events?: Record<string, (e: Event) => void>;
-	isSelected?: boolean;
 }
 
 export default class ChatsListItem extends Block<ChatsListItemProps> {
