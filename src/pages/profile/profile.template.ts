@@ -4,11 +4,11 @@ export default `
         </aside>
 
         <main>
+            {{{changeAvatarModal}}}
+
             <section class="profile-page__content">
                 <div class="profile-page__header">
-                    <button type="button" class="profile-page__avatar">
-                        <span class="profile-page__avatar-text">Поменять<br>аватар</span>
-                    </button>
+                    {{{changeAvatarButton}}}
                     <h1 class="profile-page__name">{{profile.name}}</h1>
                 </div>
 

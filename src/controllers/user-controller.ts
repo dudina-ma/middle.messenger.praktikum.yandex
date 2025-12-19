@@ -54,6 +54,21 @@ class UserController {
 				throw error;
 			});
 	}
+
+	public changeAvatar(avatar: File) {
+		return UserAPI.changeAvatar(avatar)
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					const response = JSON.parse(xhr.responseText || '{}');
+					store.set('user', response);
+					return response;
+				}
+			})
+			.catch((error) => {
+				console.error('Change avatar error:', error);
+				throw error;
+			});
+	}
 }
 
 export default new UserController();

@@ -9,7 +9,7 @@ type Options = {
 	method?: string;
 	timeout?: number;
 	headers?: Record<string, string>;
-	data?: Record<string, unknown>;
+	data?: Record<string, unknown> | FormData;
 };
 
 function queryStringify(data: Record<string, unknown>) {
@@ -74,7 +74,7 @@ class HttpClient {
 
 			url = this.baseUrl + url;
 
-			if (method === METHODS.GET) {
+			if (method === METHODS.GET && data && !(data instanceof FormData)) {
 				url += queryStringify(data || {});
 			}
 
@@ -101,14 +101,13 @@ class HttpClient {
 
 			if (method === METHODS.GET || !data) {
 				xhr.send();
-			} else if (method === METHODS.POST || method === METHODS.PUT || method === METHODS.DELETE) {
-				if (!options.headers?.['Content-Type']) {
-					xhr.setRequestHeader('Content-Type', 'application/json');
-				}
+			  } else if (data instanceof FormData) {
+				xhr.send(data);
+			  } else {
+				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.send(JSON.stringify(data));
-			} else {
-				xhr.send(JSON.stringify(data));
-			}
+			  }
+			
 		});
 	};
 }

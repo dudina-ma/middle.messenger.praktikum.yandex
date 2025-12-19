@@ -6,4 +6,5 @@ export const API_BASE_URLS = {
 	auth: `${API_BASE_URL}/auth`,
 	chats: `${API_BASE_URL}/chats`,
 	user: `${API_BASE_URL}/user`,
+	resources: `${API_BASE_URL}/resources`,
 };

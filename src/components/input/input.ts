@@ -17,6 +17,7 @@ interface InputProps {
 	class?: string;
 	error?: boolean;
 	errorText?: Nullable<string>;
+	events?: Record<string, (e: Event) => void>;
 }
 
 export default class Input extends Block<InputProps> {
@@ -28,6 +29,7 @@ export default class Input extends Block<InputProps> {
 		const props = {
 			...this.props,
 			inputClass,
+			isFile: this.props.type === 'file',
 		};
 
 		return this.compile(inputTemplate, props);

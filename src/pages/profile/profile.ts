@@ -14,6 +14,8 @@ import type { State } from '../../store/store';
 import connect from '../../services/hoc';
 import UserController from '../../controllers/user-controller';
 import { ProfilePageMode } from '../../controllers/user-controller';
+import Modal from '../../components/modal/modal';
+import { API_BASE_URLS } from '../../api/index';
 
 interface ProfilePageProps {
 	profile: User;
@@ -39,7 +41,96 @@ class ProfilePage extends Block<ProfilePageProps> {
 
 	render() {
 		const user = this.props.profile;
-		
+
+		const changeAvatarButton = new Button('button', {
+			type: 'button',
+			content: 'Поменять аватар',
+			contentClass: 'profile-page__avatar-text',
+			attr: {
+				class: 'profile-page__avatar',
+			},
+			events: {
+				click: () => {
+					changeAvatarModal.open();
+				},
+			},
+
+		});
+
+		if (user?.avatar) {
+			const content = changeAvatarButton.getContent();
+			
+			if (content) {
+				content.style.setProperty('--avatar-url', `url(${API_BASE_URLS.resources}${user.avatar})`);
+			}
+		}
+
+		const changeAvatarInput = new Input('div', {
+			type: 'file',
+			name: 'avatar',
+			label: 'Аватар',
+			class: 'input-field__input profile-page__file-input',
+			attr: {
+				class: 'input-field profile-form__item profile-page__file-input-wrapper',
+			},
+		});
+
+		const changeAvatarSubmitButton = new Button('button', {
+			type: 'submit',
+			text: 'Поменять',
+			attr: {
+				class: 'profile-form__button profile-page__change-avatar-submit-button',
+			},
+		});
+
+		const changeAvatarForm = new Form('form', {
+			attr: {
+				class: 'profile-page__change-avatar-form',
+			},
+			formChildren: [changeAvatarInput, changeAvatarSubmitButton],
+			events: {
+				click: (e: Event) => {
+					const target = e.target as HTMLElement;
+					if (target.classList.contains('profile-page__file-trigger')) {
+						e.preventDefault();
+						e.stopPropagation();
+						const fileInputWrapper = target.closest('.profile-page__file-input-wrapper');
+						const fileInput = fileInputWrapper?.querySelector('input[type="file"]') as HTMLInputElement;
+						if (fileInput) {
+							fileInput.click();
+						}
+					}
+				},
+				submit: (e: Event) => {
+					e.preventDefault();
+					e.stopPropagation();
+					
+					const form = e.target as HTMLFormElement;
+					if (!form) return;
+					
+					const fileInput = form.querySelector('input[type="file"]') as HTMLInputElement;
+					if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+						console.error('Файл не выбран');
+						return;
+					}
+					
+					const file = fileInput.files[0];
+
+					UserController.changeAvatar(file);
+					changeAvatarModal.close();
+
+				},
+			},
+		});
+
+		const changeAvatarModal = new Modal('dialog', {
+			title: 'Загрузите файл',
+			modalChildren: [changeAvatarForm],
+			attr: {
+				class: 'profile-page__change-avatar-modal',
+			},
+		});
+
 		const emailInputReadonly = new Input('div', {
 			type: 'email',
 			name: 'email',
@@ -433,6 +524,8 @@ class ProfilePage extends Block<ProfilePageProps> {
 			profileChangePasswordButton,
 			profileLogoutButton,
 			chatsBackLink,
+			changeAvatarButton,
+			changeAvatarModal,
 		};
 
 		return this.compile(profileTemplate, this.props);

@@ -5,9 +5,7 @@ export default `
     {{#if text}}
       {{text}}
     {{/if}}
-    {{#if children}}
-      {{#each children}}
-        {{{this}}}
-      {{/each}}
+    {{#if content}}
+      <span class="{{contentClass}}">{{content}}</span>
     {{/if}}
 `;
