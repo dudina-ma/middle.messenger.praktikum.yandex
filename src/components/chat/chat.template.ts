@@ -1,4 +1,7 @@
 export default `
+            {{{addUserModal}}}
+            {{{deleteUserModal}}}
+            
             <header class="chat__header">
                 <div class="chat__avatar"></div>
                 <div class="chat__info">
@@ -6,10 +9,7 @@ export default `
                 </div>
                 <div class="chat__menu-wrapper">
                     {{{contextMenuButton}}}
-                    <div class="chat__context-menu">
-                        {{{addUserButton}}}
-                        {{{deleteUserButton}}}
-                    </div>
+                    {{{contextMenu}}}
                 </div>
             </header>
 

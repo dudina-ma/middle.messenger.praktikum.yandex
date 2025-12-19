@@ -8,6 +8,7 @@ import Form from '../form/form';
 import { handleFormSubmit } from '../../utils/formHelpers';
 import ChatsController from '../../controllers/chats-controller';
 import Modal from '../modal/modal';
+import ContextMenu from '../context-menu/context-menu';
 
 interface ChatProps {
 	chat: ChatType;
@@ -15,16 +16,8 @@ interface ChatProps {
 	events?: Record<string, (e: Event) => void>;
 }
 
-export default class ChatsListItem extends Block<ChatProps> {
+export default class Chat extends Block<ChatProps> {
 	render(): DocumentFragment {
-		const contextMenuButton = new Button('button', {
-			type: 'button',
-			attr: {
-				class: 'chat__context-menu-button',
-			},
-			icon: true,
-			iconClass: 'chat__menu-button-icon',
-		});
 
 		const addUserButton = new Button('button', {
 			type: 'button',
@@ -36,6 +29,7 @@ export default class ChatsListItem extends Block<ChatProps> {
 			text: 'Добавить пользователя',
 			events: {
 				click: () => {
+					contextMenu.hide();
 					addUserModal.open();
 				},
 			},
@@ -93,6 +87,7 @@ export default class ChatsListItem extends Block<ChatProps> {
 			text: 'Удалить пользователя',
 			events: {
 				click: () => {
+					contextMenu.hide();
 					deleteUserModal.open();
 				},
 			},
@@ -138,6 +133,34 @@ export default class ChatsListItem extends Block<ChatProps> {
 		const deleteUserModal = new Modal('dialog', {
 			title: 'Удалить пользователя',
 			modalChildren: [deleteUserForm],
+		});
+
+		const contextMenu = new ContextMenu('div', {
+			menuItems: [addUserButton, deleteUserButton],
+			attr: {
+				class: 'chat__context-menu',
+			},
+		});
+
+		contextMenu.hide();
+
+		const contextMenuButton = new Button('button', {
+			type: 'button',
+			attr: {
+				class: 'chat__context-menu-button',
+			},
+			icon: true,
+			iconClass: 'chat__menu-button-icon',
+			events: {
+				click: (e: Event) => {
+					e.stopPropagation();
+					if (contextMenu.getContent()?.style.display === 'none') {
+						contextMenu.show();
+					} else {
+						contextMenu.hide();
+					}
+				},
+			},
 		});
 
         const messageInput = new Input('div', {
@@ -186,8 +209,7 @@ export default class ChatsListItem extends Block<ChatProps> {
         this.children = {
             messageForm,
             contextMenuButton,
-			addUserButton,
-			deleteUserButton,
+			contextMenu,
 			addUserModal,
 			deleteUserModal,
         };
