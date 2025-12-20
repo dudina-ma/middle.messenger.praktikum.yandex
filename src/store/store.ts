@@ -10,6 +10,7 @@ export interface State {
 		pageMode: ProfilePageMode;
 	};
 	chats?: Chat[];
+	selectedChatId?: number;
 }
 
 export enum StoreEvents {

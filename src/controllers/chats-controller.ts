@@ -2,9 +2,12 @@ import ChatsAPI from '../api/chats/chats-api';
 import store from '../store/store';
 import UserController from './user-controller';
 import type { User } from '../types/types';
+import { WebSocketClient } from '../services/web-socket-client';
+import { API_BASE_URLS } from '../api';
 
 class ChatsController {
-    
+    private webSocketClient: WebSocketClient | null = null;
+
 	public getChats() {
 		return ChatsAPI.getChats()
 			.then((chats) => {
@@ -61,6 +64,42 @@ class ChatsController {
 
 	public getChatToken(chatId: number): Promise<string> {
 		return ChatsAPI.getChatToken(chatId);
+	}
+
+	public selectChat(chatId: number) {
+		if (chatId !== store.getState().selectedChatId) {
+			this.openConnection(chatId);
+		}
+
+		store.set('selectedChatId', chatId);
+	}
+
+	private openConnection(chatId: number) {
+		this.webSocketClient?.close();
+
+		const userId = store.getState().user?.id;
+
+		this.getChatToken(chatId)
+			.then((token) => {
+				const wsUrl = `${API_BASE_URLS.ws}/${userId}/${chatId}/${token}`;
+				
+				this.webSocketClient = new WebSocketClient(wsUrl);
+				
+				return this.webSocketClient.connect();
+			})
+			.then(() => {
+				this.webSocketClient?.send({
+					content: '0',
+					type: 'get old',
+				});
+			})
+			.catch((error) => {
+				console.error('WebSocket connection error:', error);
+			});
+	}
+
+	public closeConnection() {
+		this.webSocketClient?.close();
 	}
 }
 
