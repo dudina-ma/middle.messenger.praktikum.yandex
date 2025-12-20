@@ -19,12 +19,18 @@ class Route {
 	private pageClass: PageConstructor;
 	private page: Nullable<Block<object>>;
 	private props: RouteProps;
+	private isPrivate: boolean;
 
-	constructor(pathname: string, pageClass: PageConstructor, props: RouteProps) {
+	constructor(pathname: string, pageClass: PageConstructor, props: RouteProps, isPrivate: boolean = false) {
 		this.pathname = pathname;
 		this.pageClass = pageClass;
 		this.page = null;
 		this.props = props;
+		this.isPrivate = isPrivate;
+	}
+
+	getIsPrivate() {
+		return this.isPrivate;
 	}
 
 	navigate(pathname: string) {

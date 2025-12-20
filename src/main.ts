@@ -20,24 +20,24 @@ router
 	.use('/', LoginPage, {
 		tagName: 'main',
 		attr: { class: 'login-page' },
-	})
-	.use('/messenger', ChatsPage, {
-		tagName: 'main',
-		attr: { class: 'chats-page' },
-	})
-	.use('/error500', Error500Page, {
-		tagName: 'main',
-		attr: { class: 'error-page' },
-	})
+	}, false)
 	.use('/sign-up', SignupPage, {
 		tagName: 'main',
 		attr: { class: 'signup-page' },
-	})
+	}, false)
+	.use('/messenger', ChatsPage, {
+		tagName: 'main',
+		attr: { class: 'chats-page' },
+	}, true)
 	.use('/settings', ProfilePage, {
 		tagName: 'div',
 		attr: { class: 'profile-page' },
-	})
+	}, true)
 	.on404(Error404Page, {
+		tagName: 'main',
+		attr: { class: 'error-page' },
+	})
+	.use('/error500', Error500Page, {
 		tagName: 'main',
 		attr: { class: 'error-page' },
 	})

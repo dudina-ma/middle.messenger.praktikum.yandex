@@ -1,6 +1,7 @@
 import Route from './route';
 import type { Nullable } from '../types/types';
 import type Block from './block';
+import store from '../store/store';
 
 type PageProps = {
 	attr: Record<string, string>;
@@ -35,8 +36,8 @@ class Router {
 		return Router.__instance || null;
 	}
 
-	use(pathname: string, block: PageConstructor, props: RouteProps) {
-		const route = new Route(pathname, block, { ...props, rootQuery: this.rootQuery });
+	use(pathname: string, block: PageConstructor, props: RouteProps, isPrivate: boolean = false) {
+		const route = new Route(pathname, block, { ...props, rootQuery: this.rootQuery }, isPrivate);
 		this.routes.push(route);
 
 		return this;
@@ -68,6 +69,11 @@ class Router {
 
 		if (this.currentRoute && this.currentRoute !== route) {
 			this.currentRoute.leave();
+		}
+
+		if (route.getIsPrivate() && !store.getState().user) {
+			this.go('/');
+			return;
 		}
 
 		this.currentRoute = route;
