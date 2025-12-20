@@ -9,13 +9,9 @@ import ProfilePage from './pages/profile/profile';
 import AuthController from './controllers/auth-controller';
 import store from './store/store';
 
-AuthController.getUser()
+AuthController.getUser(true)
 	.then((user) => {
 		store.set('user', user);
-	})
-	.catch((error) => {
-		console.error('Get user error:', error);
-		throw error;
 	});
 
 const router = new Router('#app');
@@ -25,13 +21,13 @@ router
 		tagName: 'main',
 		attr: { class: 'login-page' },
 	})
-	.use('/messenger', ChatsPage, { 
+	.use('/messenger', ChatsPage, {
 		tagName: 'main',
-		attr: { class: 'chats-page' }, 
+		attr: { class: 'chats-page' },
 	})
-	.use('/error500', Error500Page, { 
+	.use('/error500', Error500Page, {
 		tagName: 'main',
-		attr: { class: 'error-page' }, 
+		attr: { class: 'error-page' },
 	})
 	.use('/sign-up', SignupPage, {
 		tagName: 'main',

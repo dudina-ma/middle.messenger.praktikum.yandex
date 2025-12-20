@@ -84,7 +84,11 @@ class HttpClient {
 			xhr.open(method || '', url);
 
 			xhr.onload = function () {
-				resolve(xhr);
+				if (xhr.status >= 400) {
+					reject(new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`));
+				} else {
+					resolve(xhr);
+				}
 			};
 
 			if (options.headers) {
@@ -107,7 +111,6 @@ class HttpClient {
 				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.send(JSON.stringify(data));
 			  }
-			
 		});
 	};
 }

@@ -65,8 +65,8 @@ class AuthController {
 				store.set('user', null);
 			});
 	}
-	public getUser() {
-		return AuthAPI.getUser()
+	public getUser(shouldIgnoreError: boolean = false) {
+		return AuthAPI.getUser(shouldIgnoreError)
 			.then((xhr) => {
 				if (xhr.status >= 200 && xhr.status < 300) {
 					const response = JSON.parse(xhr.responseText || '{}');
@@ -84,14 +84,14 @@ class AuthController {
 
 	// public async login(data: LoginFormModel) {
 	// 	try {
-	// 		// Запускаем крутилку            
+	// 		// Запускаем крутилку
 
 	// 		const validateData = userLoginValidator(data);
 
 	// 		if (!validateData.isCorrect) {
 	// 			throw new Error(validateData);
 	// 		}
-		
+
 	// 		const userID = loginApi.request(prepareDataToRequest(data));
 
 	// 		RouteManagement.go('/chats');
