@@ -1,7 +1,6 @@
 import Route from './route';
 import type { Nullable } from '../types/types';
 import type Block from './block';
-import store from '../store/store';
 
 type PageProps = {
 	attr: Record<string, string>;
@@ -21,13 +20,15 @@ class Router {
 	private currentRoute: Nullable<Route> = null;
 	private rootQuery!: string;
 	private route404: Route | null = null;
+	private readonly isUserAuthorizedFn: () => Promise<boolean>;
 
-	constructor(rootQuery: string) {
+	constructor(rootQuery: string, isUserAuthorizedFn: () => Promise<boolean>) {
+		this.rootQuery = rootQuery;
+		this.isUserAuthorizedFn = isUserAuthorizedFn;
+
 		if (Router.__instance) {
 			return Router.__instance;
 		}
-
-		this.rootQuery = rootQuery;
 
 		Router.__instance = this;
 	}
@@ -71,14 +72,16 @@ class Router {
 			this.currentRoute.leave();
 		}
 
-		if (route.getIsPrivate() && !store.getState().user) {
-			this.go('/');
-			return;
-		}
+		this.isUserAuthorizedFn().then((isAuthorized) => {
+			if (route.getIsPrivate() && !isAuthorized) {
+				this.go('/');
+				return;
+			}
 
-		this.currentRoute = route;
+			this.currentRoute = route;
 
-		route.render();
+			route.render();
+		});
 	}
 
 	go(pathname: string) {

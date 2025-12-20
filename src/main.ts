@@ -14,7 +14,11 @@ AuthController.getUser(true)
 		store.set('user', user);
 	});
 
-const router = new Router('#app');
+const router = new Router('#app', () => {
+	return AuthController.getUser(true)
+		.then(() => true)
+		.catch(() => false);
+});
 
 router
 	.use('/', LoginPage, {
