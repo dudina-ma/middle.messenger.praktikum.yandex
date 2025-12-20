@@ -67,6 +67,21 @@ class UserAPI {
 				throw error;
 			});
 	}
+
+	getChatToken(chatId: number) {
+		return chatsAPIInstance.post(`/token/${chatId}`)
+			.then((xhr) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					const response = JSON.parse(xhr.responseText || '{}');
+					return response.token as string;
+				}
+				throw new Error(`Failed to get chat token: ${xhr.status}`);
+			})
+			.catch((error) => {
+				console.error('Get chat token error:', error);
+				throw error;
+			});
+	}
 }
 
 export default new UserAPI();

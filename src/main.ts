@@ -6,6 +6,17 @@ import Error500Page from './pages/error500/error500';
 import LoginPage from './pages/login/login';
 import SignupPage from './pages/signup/signup';
 import ProfilePage from './pages/profile/profile';
+import AuthController from './controllers/auth-controller';
+import store from './store/store';
+
+AuthController.getUser()
+	.then((user) => {
+		store.set('user', user);
+	})
+	.catch((error) => {
+		console.error('Get user error:', error);
+		throw error;
+	});
 
 const router = new Router('#app');
 

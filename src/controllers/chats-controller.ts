@@ -58,6 +58,10 @@ class ChatsController {
 		// 	throw new Error('User not found');
 		// }
 	}
+
+	public getChatToken(chatId: number): Promise<string> {
+		return ChatsAPI.getChatToken(chatId);
+	}
 }
 
 export default new ChatsController();

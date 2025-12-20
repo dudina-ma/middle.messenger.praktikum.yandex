@@ -14,20 +14,59 @@ import type { State } from '../../store/store';
 import Modal from '../../components/modal/modal';
 import ChatListItem from '../../components/chat-list-item/chat-list-item';
 import Chat from '../../components/chat/chat';
+import { WebSocketClient } from '../../services/web-socket-client';
+import { API_BASE_URLS } from '../../api/index';
 
 interface ChatsPageProps {
 	chats: ChatType[];
 	selectedChatId: number | null;
+	userId?: number;
 }
 
-// TODO: возможно, для компонентов, у которых по смыслу нет пропсов, надо закрывать дженерик {}
 class ChatsPage extends Block<ChatsPageProps> {
 	private chatComponent: Chat | null = null;
+	private webSocketClient: WebSocketClient | null = null;
 	// типизация
 	constructor(...args: ConstructorParameters<typeof Block<ChatsPageProps>>) {
 		super(...args);
 
 		ChatsController.getChats();
+	}
+
+	protected componentReceivesProps(nextProps: ChatsPageProps): void {
+		if (nextProps.selectedChatId !== this.props.selectedChatId) {
+			this.webSocketClient?.close();
+			
+			const chatId = nextProps.selectedChatId;
+
+			if (!chatId) {
+				return;
+			}
+
+			ChatsController.getChatToken(chatId)
+				.then((token) => {
+					const wsUrl = `${API_BASE_URLS.ws}/${this.props.userId}/${chatId}/${token}`;
+					
+					this.webSocketClient = new WebSocketClient(wsUrl);
+					
+					return this.webSocketClient.connect();
+				})
+				.then(() => {
+					this.webSocketClient?.send({
+						content: '0',
+						type: 'get old',
+					});
+				})
+				.catch((error) => {
+					console.error('WebSocket connection error:', error);
+				});
+		}
+	}
+
+	public destroy() {
+		super.destroy();
+
+		this.webSocketClient?.close();
 	}
 
 	render() {
@@ -43,9 +82,6 @@ class ChatsPage extends Block<ChatsPageProps> {
 					chatData: chat,
 					events: {
 						click: () => {
-							this.props.selectedChatId = chat.id;
-
-
 							this.setProps({
 								selectedChatId: chat.id,
 							});
@@ -211,6 +247,7 @@ class ChatsPage extends Block<ChatsPageProps> {
 function mapStateToProps(state: State) {
 	return {
 		chats: state.chats,
+		userId: state.user?.id
 	};
 }
 

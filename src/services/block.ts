@@ -49,7 +49,7 @@ export default class Block<TProps extends object> {
 		eventBus.on(Block.EVENTS.FLOW_CDM, this.componentDidMountInternal.bind(this));
 		eventBus.on(Block.EVENTS.FLOW_RENDER, this.renderInternal.bind(this));
 		eventBus.on(Block.EVENTS.FLOW_CDU, (...args: unknown[]) => {
-			this.componentDidUpdateInternal(args[0] as TProps, args[1] as TProps);
+			this.shouldComponentUpdateInternal(args[0] as TProps, args[1] as TProps);
 		});
 	}
 
@@ -77,22 +77,27 @@ export default class Block<TProps extends object> {
 		this.eventBus().emit(Block.EVENTS.FLOW_CDM);
 	}
 
-	private componentDidUpdateInternal(oldProps: TProps, newProps: TProps) {
-		const response = this.componentDidUpdate(oldProps, newProps);
+	private shouldComponentUpdateInternal(oldProps: TProps, newProps: TProps) {
+		const response = this.shouldComponentUpdate(oldProps, newProps);
 		if (response) {
 			this.renderInternal();
 		} 
 	}
 
-	public componentDidUpdate(_oldProps: TProps, _newProps: TProps) {
+	public shouldComponentUpdate(_oldProps: TProps, _newProps: TProps) {
 		return true;
 	}
 
-	public setProps = (nextProps: Partial<TProps>) => {
+	protected componentReceivesProps(_nextProps: TProps): void {
+	}
+
+	public setProps(nextProps: Partial<TProps>) {
 		if (!nextProps) {
 			return;
 		}
 
+		this.componentReceivesProps(Object.assign({}, this.props, nextProps));
+		
 		Object.assign(this.props, nextProps);
 	};
 
