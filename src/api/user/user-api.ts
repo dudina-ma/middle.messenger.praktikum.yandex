@@ -42,7 +42,7 @@ class UserAPI {
 	changeAvatar(avatar: File) {
 		const formdata = new FormData();
 		formdata.append ('avatar', avatar);
-		return userAPIInstance.put('/profile/avatar', { data: formdata});
+		return userAPIInstance.put('/profile/avatar', { data: formdata });
 	}
 }
 

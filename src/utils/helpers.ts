@@ -16,8 +16,8 @@ export function isEqual(a: object, b: object): boolean {
 	}
     
 	for (const key of aKeys) {
-		const aValue = (a as any)[key];
-		const bValue = (b as any)[key];
+		const aValue = (a as Record<string, unknown>)[key];
+		const bValue = (b as Record<string, unknown>)[key];
         
 		if (typeof aValue === 'object' && aValue !== null &&
             typeof bValue === 'object' && bValue !== null) {
@@ -39,7 +39,7 @@ export function isEqual(a: object, b: object): boolean {
 	return true;
 }
 
-export function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {
+export function set(object: Indexed, path: string, value: unknown): Indexed {
 	if (typeof path !== 'string') {
 		throw new Error('path must be string');
 	}
@@ -51,7 +51,7 @@ export function set(object: Indexed | unknown, path: string, value: unknown): In
 	const pathItems = path.split('.');
     
 	if (pathItems.length === 1) {
-		(object as any)[pathItems[0]] = value;
+		object[pathItems[0]] = value;
 		return object;
 	}
 
@@ -59,12 +59,12 @@ export function set(object: Indexed | unknown, path: string, value: unknown): In
 	const restPath = pathItems.slice(1).join('.');
     
 	if (object && !(key in object) || 
-        typeof (object as any)[key] !== 'object' || 
-        (object as any)[key] === null) {
-		(object as any)[key] = {};
+        typeof object[key] !== 'object' || 
+        object[key] === null) {
+		object[key] = {};
 	}
     
-	set((object as any)[key], restPath, value);
+	set(object[key] as Indexed, restPath, value);
     
 	return object;
 }

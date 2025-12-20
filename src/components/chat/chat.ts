@@ -1,7 +1,7 @@
 import './chat.scss';
 import Block from '../../services/block';
 import chatTemplate from './chat.template';
-import type { Chat as ChatType, Message} from '../../types/types';
+import type { Chat as ChatType, Message } from '../../types/types';
 import Input from '../input/input';
 import Button from '../button/button';
 import Form from '../form/form';
@@ -65,8 +65,6 @@ export default class Chat extends Block<ChatProps> {
 					const data = handleFormSubmit(e);
 					if (!data) return;
 
-					console.log('Form data:', data);
-					
 					ChatsController.addUser({ userName: data.username, chatId: this.props.chat.id });
 					addUserModal.close();
 				},
@@ -123,8 +121,6 @@ export default class Chat extends Block<ChatProps> {
 					const data = handleFormSubmit(e);
 					if (!data) return;
 
-					console.log('Form data:', data);
-					
 					ChatsController.deleteUser({ userName: data.username, chatId: this.props.chat.id });
 					deleteUserModal.close();
 				},
@@ -164,7 +160,7 @@ export default class Chat extends Block<ChatProps> {
 			},
 		});
 
-        const messageInput = new Input('div', {
+		const messageInput = new Input('div', {
 			name: 'message',
 			type: 'text',
 			placeholder: 'Сообщение',
@@ -202,8 +198,6 @@ export default class Chat extends Block<ChatProps> {
 					const data = handleFormSubmit(e);
 					if (!data) return;
 			
-					console.log('Form data:', data);
-
 					if (data.message) {
 						ChatsController.sendMessage(data.message);
 						messageInput.setProps({ value: '' });
@@ -213,13 +207,13 @@ export default class Chat extends Block<ChatProps> {
 			},
 		});
 
-        this.children = {
-            messageForm,
-            contextMenuButton,
+		this.children = {
+			messageForm,
+			contextMenuButton,
 			contextMenu,
 			addUserModal,
 			deleteUserModal,
-        };
+		};
 
 
 		return this.compile(chatTemplate, this.props);

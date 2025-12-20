@@ -16,7 +16,7 @@ export default class Block<TProps extends object> {
 		FLOW_CDU: 'flow:component-did-update',
 	};
 
-	private element: Nullable<HTMLElement> = null;
+	protected element: Nullable<HTMLElement> = null;
 	private meta: Nullable<{ tagName: string, props: TProps }> = null;
 	private id: string;
 	protected children: Record<string, Block<object>>;

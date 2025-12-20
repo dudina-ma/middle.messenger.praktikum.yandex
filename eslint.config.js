@@ -45,7 +45,7 @@ export default [
       'eqeqeq': ['error', 'always'],
       'no-var': 'error',
       'prefer-const': 'error',
-      'no-console': ['warn', { allow: ['log'] }],
+      'no-console': ['warn', { allow: [ 'error'] }],
       'eol-last': ['error', 'always'],
     },
   },

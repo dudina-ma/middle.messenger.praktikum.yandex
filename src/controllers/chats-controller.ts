@@ -6,7 +6,7 @@ import { WebSocketClient, WebSocketClientEvents } from '../services/web-socket-c
 import { API_BASE_URLS } from '../api';
 
 class ChatsController {
-    private webSocketClient: WebSocketClient | null = null;
+	private webSocketClient: WebSocketClient | null = null;
 
 	public getChats() {
 		return ChatsAPI.getChats()

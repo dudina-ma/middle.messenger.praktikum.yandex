@@ -2,7 +2,7 @@ import EventBus from '../services/event-bus';
 import type { User, Chat } from '../types/types';
 import { ProfilePageMode } from '../controllers/user-controller';
 import { set } from '../utils/helpers';
-import type { Message } from '../types/types';
+import type { Message, Indexed } from '../types/types';
 
 // правильно ли сделано, что это необязательные поля
 export interface State {
@@ -27,7 +27,7 @@ class Store extends EventBus {
 	}
   
 	public set(path: string, value: unknown) {
-		set(this.state, path, value);
+		set(this.state as Indexed, path, value);
 
 		this.emit(StoreEvents.Updated);
 	};

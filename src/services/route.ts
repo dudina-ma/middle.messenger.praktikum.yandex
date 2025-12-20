@@ -1,5 +1,4 @@
 import type Block from './block';
-import { isEqual } from '../utils/helpers';
 import render from '../utils/render';
 import type { Nullable } from '../types/types';
 

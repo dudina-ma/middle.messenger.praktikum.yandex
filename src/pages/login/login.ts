@@ -95,8 +95,6 @@ class LoginPage extends Block<object> {
 						value: data.password,
 					});
 		
-					console.log('Form data:', data);
-
 					const loginData: LoginFormData = {
 						login: data.login,
 						password: data.password,

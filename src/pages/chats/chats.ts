@@ -40,8 +40,6 @@ class ChatsPage extends Block<ChatsPageProps> {
 	render() {
  		const chats = this.props.chats || [];
 
-		console.log(chats);
-
 		let chatList: Block<object>[] = [];
 
 		if (chats) {
@@ -61,22 +59,22 @@ class ChatsPage extends Block<ChatsPageProps> {
 		}
 
 		if (this.props.selectedChatId) {
-            const selectedChat = chats.find(c => c.id === this.props.selectedChatId);
+			const selectedChat = chats.find(c => c.id === this.props.selectedChatId);
             
-            if (!this.chatComponent) {
-                this.chatComponent = new Chat('section', {
-                    chat: selectedChat as ChatType,
+			if (!this.chatComponent) {
+				this.chatComponent = new Chat('section', {
+					chat: selectedChat as ChatType,
 					chatMessages: this.props.chatMessages,
 					attr: {
 						class: 'chats-page__chat',
 					},
-                });
-            } else {
-                this.chatComponent.setProps({ chat: selectedChat, chatMessages: this.props.chatMessages });
-            }
-        } else {
-            this.chatComponent = null;
-        }
+				});
+			} else {
+				this.chatComponent.setProps({ chat: selectedChat, chatMessages: this.props.chatMessages });
+			}
+		} else {
+			this.chatComponent = null;
+		}
 
 		const searchInput = new Input('div', {
 			name: 'search',
@@ -106,8 +104,6 @@ class ChatsPage extends Block<ChatsPageProps> {
 					for (const [key, value] of formData.entries()) {
 						data[key] = value.toString();
 					}
-			
-					console.log('Form data:', data);
 				},
 			},
 		});
@@ -140,7 +136,6 @@ class ChatsPage extends Block<ChatsPageProps> {
 				submit: (e: Event) => {
 					const data = handleFormSubmit(e);
 					if (!data) return;
-					console.log('Form data:', data);
 
 					ChatsController.createChat({ title: data.chatTitle });
 					createChatModal.close();

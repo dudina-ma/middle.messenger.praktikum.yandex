@@ -392,8 +392,6 @@ class ProfilePage extends Block<ProfilePageProps> {
 
 						UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
 					}
-					
-					console.log('Form data:', data);
 
 					const editProfileData: User = {
 						first_name: data.first_name,
@@ -486,8 +484,6 @@ class ProfilePage extends Block<ProfilePageProps> {
 						UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
 					}
 		
-					console.log('Form data::', data);
-
 					const changePasswordData: ChangePasswortdData = {
 						oldPassword: data.oldPassword,
 						newPassword: data.newPassword,

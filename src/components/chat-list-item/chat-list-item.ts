@@ -1,7 +1,7 @@
 import './chat-list-item.scss';
 import Block from '../../services/block';
 import chatTemplate from './chat-list-item.template';
-import type { Chat as ChatType} from '../../types/types';
+import type { Chat as ChatType } from '../../types/types';
 
 interface ChatListItemProps {
 	chatData: ChatType;

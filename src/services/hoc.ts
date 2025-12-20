@@ -10,22 +10,17 @@ type PageProps = {
 
 type PageConstructor = new (tagName?: string, props?: PageProps) => Block<object>;
 
-// типизация
 function connect<TProps extends object>(mapStateToProps: (state: State) => TProps) {
 	return function(Component: typeof Block<object>): PageConstructor {
 		return class extends Component {
 			private currentState: ReturnType<typeof mapStateToProps>;
 
-			// по идее это неправильно, потому что мы не только страницы будем оборачивать в этот HOC, а и компоненты
 			constructor(tagName?: string, props?: PageProps) {
 				const initialState = mapStateToProps(store.getState());
 
-				// разобраться
-				const finalTagName = tagName || (props as any)?.tagName || 'div';
-				const propsWithoutTagName = props ? { ...props } : {};
-				delete (propsWithoutTagName as any).tagName;
+				const finalTagName = tagName || 'div';
   
-				super(finalTagName, { ...propsWithoutTagName, ...initialState } as object);
+				super(finalTagName, { ...props, ...initialState } as object);
   
 				this.currentState = initialState;
 

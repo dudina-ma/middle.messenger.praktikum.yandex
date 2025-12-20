@@ -13,11 +13,6 @@ import type { SignupFormData } from '../../types/types';
 import connect from '../../services/hoc';
 import type { State } from '../../store/store';
 
-interface SignupPageProps {
-	signupForm: Form;
-	signupLink: Link;
-}
-
 class SignupPage extends Block<object> {
 	render() {
 		const emailInput = new Input('div', {
@@ -145,8 +140,6 @@ class SignupPage extends Block<object> {
 						});
 					});
 		
-					console.log('Form data:', data);
-
 					const signupData: SignupFormData = {
 						first_name: data.first_name,
 						second_name: data.second_name,
