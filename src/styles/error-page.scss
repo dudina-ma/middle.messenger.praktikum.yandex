@@ -4,11 +4,13 @@
 
 .error-page {
   @include flex-center;
+
   min-height: 100vh;
   background-color: $primary-color;
 
   &__content {
     @include flex-column-center;
+
     width: 100%;
   }
 

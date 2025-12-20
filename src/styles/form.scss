@@ -5,6 +5,7 @@
 
 @mixin auth-page {
   @include flex-center;
+
   min-height: 100vh;
   background-color: $primary-color;
 }
@@ -12,13 +13,14 @@
 @mixin auth-form-container {
   width: 340px;
   border-radius: 12px;
-  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 0 6px 0 rgb(0 0 0 / 14%);
   padding: 30px;
   padding-top: 50px;
 }
 
 @mixin auth-form {
   @include flex-column;
+
   height: 100%;
 
   &__title {

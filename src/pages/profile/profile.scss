@@ -1,5 +1,4 @@
 @use "../../styles/common" as *;
-@use "../../components/partials/input" as *;
 @use "sass:string";
 @use "sass:color";
 
@@ -11,6 +10,7 @@
 
 .profile-page__sidebar {
     @include flex-center;
+
     width: 64px;
     background-color: $sidebar-background;
     border-right: 1px solid $background-gray;
@@ -25,6 +25,7 @@
 
 .profile-page__back-button {
     @include flex-center;
+
     width: 28px;
     height: 28px;
     background: $secondary-color;
@@ -37,7 +38,9 @@
 .profile-page__back-icon {
     width: 13px;
     height: 13px;
+
     $white-hex: string.slice(color.ie-hex-str($primary-color), 4);
+
     background-image: url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.5 1L1 6.5L6.5 12M1 6.5H12' stroke='%23#{$white-hex}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
@@ -45,6 +48,7 @@
 
 .profile-page__content {
     @include flex-column-center;
+
     flex: 1;
     min-width: 0;
     padding: 60px 20px;
@@ -58,11 +62,13 @@
 
 .profile-page__header {
     @include flex-column-center;
+
     margin-bottom: 60px;
 }
 
 .profile-page__avatar {
     @include flex-center;
+
     width: 130px;
     height: 130px;
     border-radius: 50%;
@@ -78,7 +84,7 @@
     position: relative;
     
     &:hover {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgb(0 0 0 / 50%);
         background-blend-mode: overlay;
         
         .profile-page__avatar-text {
@@ -103,51 +109,83 @@
     color: $text-primary;
 }
 
-.profile-page__settings-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-}
-
-.profile-page__setting-item {
-    margin-bottom: 10px;
-
+.profile-form__item {
     &:last-child {
         margin-bottom: 0;
     }
 
-    .input-field {
+    &.input-field {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0;
-
-        &__label {
-            display: block;
-            flex-shrink: 0;
-            margin-right: 20px;
-            font-weight: 500;
-            font-size: 13px;
-            line-height: 13px;
-            letter-spacing: 0;
-        }
-
-        &__input {
-            flex: 1;
-            text-align: right;
-            color: rgba(153, 153, 153, 1);
-        }
+        margin-bottom: 10px;
     }
 
-    &:not(:last-child) .input-field {
+    .input-field__label {
+        display: block;
+        flex-shrink: 0;
+        margin-right: 20px;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 13px;
+        letter-spacing: 0;
+        order: 1;
+    }
+
+    .input-field__input {
+        flex: 1;
+        text-align: right;
+        color: rgb(153 153 153 / 100%);
+        order: 2;
+        min-width: 0;
+    }
+
+    .input-field__error {
+        width: 100%;
+        margin-top: 7px;
+        margin-left: 0;
+        text-align: left;
+        font-size: 8px;
+        font-weight: 400;
+        line-height: 8px;
+        color: $error-color;
+        order: 3;
+    }
+
+    &:not(:last-of-type).input-field {
         border-bottom: 1px solid $background-gray;
         padding-bottom: 10px;
     }
 }
 
+.profile-form__button {
+    width: 280px;
+    margin: 40px auto 0;
+    padding: 12px 0;
+    background: $secondary-color;
+    color: $primary-color;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    display: block;
+
+    &:hover {
+        opacity: 0.9;
+    }
+
+    &:active {
+        opacity: 0.8;
+    }
+}
+
 .profile-page__actions {
     @include flex-column-center;
+
     margin-top: 60px;
     width: 100%;
 }

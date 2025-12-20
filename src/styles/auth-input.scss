@@ -1,7 +1,7 @@
 @use "./variables" as *;
-@use "../components/partials/input" as *;
 
-.input-field {
+.login-form .input-field,
+.signup-form .input-field {
   margin-bottom: 16px;
 
   &__label {
