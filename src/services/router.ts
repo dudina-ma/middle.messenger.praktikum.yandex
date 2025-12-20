@@ -19,6 +19,7 @@ class Router {
 	private history: History = window.history;
 	private currentRoute: Nullable<Route> = null;
 	private rootQuery!: string;
+	private route404: Route | null = null;
 
 	constructor(rootQuery: string) {
 		if (Router.__instance) {
@@ -41,6 +42,12 @@ class Router {
 		return this;
 	}
 
+	on404(block: PageConstructor, props: RouteProps) {
+		this.route404 = new Route('/fake-path', block, { ...props, rootQuery: this.rootQuery });
+
+		return this;
+	}
+
 	start() {
 		window.onpopstate = () => {
 			this._onRoute(window.location.pathname);
@@ -53,6 +60,9 @@ class Router {
 		const route = this.getRoute(pathname);
 
 		if (!route) {
+			this.currentRoute?.leave();
+			this.currentRoute = this.route404;
+			this.route404?.render();
 			return;
 		}
 

@@ -29,10 +29,6 @@ router
 		tagName: 'main',
 		attr: { class: 'chats-page' }, 
 	})
-	.use('/error404', Error404Page, { 
-		tagName: 'main',
-		attr: { class: 'error-page' }, 
-	})
 	.use('/error500', Error500Page, { 
 		tagName: 'main',
 		attr: { class: 'error-page' }, 
@@ -44,5 +40,9 @@ router
 	.use('/settings', ProfilePage, {
 		tagName: 'div',
 		attr: { class: 'profile-page' },
+	})
+	.on404(Error404Page, {
+		tagName: 'main',
+		attr: { class: 'error-page' },
 	})
 	.start();
