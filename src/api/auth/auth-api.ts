@@ -6,15 +6,6 @@ import { showErrorAlert } from '../../utils/errorAlert';
 
 const authAPIInstance = new HttpClient(API_BASE_URLS.auth);
 
-// где должен быть then
-// class LoginAPI extends BaseAPI {
-//     public request(user: LoginRequest) {
-//       return authAPIInstance.post<LoginRequest, LoginResponse>('/login', user)
-//         .then(({user_id}) => user_id); // Обрабатываем получение данных из сервиса далее
-//     }
-//   }
-
-//  BaseAPI
 class AuthAPI {
 	signup(data: SignupFormData) {
 		return authAPIInstance.post('/signup', { data: {

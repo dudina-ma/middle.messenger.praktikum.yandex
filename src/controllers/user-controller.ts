@@ -2,7 +2,6 @@ import UserAPI from '../api/user/user-api';
 import store from '../store/store';
 import type { User, ChangePasswortdData } from '../types/types';
 
-// где должен быть этот enum
 export enum ProfilePageMode {
 	VIEW_DATA = 'view_data',
 	EDIT_DATA = 'edit_data',
@@ -14,7 +13,6 @@ class UserController {
 		store.set('profile.pageMode', mode);
 	}
 
-	// работа с ошибками
 	public editProfile(data: User) {
 		return UserAPI.editProfile(data)
 			.then((xhr) => {

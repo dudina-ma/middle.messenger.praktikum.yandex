@@ -23,7 +23,7 @@ class LoginPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const passwordInput = new Input('div', {
 			name: 'password',
 			type: 'password',
@@ -34,7 +34,7 @@ class LoginPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const submitButton = new Button('button', {
 			type: 'submit',
 			text: 'Войти',
@@ -42,30 +42,29 @@ class LoginPage extends Block<object> {
 				class: 'login-form__button',
 			},
 		});
-		
+
 		const loginLink = new Link('a', {
 			text: 'Создать аккаунт',
 			attr: {
 				class: 'login-form__link',
-				href: '/sign-up',	
+				href: '/sign-up',
 			},
 			events: {
 				click: (event: Event) => {
 					event.preventDefault();
 					const router = Router.getInstance();
-					// else
 					if (router) {
 						router.go('/sign-up');
 					}
 				},
 			},
 		});
-		
+
 		const inputsByName = {
 			login: loginInput,
 			password: passwordInput,
 		};
-		
+
 		const loginForm = new Form('form', {
 			attr: {
 				class: 'login-form',
@@ -80,21 +79,21 @@ class LoginPage extends Block<object> {
 				submit: (e: Event) => {
 					const data = handleFormSubmit(e);
 					if (!data) return;
-			
+
 					const errors = validateForm(data);
-		
+
 					loginInput.setProps({
 						error: Boolean(errors.login),
 						errorText: errors.login,
 						value: data.login,
 					});
-		
+
 					passwordInput.setProps({
 						error: Boolean(errors.password),
 						errorText: errors.password,
 						value: data.password,
 					});
-		
+
 					const loginData: LoginFormData = {
 						login: data.login,
 						password: data.password,
@@ -110,7 +109,7 @@ class LoginPage extends Block<object> {
 			loginLink,
 		};
 
-		return this.compile(loginTemplate, { 
+		return this.compile(loginTemplate, {
 			loginForm,
 			loginLink,
 		});

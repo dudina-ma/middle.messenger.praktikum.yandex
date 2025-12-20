@@ -5,11 +5,8 @@ import './modal.scss';
 interface ModalProps {
 	modalChildren?: Block<object>[];
 	attr?: Record<string, string>;
-
-	// скорее всего не понадобится
 	onClose?: () => void;
 	events?: Record<string, (e: Event) => void>;
-
 	title?: string;
 	titleClass?: string;
 }
@@ -24,7 +21,7 @@ export default class Modal extends Block<ModalProps> {
 			click: (e: Event) => {
 				const target = e.target as HTMLElement;
 				const dialogElement = this.getContent() as HTMLDialogElement;
-				
+
 				if (target === dialogElement) {
 					this.close();
 				}

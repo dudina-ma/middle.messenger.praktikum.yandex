@@ -28,7 +28,6 @@ class UserAPI {
 			.then((xhr) => {
 				if (xhr.status >= 200 && xhr.status < 300) {
 					const response = JSON.parse(xhr.responseText || '{}');
-					// возвращается id
 					return response;
 				}
 			})

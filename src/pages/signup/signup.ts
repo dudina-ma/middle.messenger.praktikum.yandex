@@ -25,7 +25,7 @@ class SignupPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const loginInput = new Input('div', {
 			name: 'login',
 			type: 'text',
@@ -36,7 +36,7 @@ class SignupPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const firstNameInput = new Input('div', {
 			name: 'first_name',
 			type: 'text',
@@ -47,7 +47,7 @@ class SignupPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const secondNameInput = new Input('div', {
 			name: 'second_name',
 			type: 'text',
@@ -58,7 +58,7 @@ class SignupPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const phoneInput = new Input('div', {
 			name: 'phone',
 			type: 'tel',
@@ -69,7 +69,7 @@ class SignupPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const passwordInput = new Input('div', {
 			name: 'password',
 			type: 'password',
@@ -80,7 +80,7 @@ class SignupPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const passwordRepeatedInput = new Input('div', {
 			name: 'password_repeated',
 			type: 'password',
@@ -91,7 +91,7 @@ class SignupPage extends Block<object> {
 				class: 'input-field',
 			},
 		});
-		
+
 		const inputsByName = {
 			email: emailInput,
 			login: loginInput,
@@ -101,7 +101,7 @@ class SignupPage extends Block<object> {
 			password: passwordInput,
 			password_repeated: passwordRepeatedInput,
 		};
-		
+
 		const submitButton = new Button('button', {
 			type: 'submit',
 			text: 'Зарегистрироваться',
@@ -109,7 +109,7 @@ class SignupPage extends Block<object> {
 				class: 'signup-form__button',
 			},
 		});
-		
+
 		const signupForm = new Form('form', {
 			attr: {
 				class: 'signup-form',
@@ -126,11 +126,11 @@ class SignupPage extends Block<object> {
 				submit: (e: Event) => {
 					const data = handleFormSubmit(e);
 					if (!data) return;
-		
+
 					const errors = validateForm(data);
-		
+
 					validatePasswordMatchOnSubmit(data, errors, 'password', 'password_repeated');
-		
+
 					Object.keys(inputsByName).forEach((key) => {
 						const input = inputsByName[key as keyof typeof inputsByName];
 						input.setProps({
@@ -139,7 +139,7 @@ class SignupPage extends Block<object> {
 							value: data[key] || input.props.value,
 						});
 					});
-		
+
 					const signupData: SignupFormData = {
 						first_name: data.first_name,
 						second_name: data.second_name,
@@ -153,7 +153,7 @@ class SignupPage extends Block<object> {
 				},
 			},
 		});
-		
+
 		const signupLink = new Link('a', {
 			text: 'Войти',
 			attr: {
@@ -164,7 +164,6 @@ class SignupPage extends Block<object> {
 				click: (event: Event) => {
 					event.preventDefault();
 					const router = Router.getInstance();
-					// else
 					if (router) {
 						router.go('/');
 					}
@@ -177,7 +176,7 @@ class SignupPage extends Block<object> {
 			signupLink,
 		};
 
-		return this.compile(signupTemplate, { 
+		return this.compile(signupTemplate, {
 			signupForm,
 			signupLink,
 		});

@@ -26,7 +26,6 @@ class Error404Page extends Block<object> {
 					event.preventDefault();
 
 					const router = Router.getInstance();
-					// else
 					if (router) {
 						router.go('/messenger');
 					}
@@ -39,7 +38,7 @@ class Error404Page extends Block<object> {
 			profileLink,
 		};
 
-		return this.compile(error404Template, { 
+		return this.compile(error404Template, {
 			error,
 			profileLink,
 		});

@@ -5,19 +5,9 @@ import Router from '../services/router';
 
 class AuthController {
 	public signup(data: SignupFormData) {
-		// крутилка
-		// валидация данных где должна быть
 		AuthAPI.signup(data)
 			.then((xhr) => {
 				if (xhr.status >= 200 && xhr.status < 300) {
-					// надо ли это тут
-
-					//const response = JSON.parse(xhr.responseText || '{}');
-					//const id = response.id || response.user_id;
-					// if (id) {
-					// 	store.set('user', { id });
-					// }
-
 					this.getUser().then(() => {
 						const router = Router.getInstance();
 						if (router) {
@@ -81,26 +71,6 @@ class AuthController {
 				throw error;
 			});
 	}
-
-	// public async login(data: LoginFormModel) {
-	// 	try {
-	// 		// Запускаем крутилку
-
-	// 		const validateData = userLoginValidator(data);
-
-	// 		if (!validateData.isCorrect) {
-	// 			throw new Error(validateData);
-	// 		}
-
-	// 		const userID = loginApi.request(prepareDataToRequest(data));
-
-	// 		RouteManagement.go('/chats');
-
-	// 		// Останавливаем крутилку
-	// 	} catch (error) {
-	// 		// Логика обработки ошибок
-	// }
-	//}
 }
 
 export default new AuthController();

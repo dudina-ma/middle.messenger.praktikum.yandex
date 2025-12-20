@@ -23,20 +23,19 @@ class Error500Page extends Block<object> {
 					event.preventDefault();
 
 					const router = Router.getInstance();
-					// else
 					if (router) {
 						router.go('/messenger');
 					}
 				},
 			},
 		});
-	
+
 		this.children = {
 			error,
 			profileLink,
 		};
 
-		return this.compile(error500Template, { 
+		return this.compile(error500Template, {
 			error,
 		});
 	}

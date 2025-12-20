@@ -25,7 +25,6 @@ interface ProfilePageProps {
 }
 
 class ProfilePage extends Block<ProfilePageProps> {
-	// типизация
 	constructor(...args: ConstructorParameters<typeof Block<ProfilePageProps>>) {
 		super(...args);
 
@@ -36,7 +35,6 @@ class ProfilePage extends Block<ProfilePageProps> {
 				profile: user,
 			});
 		});
-		//UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
 	}
 
 	render() {
@@ -59,7 +57,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 
 		if (user?.avatar) {
 			const content = changeAvatarButton.getContent();
-			
+
 			if (content) {
 				content.style.setProperty('--avatar-url', `url(${API_BASE_URLS.resources}${user.avatar})`);
 			}
@@ -104,16 +102,16 @@ class ProfilePage extends Block<ProfilePageProps> {
 				submit: (e: Event) => {
 					e.preventDefault();
 					e.stopPropagation();
-					
+
 					const form = e.target as HTMLFormElement;
 					if (!form) return;
-					
+
 					const fileInput = form.querySelector('input[type="file"]') as HTMLInputElement;
 					if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
 						console.error('Файл не выбран');
 						return;
 					}
-					
+
 					const file = fileInput.files[0];
 
 					UserController.changeAvatar(file);
@@ -295,7 +293,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 			display_name: displayNameInputEditable,
 			phone: phoneInputEditable,
 		};
-		
+
 		const profileChangeDataButton = new Button('button', {
 			type: 'button',
 			text: 'Изменить данные',
@@ -308,7 +306,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 				},
 			},
 		});
-		
+
 		const profileChangePasswordButton = new Button('button', {
 			type: 'button',
 			text: 'Изменить пароль',
@@ -321,7 +319,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 				},
 			},
 		});
-		
+
 		const submitButton = new Button('button', {
 			type: 'submit',
 			text: 'Сохранить',
@@ -342,14 +340,14 @@ class ProfilePage extends Block<ProfilePageProps> {
 				},
 			},
 		});
-		
+
 		const profileViewForm = new Form('form', {
 			attr: {
 				class: 'profile-form',
 			},
 			formChildren: [...readonlyInputs, profileLogoutButton],
 		});
-		
+
 		const profileEditForm = new Form('form', {
 			attr: {
 				class: 'profile-form',
@@ -362,9 +360,9 @@ class ProfilePage extends Block<ProfilePageProps> {
 				submit: (e: Event) => {
 					const data = handleFormSubmit(e);
 					if (!data) return;
-		
+
 					const errors = validateForm(data);
-		
+
 					editableInputs.forEach((input) => {
 						const name = input.props.name as string;
 						if (name) {
@@ -376,9 +374,9 @@ class ProfilePage extends Block<ProfilePageProps> {
 							});
 						}
 					});
-		
+
 					const hasErrors = Object.values(errors).some(error => Boolean(error));
-					
+
 					if (!hasErrors) {
 						readonlyInputs.forEach((input) => {
 							const name = input.props.name as string;
@@ -406,7 +404,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 				},
 			},
 		});
-		
+
 		const oldPasswordInput = new Input('div', {
 			type: 'password',
 			name: 'oldPassword',
@@ -416,7 +414,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 				class: 'input-field profile-form__item',
 			},
 		});
-		
+
 		const newPasswordInput = new Input('div', {
 			type: 'password',
 			name: 'newPassword',
@@ -426,7 +424,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 				class: 'input-field profile-form__item',
 			},
 		});
-		
+
 		const repeatPasswordInput = new Input('div', {
 			type: 'password',
 			name: 'repeatPassword',
@@ -436,7 +434,7 @@ class ProfilePage extends Block<ProfilePageProps> {
 				class: 'input-field profile-form__item',
 			},
 		});
-		
+
 		const passwordSubmitButton = new Button('button', {
 			type: 'submit',
 			text: 'Сохранить',
@@ -444,13 +442,13 @@ class ProfilePage extends Block<ProfilePageProps> {
 				class: 'profile-form__button',
 			},
 		});
-		
+
 		const passwordInputsByName: Record<string, Input> = {
 			oldPassword: oldPasswordInput,
 			newPassword: newPasswordInput,
 			repeatPassword: repeatPasswordInput,
 		};
-		
+
 		const profilePasswordChangeForm = new Form('form', {
 			attr: {
 				class: 'profile-form',
@@ -465,11 +463,11 @@ class ProfilePage extends Block<ProfilePageProps> {
 				submit: (e: Event) => {
 					const data = handleFormSubmit(e);
 					if (!data) return;
-		
+
 					const errors = validateForm(data);
-		
+
 					validatePasswordMatchOnSubmit(data, errors, 'newPassword', 'repeatPassword');
-		
+
 					Object.keys(passwordInputsByName).forEach((name) => {
 						const input = passwordInputsByName[name];
 						input.setProps({
@@ -478,12 +476,12 @@ class ProfilePage extends Block<ProfilePageProps> {
 							value: data[name] || '',
 						});
 					});
-		
+
 					const hasErrors = Object.values(errors).some(error => Boolean(error));
 					if (!hasErrors && data.newPassword && data.repeatPassword && data.newPassword === data.repeatPassword) {
 						UserController.setProfilePageMode(ProfilePageMode.VIEW_DATA);
 					}
-		
+
 					const changePasswordData: ChangePasswortdData = {
 						oldPassword: data.oldPassword,
 						newPassword: data.newPassword,

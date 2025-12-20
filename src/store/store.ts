@@ -4,7 +4,6 @@ import { ProfilePageMode } from '../controllers/user-controller';
 import { set } from '../utils/helpers';
 import type { Message, Indexed } from '../types/types';
 
-// правильно ли сделано, что это необязательные поля
 export interface State {
 	user?: User;
 	profile?: {
@@ -21,16 +20,16 @@ export enum StoreEvents {
 
 class Store extends EventBus {
 	private state: State = {};
-  
+
 	public getState() {
 		return this.state;
 	}
-  
+
 	public set(path: string, value: unknown) {
 		set(this.state as Indexed, path, value);
 
 		this.emit(StoreEvents.Updated);
 	};
 }
-  
+
 export default new Store();

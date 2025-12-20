@@ -40,7 +40,6 @@ class Route {
 	}
 
 	leave() {
-		// else
 		if (this.page) {
 			this.page.destroy();
 			this.page = null;
@@ -57,7 +56,6 @@ class Route {
 			render(this.props.rootQuery, this.page);
 			return;
 		}
-		//this.page.show();
 	}
 }
 

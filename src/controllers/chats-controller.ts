@@ -38,10 +38,6 @@ class ChatsController {
 			.then((id) => {
 				return ChatsAPI.addUser({ userId: id as number, chatId: data.chatId });
 			});
-		// где должна быть обработка ошибки
-		// if (!userId) {
-		// 	throw new Error('User not found');
-		// }
 	}
 
 	public deleteUser(data: { userName: string, chatId: number }) {
@@ -56,10 +52,6 @@ class ChatsController {
 			.then((id) => {
 				return ChatsAPI.deleteUser({ userId: id as number, chatId: data.chatId });
 			});
-		// где должна быть обработка ошибки
-		// if (!userId) {
-		// 	throw new Error('User not found');
-		// }
 	}
 
 	public getChatToken(chatId: number): Promise<string> {
@@ -82,11 +74,11 @@ class ChatsController {
 		this.getChatToken(chatId)
 			.then((token) => {
 				const wsUrl = `${API_BASE_URLS.ws}/${userId}/${chatId}/${token}`;
-				
+
 				this.webSocketClient = new WebSocketClient(wsUrl);
 
 				this.subscribeToMessages();
-				
+
 				return this.webSocketClient.connect();
 			})
 			.then(() => {
@@ -119,7 +111,7 @@ class ChatsController {
 			time: this.formatTime(message.time),
 		};
 	}
-	
+
 	private addMessage(message: Message) {
 		const messageWithFlag = this.addIsFromMeFlag(message);
 

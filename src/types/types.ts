@@ -18,7 +18,6 @@ export interface LoginFormData {
 	password: string;
 }
 
-// разообраться с опциональными полями
 export interface User {
 	id?: number;
 	first_name: string;

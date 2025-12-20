@@ -19,20 +19,17 @@ function connect<TProps extends object>(mapStateToProps: (state: State) => TProp
 				const initialState = mapStateToProps(store.getState());
 
 				const finalTagName = tagName || 'div';
-  
+
 				super(finalTagName, { ...props, ...initialState } as object);
-  
+
 				this.currentState = initialState;
 
-				// подписываемся на событие
 				store.on(StoreEvents.Updated, this.handleStoreUpdate);
 			}
 
 			private handleStoreUpdate = () => {
-				// при обновлении получаем новое состояние
 				const newState = mapStateToProps(store.getState());
-            
-				// если что-то из используемых данных поменялось, обновляем компонент
+
 				if (!isEqual(this.currentState, newState)) {
 					this.setProps({ ...newState });
 				}
@@ -47,5 +44,5 @@ function connect<TProps extends object>(mapStateToProps: (state: State) => TProp
 		};
 	};
 }
-  
+
 export default connect;

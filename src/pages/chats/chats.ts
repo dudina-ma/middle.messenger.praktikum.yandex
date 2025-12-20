@@ -24,7 +24,6 @@ interface ChatsPageProps {
 
 class ChatsPage extends Block<ChatsPageProps> {
 	private chatComponent: Chat | null = null;
-	// типизация
 	constructor(...args: ConstructorParameters<typeof Block<ChatsPageProps>>) {
 		super(...args);
 
@@ -60,7 +59,7 @@ class ChatsPage extends Block<ChatsPageProps> {
 
 		if (this.props.selectedChatId) {
 			const selectedChat = chats.find(c => c.id === this.props.selectedChatId);
-            
+
 			if (!this.chatComponent) {
 				this.chatComponent = new Chat('section', {
 					chat: selectedChat as ChatType,
@@ -87,7 +86,7 @@ class ChatsPage extends Block<ChatsPageProps> {
 				class: 'chats-page__search-wrapper',
 			},
 		});
-		
+
 		const searchForm = new Form('form', {
 			attr: {
 				role: 'search',
@@ -99,7 +98,7 @@ class ChatsPage extends Block<ChatsPageProps> {
 					e.preventDefault();
 					const form = e.target as HTMLFormElement;
 					const formData = new FormData(form);
-		
+
 					const data: Record<string, string> = {};
 					for (const [key, value] of formData.entries()) {
 						data[key] = value.toString();
@@ -165,7 +164,6 @@ class ChatsPage extends Block<ChatsPageProps> {
 			text: 'Профиль',
 			attr: {
 				class: 'chats-page__profile-link',
-				// нужна ли
 				href: '/settings',
 			},
 			icon: true,
@@ -176,7 +174,6 @@ class ChatsPage extends Block<ChatsPageProps> {
 					event.preventDefault();
 
 					const router = Router.getInstance();
-					// else
 					if (router) {
 						router.go('/settings');
 					}
@@ -189,7 +186,7 @@ class ChatsPage extends Block<ChatsPageProps> {
 			profileLink,
 			createChatButton,
 			createChatModal,
-			...(this.chatComponent && { chat: this.chatComponent }),	
+			...(this.chatComponent && { chat: this.chatComponent }),
 		};
 
 		if (chats.length) {

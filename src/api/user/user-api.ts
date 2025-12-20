@@ -5,11 +5,6 @@ import { showErrorAlert } from '../../utils/errorAlert';
 
 const userAPIInstance = new HttpClient(API_BASE_URLS.user);
 
-//   updateAvatar: (form: FormData): Promise<unknown> =>
-//     httpClient.put('profile/avatar', { data: form }),
-
-//  BaseAPI
-// нужны эти перекладывания? из даты в дату
 class UserAPI {
 	editProfile(data: User) {
 		return userAPIInstance.put('/profile', { data: {
