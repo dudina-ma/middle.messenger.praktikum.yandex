@@ -203,6 +203,12 @@ export default class Chat extends Block<ChatProps> {
 					if (!data) return;
 			
 					console.log('Form data:', data);
+
+					if (data.message) {
+						ChatsController.sendMessage(data.message);
+						messageInput.setProps({ value: '' });
+					}
+
 				},
 			},
 		});

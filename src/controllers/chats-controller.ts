@@ -124,7 +124,7 @@ class ChatsController {
 		const messageWithFlag = this.addIsFromMeFlag(message);
 
 		const currentMessages = store.getState().chatMessages || [];
-		store.set('chatMessages', [...currentMessages, messageWithFlag]);
+		store.set('chatMessages', [messageWithFlag, ...currentMessages]);
 	}
 
 	private setOldMessages(messages: Message[]) {
@@ -140,6 +140,13 @@ class ChatsController {
 			} else {
 				this.addMessage(data as Message);
 			}
+		});
+	}
+
+	public sendMessage(message: string) {
+		this.webSocketClient?.send({
+			content: message,
+			type: 'message',
 		});
 	}
 }
