@@ -50,3 +50,15 @@ export interface Chat {
 	created_by: number;
 	last_message: LastMessage;
 }
+
+export interface Message {
+	id: number;
+	user_id: number;
+	chat_id: number;
+	content: string;
+	file: string | null;
+	is_read: boolean;
+	time: string;
+	type: string;
+	isFromMe?: boolean;
+}

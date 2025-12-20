@@ -1,7 +1,7 @@
 import './chat.scss';
 import Block from '../../services/block';
 import chatTemplate from './chat.template';
-import type { Chat as ChatType} from '../../types/types';
+import type { Chat as ChatType, Message} from '../../types/types';
 import Input from '../input/input';
 import Button from '../button/button';
 import Form from '../form/form';
@@ -14,6 +14,7 @@ interface ChatProps {
 	chat: ChatType;
 	attr?: Record<string, string>;
 	events?: Record<string, (e: Event) => void>;
+	chatMessages: Message[];
 }
 
 export default class Chat extends Block<ChatProps> {

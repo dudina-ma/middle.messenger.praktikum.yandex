@@ -2,6 +2,7 @@ import EventBus from '../services/event-bus';
 import type { User, Chat } from '../types/types';
 import { ProfilePageMode } from '../controllers/user-controller';
 import { set } from '../utils/helpers';
+import type { Message } from '../types/types';
 
 // правильно ли сделано, что это необязательные поля
 export interface State {
@@ -11,6 +12,7 @@ export interface State {
 	};
 	chats?: Chat[];
 	selectedChatId?: number;
+	chatMessages?: Message[];
 }
 
 export enum StoreEvents {

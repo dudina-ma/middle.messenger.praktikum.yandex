@@ -1,8 +1,8 @@
 import ChatsAPI from '../api/chats/chats-api';
 import store from '../store/store';
 import UserController from './user-controller';
-import type { User } from '../types/types';
-import { WebSocketClient } from '../services/web-socket-client';
+import type { Message, User } from '../types/types';
+import { WebSocketClient, WebSocketClientEvents } from '../services/web-socket-client';
 import { API_BASE_URLS } from '../api';
 
 class ChatsController {
@@ -84,6 +84,8 @@ class ChatsController {
 				const wsUrl = `${API_BASE_URLS.ws}/${userId}/${chatId}/${token}`;
 				
 				this.webSocketClient = new WebSocketClient(wsUrl);
+
+				this.subscribeToMessages();
 				
 				return this.webSocketClient.connect();
 			})
@@ -100,6 +102,45 @@ class ChatsController {
 
 	public closeConnection() {
 		this.webSocketClient?.close();
+	}
+
+	private formatTime(isoString: string): string {
+		const date = new Date(isoString);
+		const hours = date.getHours().toString().padStart(2, '0');
+		const minutes = date.getMinutes().toString().padStart(2, '0');
+		return `${hours}:${minutes}`;
+	}
+
+	private addIsFromMeFlag(message: Message): Message {
+		const userId = store.getState().user?.id;
+		return {
+			...message,
+			isFromMe: message.user_id === userId,
+			time: this.formatTime(message.time),
+		};
+	}
+	
+	private addMessage(message: Message) {
+		const messageWithFlag = this.addIsFromMeFlag(message);
+
+		const currentMessages = store.getState().chatMessages || [];
+		store.set('chatMessages', [...currentMessages, messageWithFlag]);
+	}
+
+	private setOldMessages(messages: Message[]) {
+		const messagesWithFlags = messages.map((message) => this.addIsFromMeFlag(message));
+
+		store.set('chatMessages', messagesWithFlags);
+	}
+
+	private subscribeToMessages() {
+		this.webSocketClient?.on(WebSocketClientEvents.Message, (data: unknown) => {
+			if (Array.isArray(data)) {
+				this.setOldMessages(data);
+			} else {
+				this.addMessage(data as Message);
+			}
+		});
 	}
 }
 

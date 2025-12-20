@@ -7,19 +7,19 @@ import Button from '../../components/button/button';
 import { handleFormSubmit } from '../../utils/formHelpers';
 import Router from '../../services/router';
 import Link from '../../components/link/link';
-import type { Chat as ChatType } from '../../types/types';
+import type { Chat as ChatType, Message } from '../../types/types';
 import ChatsController from '../../controllers/chats-controller';
 import connect from '../../services/hoc';
 import type { State } from '../../store/store';
 import Modal from '../../components/modal/modal';
 import ChatListItem from '../../components/chat-list-item/chat-list-item';
 import Chat from '../../components/chat/chat';
-import { API_BASE_URLS } from '../../api/index';
 
 interface ChatsPageProps {
 	chats: ChatType[];
 	selectedChatId: number | null;
-	userId?: number;
+	userId: number;
+	chatMessages: Message[];
 }
 
 class ChatsPage extends Block<ChatsPageProps> {
@@ -66,12 +66,13 @@ class ChatsPage extends Block<ChatsPageProps> {
             if (!this.chatComponent) {
                 this.chatComponent = new Chat('section', {
                     chat: selectedChat as ChatType,
+					chatMessages: this.props.chatMessages,
 					attr: {
 						class: 'chats-page__chat',
 					},
                 });
             } else {
-                this.chatComponent.setProps({ chat: selectedChat });
+                this.chatComponent.setProps({ chat: selectedChat, chatMessages: this.props.chatMessages });
             }
         } else {
             this.chatComponent = null;
@@ -188,8 +189,6 @@ class ChatsPage extends Block<ChatsPageProps> {
 			},
 		});
 
-
-
 		this.children = {
 			searchForm,
 			profileLink,
@@ -213,6 +212,7 @@ function mapStateToProps(state: State) {
 		chats: state.chats,
 		userId: state.user?.id,
 		selectedChatId: state.selectedChatId,
+		chatMessages: state.chatMessages,
 	};
 }
 
