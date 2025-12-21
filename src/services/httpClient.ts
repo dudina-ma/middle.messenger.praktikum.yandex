@@ -85,7 +85,18 @@ class HttpClient {
 
 			xhr.onload = function () {
 				if (xhr.status >= 400) {
-					reject(new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`));
+					let errorBody: { reason?: string } = {};
+					try {
+						if (xhr.responseText) {
+							errorBody = JSON.parse(xhr.responseText);
+						}
+					} catch (e) {
+					}
+
+					const error = new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`) as Error & { reason?: string; xhr: XMLHttpRequest };
+					error.reason = errorBody.reason;
+					error.xhr = xhr;
+					reject(error);
 				} else {
 					resolve(xhr);
 				}

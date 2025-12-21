@@ -29,6 +29,11 @@ class AuthAPI {
 		} })
 			.catch((error) => {
 				console.error('Login error:', error);
+
+				if (error.reason === 'User already in system') {
+					throw error;
+				}
+
 				showErrorAlert('Ошибка при входе. Проверьте логин и пароль.');
 				throw error;
 			});

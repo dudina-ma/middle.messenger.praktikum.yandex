@@ -34,7 +34,12 @@ class AuthController {
 				}
 			})
 			.catch((error) => {
-				console.error('Login error:', error);
+				if (error.reason === 'User already in system') {
+					const router = Router.getInstance();
+						if (router) {
+							router.go('/messenger');
+						}
+				}
 			});
 	}
 
