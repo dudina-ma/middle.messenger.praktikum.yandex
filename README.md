@@ -145,6 +145,4 @@ https://yandex-praktikum-messenger-dudina-ma.netlify.app
 - Node.js >= 12.0.0
 - npm
 
-## Ссылка на PR
-
 https://github.com/dudina-ma/middle.messenger.praktikum.yandex/pull/5

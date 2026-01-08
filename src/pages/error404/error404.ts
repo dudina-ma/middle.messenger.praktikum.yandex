@@ -1,28 +1,48 @@
 import './error404.scss';
 import Error from '../../components/error/error';
 import error404Template from './error404.template';
-import render from '../../utils/render';
 import Block from '../../services/block';
+import Link from '../../components/link/link';
+import Router from '../../services/router';
 
-const error = new Error('div', {
-	code: '404',
-	message: 'Не туда попали',
-});
-
-interface Error404PageProps {
-	error: Error;
-}
-
-class Error404Page extends Block<Error404PageProps> {
+class Error404Page extends Block<object> {
 	render() {
-		return this.compile(error404Template, { 
+		const error = new Error('div', {
+			code: '404',
+			message: 'Не туда попали',
+			attr: {
+				class: 'error',
+			},
+		});
+
+		const profileLink = new Link('a', {
+			text: 'Назад к чатам',
+			attr: {
+				href: '/messenger',
+				class: 'error-page__link',
+			},
+			events: {
+				click: (event: Event) => {
+					event.preventDefault();
+
+					const router = Router.getInstance();
+					if (router) {
+						router.go('/messenger');
+					}
+				},
+			},
+		});
+
+		this.children = {
 			error,
+			profileLink,
+		};
+
+		return this.compile(error404Template, {
+			error,
+			profileLink,
 		});
 	}
 }
 
-const error404Page = new Error404Page('div', {
-	error,
-});
-
-render('#error404', error404Page);
+export default Error404Page;

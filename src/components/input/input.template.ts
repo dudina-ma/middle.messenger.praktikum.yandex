@@ -18,6 +18,10 @@ export default `
     {{#if required}}required{{/if}}
   >
   
+  {{#if isFile}}
+    <button type="button" class="profile-page__file-trigger">Выбрать файл на<br>компьютере</button>
+  {{/if}}
+  
   {{#if error}}
     <div class="input-field__error">{{errorText}}</div>
   {{/if}}

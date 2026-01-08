@@ -16,17 +16,17 @@ export default class Block<TProps extends object> {
 		FLOW_CDU: 'flow:component-did-update',
 	};
 
-	private element: Nullable<HTMLElement> = null;
+	protected element: Nullable<HTMLElement> = null;
 	private meta: Nullable<{ tagName: string, props: TProps }> = null;
 	private id: string;
-	private children: Record<string, Block<object>>;
-	private lists: Record<string, Block<object>[]>;
+	protected children: Record<string, Block<object>>;
+	protected lists: Record<string, Block<object>[]>;
 
 	public props: TProps;
 	public eventBus: () => EventBus;
 
-	constructor(tagName: string = 'div', propsAndChilds: TProps = {} as TProps) {
-		const { children, props, lists } = this.getChildren(propsAndChilds);
+	constructor(tagName: string = 'div', propsAndChildren: TProps = {} as TProps) {
+		const { children, props, lists } = this.getChildren(propsAndChildren);
 		const eventBus = new EventBus();
 		this.id = makeUUID();
 		this.children = children;
@@ -49,7 +49,7 @@ export default class Block<TProps extends object> {
 		eventBus.on(Block.EVENTS.FLOW_CDM, this.componentDidMountInternal.bind(this));
 		eventBus.on(Block.EVENTS.FLOW_RENDER, this.renderInternal.bind(this));
 		eventBus.on(Block.EVENTS.FLOW_CDU, (...args: unknown[]) => {
-			this.componentDidUpdateInternal(args[0] as TProps, args[1] as TProps);
+			this.shouldComponentUpdateInternal(args[0] as TProps, args[1] as TProps);
 		});
 	}
 
@@ -77,22 +77,27 @@ export default class Block<TProps extends object> {
 		this.eventBus().emit(Block.EVENTS.FLOW_CDM);
 	}
 
-	private componentDidUpdateInternal(oldProps: TProps, newProps: TProps) {
-		const response = this.componentDidUpdate(oldProps, newProps);
+	private shouldComponentUpdateInternal(oldProps: TProps, newProps: TProps) {
+		const response = this.shouldComponentUpdate(oldProps, newProps);
 		if (response) {
 			this.renderInternal();
 		} 
 	}
 
-	public componentDidUpdate(_oldProps: TProps, _newProps: TProps) {
+	public shouldComponentUpdate(_oldProps: TProps, _newProps: TProps) {
 		return true;
 	}
 
-	public setProps = (nextProps: Partial<TProps>) => {
+	protected componentReceivesProps(_nextProps: TProps): void {
+	}
+
+	public setProps(nextProps: Partial<TProps>) {
 		if (!nextProps) {
 			return;
 		}
 
+		this.componentReceivesProps(Object.assign({}, this.props, nextProps));
+		
 		Object.assign(this.props, nextProps);
 	};
 
@@ -247,5 +252,12 @@ export default class Block<TProps extends object> {
 		if (this.element) {
 			this.element.style.display = 'none';
 		}
+	}
+
+	public destroy() {
+		if (this.element && this.element.parentNode) {
+			this.element.parentNode.removeChild(this.element);
+		}
+		this.element = null;
 	}
 }

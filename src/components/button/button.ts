@@ -8,6 +8,8 @@ interface ButtonProps {
 	icon?: boolean;
 	iconClass?: string;
 	events?: Record<string, (_event: Event) => void>;
+	content?: string;
+	contentClass?: string;
 }
 
 export default class Button extends Block<ButtonProps> {

@@ -9,10 +9,10 @@ type Options = {
 	method?: string;
 	timeout?: number;
 	headers?: Record<string, string>;
-	data?: Record<string, string>;
+	data?: Record<string, unknown> | FormData;
 };
 
-function queryStringify(data: Record<string, string>) {
+function queryStringify(data: Record<string, unknown>) {
 	if (!Object.keys(data).length) {
 		return '';
 	}
@@ -20,14 +20,20 @@ function queryStringify(data: Record<string, string>) {
 	let result = '?';
 
 	Object.keys(data).forEach(key => {
-		const value = data[key].toString();
+		const value = String(data[key]);
 		result = result + key + '=' + value + '&';
 	});
 
 	return result.slice(0, -1);
 }
 
-export default class HTTPTransport {
+class HttpClient {
+	private baseUrl: string;
+
+	constructor(baseUrl: string) {
+		this.baseUrl = baseUrl;
+	}
+
 	get = (url: string, options: Options = {}) => {
 		return this.request(
 			url,
@@ -60,22 +66,40 @@ export default class HTTPTransport {
 		);
 	};
 
-	request = (url: string, options: Options, timeout = 5000) => {
+	request = (url: string, options: Options, timeout = 5000): Promise<XMLHttpRequest> => {
 		const { method, data } = options;
 
-		return new Promise((resolve, reject) => {
+		return new Promise<XMLHttpRequest>((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
 
-			if (method === METHODS.GET) {
+			url = this.baseUrl + url;
+
+			if (method === METHODS.GET && data && !(data instanceof FormData)) {
 				url += queryStringify(data || {});
 			}
 
 			xhr.timeout = timeout;
+			xhr.withCredentials = true;
 
 			xhr.open(method || '', url);
 
 			xhr.onload = function () {
-				resolve(xhr);
+				if (xhr.status >= 400) {
+					let errorBody: { reason?: string } = {};
+					try {
+						if (xhr.responseText) {
+							errorBody = JSON.parse(xhr.responseText);
+						}
+					} catch (e) {
+					}
+
+					const error = new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`) as Error & { reason?: string; xhr: XMLHttpRequest };
+					error.reason = errorBody.reason;
+					error.xhr = xhr;
+					reject(error);
+				} else {
+					resolve(xhr);
+				}
 			};
 
 			if (options.headers) {
@@ -92,14 +116,14 @@ export default class HTTPTransport {
 
 			if (method === METHODS.GET || !data) {
 				xhr.send();
-			} else if (method === METHODS.POST || method === METHODS.PUT) {
-				if (!options.headers?.['Content-Type']) {
-					xhr.setRequestHeader('Content-Type', 'application/json');
-				}
+			  } else if (data instanceof FormData) {
+				xhr.send(data);
+			  } else {
+				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.send(JSON.stringify(data));
-			} else {
-				xhr.send(JSON.stringify(data));
-			}
+			  }
 		});
 	};
 }
+
+export default HttpClient;

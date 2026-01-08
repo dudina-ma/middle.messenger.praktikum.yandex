@@ -1,1 +1,48 @@
 import './styles/common.scss';
+import Router from './services/router';
+import ChatsPage from './pages/chats/chats';
+import Error404Page from './pages/error404/error404';
+import Error500Page from './pages/error500/error500';
+import LoginPage from './pages/login/login';
+import SignupPage from './pages/signup/signup';
+import ProfilePage from './pages/profile/profile';
+import AuthController from './controllers/auth-controller';
+import store from './store/store';
+
+AuthController.getUser(true)
+	.then((user) => {
+		store.set('user', user);
+	});
+
+const router = new Router('#app', () => {
+	return AuthController.getUser(true)
+		.then(() => true)
+		.catch(() => false);
+});
+
+router
+	.use('/', LoginPage, {
+		tagName: 'main',
+		attr: { class: 'login-page' },
+	}, false)
+	.use('/sign-up', SignupPage, {
+		tagName: 'main',
+		attr: { class: 'signup-page' },
+	}, false)
+	.use('/messenger', ChatsPage, {
+		tagName: 'main',
+		attr: { class: 'chats-page' },
+	}, true)
+	.use('/settings', ProfilePage, {
+		tagName: 'div',
+		attr: { class: 'profile-page' },
+	}, true)
+	.on404(Error404Page, {
+		tagName: 'main',
+		attr: { class: 'error-page' },
+	})
+	.use('/error500', Error500Page, {
+		tagName: 'main',
+		attr: { class: 'error-page' },
+	})
+	.start();

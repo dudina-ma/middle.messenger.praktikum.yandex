@@ -73,7 +73,7 @@
     height: 130px;
     border-radius: 50%;
     background-color: $background-gray;
-    background-image: url("../../assets/images/image-placeholder.png");
+    background-image: var(--avatar-url, url("../../assets/images/image-placeholder.png"));
     background-size: 70%;
     background-position: center;
     background-repeat: no-repeat;
@@ -211,3 +211,66 @@
     }
 }
 
+.profile-page__change-avatar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+.profile-page__file-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin-bottom: 0;
+    border: none;
+    padding: 0;
+}
+
+.profile-page__file-input-wrapper .input-field__label {
+    display: none;
+}
+
+.profile-page__file-input {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.profile-page__file-trigger {
+    display: block;
+    text-align: center;
+    color: $secondary-color;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 0 auto;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    
+    &:hover {
+        opacity: 0.8;
+    }
+    
+    &:active {
+        opacity: 0.6;
+    }
+}
+
+.profile-page__change-avatar-submit-button {
+    @include primary-button;
+
+    width: 100%;
+    padding: 12px 24px;
+    font-family: Inter, sans-serif;
+    box-shadow: 0 0 6px rgb(0 0 0 / 14%);
+}
