@@ -270,6 +270,27 @@ describe('Block', () => {
     child2.destroy();
   });
 
+  it('should generate unique id for each component', () => {
+    const component1 = new TestComponent('div', { text: 'test' });
+    const component2 = new TestComponent('div', { text: 'test' });
+    const component3 = new TestComponent('div', { text: 'test' });
+
+    const id1 = component1['id'];
+    const id2 = component2['id'];
+    const id3 = component3['id'];
+
+    expect(id1).toBeTruthy();
+    expect(id2).toBeTruthy();
+    expect(id3).toBeTruthy();
+    expect(id1).not.toBe(id2);
+    expect(id1).not.toBe(id3);
+    expect(id2).not.toBe(id3);
+
+    component1.destroy();
+    component2.destroy();
+    component3.destroy();
+  });
+
   it('should hide element', () => {
     component = new TestComponent('div', { text: 'test' });
     document.body.appendChild(component.getContent()!);
@@ -379,5 +400,94 @@ describe('Block', () => {
     expect(() => {
       delete component.props.text;
     }).toThrow('Нельзя удалить свойство text из props');
+  });
+
+  it('should update attributes when props change', () => {
+    class ComponentWithAttrs extends Block<{ attr: { id: string; class: string } }> {
+      render(): DocumentFragment {
+        return this.compile('<div>Test</div>', this.props);
+      }
+    }
+
+    const attrComponent = new ComponentWithAttrs('div', {
+      attr: { id: 'initial-id', class: 'initial-class' }
+    });
+    document.body.appendChild(attrComponent.getContent()!);
+
+    expect(attrComponent.getContent()?.getAttribute('id')).toBe('initial-id');
+    expect(attrComponent.getContent()?.getAttribute('class')).toBe('initial-class');
+
+    attrComponent.setProps({
+      attr: { id: 'updated-id', class: 'updated-class' }
+    });
+
+    expect(attrComponent.getContent()?.getAttribute('id')).toBe('updated-id');
+    expect(attrComponent.getContent()?.getAttribute('class')).toBe('updated-class');
+
+    attrComponent.destroy();
+  });
+
+  it('should handle child without content in replaceStubWithContent', () => {
+    class EmptyChildComponent extends Block<TestComponentProps> {
+      render(): DocumentFragment {
+        return new DocumentFragment();
+      }
+    }
+
+    const emptyChild = new EmptyChildComponent('div', { text: 'test' });
+    const parent = new ParentWithChildComponent('div', { child: emptyChild });
+
+    document.body.appendChild(parent.getContent()!);
+
+    const stub = parent.getContent()?.querySelector('[data-id]');
+    expect(stub).toBeNull();
+
+    parent.destroy();
+    emptyChild.destroy();
+  });
+
+  it('should not treat array as list if first element is not Block', () => {
+    const parent = new ParentWithListComponent('div', { items: ['not a block', 'also not'] as any });
+
+    expect(parent['lists']).not.toHaveProperty('items');
+    expect(parent.props).toHaveProperty('items');
+
+    parent.destroy();
+  });
+
+  it('should handle mixed props with children, lists and regular props', () => {
+    const child = new ChildComponent('div', { text: 'Child' });
+    const item1 = new ChildComponent('div', { text: 'Item 1' });
+    const item2 = new ChildComponent('div', { text: 'Item 2' });
+
+    class MixedPropsComponent extends Block<{
+      child: Block<TestComponentProps>;
+      items: Block<TestComponentProps>[];
+      text: string;
+      count: number;
+    }> {
+      render(): DocumentFragment {
+        return this.compile('<div>{{text}} ({{count}}): {{{child}}} {{#each items}}{{{this}}}{{/each}}</div>', this.props);
+      }
+    }
+
+    const mixedComponent = new MixedPropsComponent('div', {
+      child,
+      items: [item1, item2],
+      text: 'Parent',
+      count: 2
+    });
+
+    expect(mixedComponent['children']).toHaveProperty('child');
+    expect(mixedComponent['lists']).toHaveProperty('items');
+    expect(mixedComponent.props).toHaveProperty('text');
+    expect(mixedComponent.props).toHaveProperty('count');
+    expect(mixedComponent.props.text).toBe('Parent');
+    expect(mixedComponent.props.count).toBe(2);
+
+    mixedComponent.destroy();
+    child.destroy();
+    item1.destroy();
+    item2.destroy();
   });
 });
