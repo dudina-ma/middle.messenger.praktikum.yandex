@@ -14,7 +14,7 @@ type RouteProps = {
 };
 
 class Router {
-	private static __instance: Router;
+	private static instance: Router | undefined;
 	private routes: Route[] = [];
 	private history: History = window.history;
 	private currentRoute: Nullable<Route> = null;
@@ -26,39 +26,43 @@ class Router {
 		this.rootQuery = rootQuery;
 		this.isUserAuthorizedFn = isUserAuthorizedFn;
 
-		if (Router.__instance) {
-			return Router.__instance;
+		if (Router.instance) {
+			return Router.instance;
 		}
 
-		Router.__instance = this;
+		Router.instance = this;
 	}
 
 	static getInstance(): Router | null {
-		return Router.__instance || null;
+		return Router.instance || null;
 	}
 
-	use(pathname: string, block: PageConstructor, props: RouteProps, isPrivate: boolean = false) {
+	static reset() {
+		Router.instance = undefined;
+	}
+
+	public use(pathname: string, block: PageConstructor, props: RouteProps, isPrivate: boolean = false) {
 		const route = new Route(pathname, block, { ...props, rootQuery: this.rootQuery }, isPrivate);
 		this.routes.push(route);
 
 		return this;
 	}
 
-	on404(block: PageConstructor, props: RouteProps) {
+	public on404(block: PageConstructor, props: RouteProps) {
 		this.route404 = new Route('/fake-path', block, { ...props, rootQuery: this.rootQuery });
 
 		return this;
 	}
 
-	start() {
+	public start() {
 		window.onpopstate = () => {
-			this._onRoute(window.location.pathname);
+			this.onRoute(window.location.pathname);
 		};
 
-		this._onRoute(window.location.pathname);
+		this.onRoute(window.location.pathname);
 	}
 
-	_onRoute(pathname: string) {
+	private async onRoute(pathname: string) {
 		const route = this.getRoute(pathname);
 
 		if (!route) {
@@ -72,7 +76,7 @@ class Router {
 			this.currentRoute.leave();
 		}
 
-		this.isUserAuthorizedFn().then((isAuthorized) => {
+		return this.isUserAuthorizedFn().then((isAuthorized) => {
 			if (route.getIsPrivate() && !isAuthorized) {
 				this.go('/');
 				return;
@@ -84,20 +88,20 @@ class Router {
 		});
 	}
 
-	go(pathname: string) {
+	public async go(pathname: string) {
 		this.history.pushState({}, '', pathname);
-		this._onRoute(pathname);
+		return this.onRoute(pathname);
 	}
 
-	back() {
+	public back() {
 		this.history.back();
 	}
 
-	forward() {
+	public forward() {
 		this.history.forward();
 	}
 
-	getRoute(pathname: string) {
+	public getRoute(pathname: string) {
 		return this.routes.find(route => route.match(pathname));
 	}
 }
