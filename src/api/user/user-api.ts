@@ -1,4 +1,4 @@
-import HttpClient from '../../services/httpClient';
+import HttpClient from '../../services/http-client';
 import { API_BASE_URLS } from '../index';
 import type { User, ChangePasswortdData } from '../../types/types';
 import { showErrorAlert } from '../../utils/errorAlert';

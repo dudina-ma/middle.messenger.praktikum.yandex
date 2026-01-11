@@ -1,4 +1,4 @@
-import HttpClient from '../../services/httpClient';
+import HttpClient from '../../services/http-client';
 import { API_BASE_URLS } from '../index';
 import type { SignupFormData } from '../../types/types';
 import type { LoginFormData } from '../../types/types';

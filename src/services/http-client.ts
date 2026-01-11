@@ -108,8 +108,14 @@ class HttpClient {
 				});
 			}
 
-			xhr.onabort = reject;
-			xhr.onerror = reject;
+			xhr.onerror = function() {
+				reject(new Error('Network error occurred'));
+			};
+
+			xhr.onabort = function() {
+				reject(new Error('Request was aborted'));
+			};
+
 			xhr.ontimeout = function () {
 				reject(new Error(`Request timeout ${timeout}ms`));
 			};

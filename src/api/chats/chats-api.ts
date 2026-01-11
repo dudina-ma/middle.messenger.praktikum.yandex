@@ -1,4 +1,4 @@
-import HttpClient from '../../services/httpClient';
+import HttpClient from '../../services/http-client';
 import { API_BASE_URLS } from '../index';
 import store from '../../store/store';
 import { showErrorAlert } from '../../utils/errorAlert';
