@@ -58,7 +58,7 @@ describe('HttpClient', () => {
 
 			expect(mockXHR.open).toHaveBeenCalledWith(
 				'GET',
-				'https://api.example.com/users?page=1&limit=10'
+				'https://api.example.com/users?page=1&limit=10',
 			);
 		});
 
@@ -196,25 +196,25 @@ describe('HttpClient', () => {
 			await expect(promise).rejects.toThrow('HTTP Error: 400 Bad Request');
 		});
 
-        it('should reject on network error', async () => {
-            const promise = httpClient.get('/users');
+		it('should reject on network error', async () => {
+			const promise = httpClient.get('/users');
 
-            if (mockXHR.onerror) {
-                mockXHR.onerror();
-            }
+			if (mockXHR.onerror) {
+				mockXHR.onerror();
+			}
 
-            await expect(promise).rejects.toThrow('Network error occurred');
-        });
+			await expect(promise).rejects.toThrow('Network error occurred');
+		});
 
-        it('should reject on abort', async () => {
-            const promise = httpClient.get('/users');
+		it('should reject on abort', async () => {
+			const promise = httpClient.get('/users');
 
-            if (mockXHR.onabort) {
-                mockXHR.onabort();
-            }
+			if (mockXHR.onabort) {
+				mockXHR.onabort();
+			}
 
-            await expect(promise).rejects.toThrow('Request was aborted');
-        });
+			await expect(promise).rejects.toThrow('Request was aborted');
+		});
 
 		it('should reject on timeout', async () => {
 			const promise = httpClient.get('/users', { timeout: 1000 });

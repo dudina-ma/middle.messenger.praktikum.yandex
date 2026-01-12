@@ -90,7 +90,8 @@ class HttpClient {
 						if (xhr.responseText) {
 							errorBody = JSON.parse(xhr.responseText);
 						}
-					} catch (e) {
+					} catch (_e) {
+						void _e;
 					}
 
 					const error = new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`) as Error & { reason?: string; xhr: XMLHttpRequest };

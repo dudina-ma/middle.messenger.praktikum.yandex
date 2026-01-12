@@ -61,14 +61,14 @@ describe('Router - Basic Navigation', () => {
 		expect(rootElement?.innerHTML).toContain('<div>Test</div>');
 	});
 
-    it('should render test page2', async () => {
+	it('should render test page2', async () => {
 		await router.go('/test2');
 
 		const rootElement = document.querySelector('#test');
 		expect(rootElement?.innerHTML).toContain('<div>Test2</div>');
 	});
 
-    it('should render 404 page', async () => {
+	it('should render 404 page', async () => {
 		await router.go('/test3');
 
 		const rootElement = document.querySelector('#test');
@@ -81,16 +81,16 @@ describe('Router - History API', () => {
 
 	beforeEach(() => {
 	  mockHistory = {
-		pushState: jest.fn(),
-		back: jest.fn(),
-		forward: jest.fn(),
-		length: 1,
-		state: null,
+			pushState: jest.fn(),
+			back: jest.fn(),
+			forward: jest.fn(),
+			length: 1,
+			state: null,
 	  };
 
 	  Object.defineProperty(window, 'history', {
-		writable: true,
-		value: mockHistory,
+			writable: true,
+			value: mockHistory,
 	  });
 	});
 
@@ -118,7 +118,7 @@ describe('Router - History API', () => {
 
 	  expect(mockHistory.forward).toHaveBeenCalled();
 	});
-  });
+});
 
 describe('Router - Private Routes', () => {
 	let router: Router;
