@@ -56,9 +56,12 @@
 ### Инструменты разработки
 
 - **Vite** — быстрый сборщик и dev-сервер
-- **ESLint** — линтер для проверки качества JavaScript/TypeScript кода
+- **vite-plugin-checker** — плагин для проверки TypeScript, ESLint и Stylelint во время разработки
+- **ESLint** — линтер для проверки качества JavaScript/TypeScript кода (flat config)
 - **Stylelint** — линтер для проверки CSS/SCSS кода
 - **TypeScript Compiler** — проверка типов на этапе компиляции
+- **Jest** — фреймворк для тестирования
+- **Husky** — инструмент для настройки Git hooks
 
 ### Архитектура
 
@@ -94,14 +97,15 @@ npm run start
 
 ### Скрипты
 
-- `npm run dev` — запуск в режиме разработки на порту 3000
+- `npm run dev` — запуск в режиме разработки на порту 3000 (с автоматической проверкой TypeScript, ESLint и Stylelint)
 - `npm start` — сборка и запуск проекта на порту 3000
 - `npm run build` — сборка проекта для продакшена
 - `npm run typecheck` — проверка типов TypeScript
-- `npm run lint` — проверка кода линтерами (ESLint + Stylelint)
+- `npm run lint` — проверка кода (TypeScript, ESLint, Stylelint)
 - `npm run lint:fix` — автоматическое исправление ошибок линтера
 - `npm run lint:css` — проверка только CSS/SCSS
 - `npm run lint:css-fix` — автоматическое исправление CSS/SCSS
+- `npm test` — запуск тестов Jest
 
 4. **Открыть в браузере**
 
@@ -138,6 +142,80 @@ https://yandex-praktikum-messenger-dudina-ma.netlify.app
 - **Профиль**: https://yandex-praktikum-messenger-dudina-ma.netlify.app/settings
 - **Ошибка 404**: автоматически отображается для несуществующих маршрутов
 
+## Тестирование
+
+Проект использует **Jest** для написания и запуска тестов. Файлы с тестами хранятся рядом с тестируемыми элементами.
+
+### Структура тестов
+
+Тесты находятся в тех же папках, что и тестируемый код:
+- `src/services/router.test.ts` — тесты для роутера
+- `src/services/block.test.ts` — тесты для компонента Block
+- `src/services/http-client.test.ts` — тесты для HTTP клиента
+
+### Запуск тестов
+
+```bash
+npm test
+```
+
+### Написание тестов
+
+Тесты написаны с использованием Jest и моков для проверки функциональности:
+- Роутер — проверка навигации, приватных маршрутов, History API
+- Компонент Block — проверка жизненного цикла, событий, обновления DOM
+- HTTP клиент — проверка методов запросов, обработки ошибок, заголовков
+
+## Проверка кода
+
+### Автоматическая проверка во время разработки
+
+Проект использует **vite-plugin-checker** для автоматической проверки кода во время разработки:
+
+- **TypeScript** — проверка типов в реальном времени
+- **ESLint** — проверка качества кода (flat config)
+- **Stylelint** — проверка CSS/SCSS стилей
+
+Ошибки отображаются в консоли Vite и в overlay браузера при запуске `npm run dev`.
+
+### Pre-commit hooks
+
+Проект настроен с использованием **Husky** для автоматической проверки кода перед коммитом:
+
+- **Линтер** — проверка TypeScript, ESLint и Stylelint
+- **Тесты** — запуск всех тестов Jest
+
+Если проверки не проходят, коммит блокируется.
+
+Настройка находится в `.husky/pre-commit`.
+
+### Ручная проверка
+
+```bash
+# Проверка всех линтеров
+npm run lint
+
+# Автоматическое исправление ошибок
+npm run lint:fix
+
+# Проверка только TypeScript
+npm run typecheck
+
+# Проверка только CSS/SCSS
+npm run lint:css
+```
+
+## Безопасность и обновления
+
+Проект проходит аудит пакетов для обеспечения безопасности:
+
+```bash
+npm audit
+npm audit fix
+```
+
+Все зависимости обновлены до актуальных и безопасных версий.
+
 ## Разработка
 
 ### Требования
@@ -145,4 +223,46 @@ https://yandex-praktikum-messenger-dudina-ma.netlify.app
 - Node.js >= 12.0.0
 - npm
 
-https://github.com/dudina-ma/middle.messenger.praktikum.yandex/pull/5
+### Настройка окружения
+
+После клонирования репозитория:
+
+1. Установите зависимости:
+```bash
+npm install
+```
+
+2. Настройте Git hooks (выполняется автоматически через `prepare` скрипт):
+```bash
+npm run prepare
+```
+
+3. Запустите проект в режиме разработки:
+```bash
+npm run dev
+```
+
+### Структура проекта
+
+```
+src/
+├── api/              # API клиенты (auth, chats, user)
+├── components/        # Переиспользуемые компоненты
+├── controllers/       # Контроллеры бизнес-логики
+├── pages/             # Страницы приложения
+├── services/          # Сервисы (router, block, http-client)
+│   ├── router.ts
+│   ├── router.test.ts # Тесты рядом с кодом
+│   ├── block.ts
+│   ├── block.test.ts
+│   ├── http-client.ts
+│   └── http-client.test.ts
+├── store/             # Управление состоянием
+├── styles/            # Глобальные стили
+├── types/             # TypeScript типы
+└── utils/             # Утилиты
+```
+
+### Ссылка на PR
+
+https://github.com/dudina-ma/middle.messenger.praktikum.yandex/pull/6
