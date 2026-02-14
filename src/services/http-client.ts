@@ -90,7 +90,8 @@ class HttpClient {
 						if (xhr.responseText) {
 							errorBody = JSON.parse(xhr.responseText);
 						}
-					} catch (e) {
+					} catch (_e) {
+						void _e;
 					}
 
 					const error = new Error(`HTTP Error: ${xhr.status} ${xhr.statusText}`) as Error & { reason?: string; xhr: XMLHttpRequest };
@@ -108,8 +109,14 @@ class HttpClient {
 				});
 			}
 
-			xhr.onabort = reject;
-			xhr.onerror = reject;
+			xhr.onerror = function() {
+				reject(new Error('Network error occurred'));
+			};
+
+			xhr.onabort = function() {
+				reject(new Error('Request was aborted'));
+			};
+
 			xhr.ontimeout = function () {
 				reject(new Error(`Request timeout ${timeout}ms`));
 			};

@@ -51,6 +51,18 @@ export default [
   },
   
   {
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/__tests__/**/*.ts', '**/__tests__/**/*.tsx'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  
+  {
     ignores: ['node_modules/', 'dist/', 'build/'],
   },
 ];
